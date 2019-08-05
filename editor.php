@@ -1,5 +1,6 @@
 <?php
 	$db = mysqli_connect("localhost", "gea", "gea", "Gea");
+	/*
 	$content_file = file_get_contents('dungeons/01.dat');
 	$query = "DELETE FROM items WHERE idBoard = 1;";
 	mysqli_query($db, $query);
@@ -13,13 +14,13 @@
 				$img_name2 = ($item == '1')?'blocks/Voxel/voxelTile_30.png':'blocks/Voxel/voxelTile_29.png';
 				$img_name1 = ($item == '1')?'001stone.jpg':'004stone.jpg';
 				$ran = rand(1, 3);
-				$query = "INSERT INTO items (`id`, `idBoard`, `x`, `y`, `z`, `step`, `img`, `name`)";
-				$query.= " VALUES (NULL, '1', '$x', '$y', '$item', '1', '$img_name1', NULL);";
+				$query = "INSERT INTO items (`id`, `idBoard`, `idType`, `x`, `y`, `z`, `step`, `img`, `name`)";
+				$query.= " VALUES (NULL, '1', '1', '$x', '$y', '$item', '1', '$img_name1', NULL);";
 				echo $query."\n";
 				mysqli_query($db, $query);
 
-				$query = "INSERT INTO items (`id`, `idBoard`, `x`, `y`, `z`, `step`, `img`, `name`)";
-				$query.= " VALUES (NULL, '2', '$x', '$y', '$item', '1', '$img_name2', NULL);";
+				$query = "INSERT INTO items (`id`, `idBoard`, `idType`, `x`, `y`, `z`, `step`, `img`, `name`)";
+				$query.= " VALUES (NULL, '2', '1', '$x', '$y', '$item', '1', '$img_name2', NULL);";
 				echo $query."\n";
 				mysqli_query($db, $query);
 				$x++;
@@ -27,4 +28,9 @@
 			$y++;
 		}
 	}
+	 */
+	$query = "INSERT INTO items (`id`, `idBoard`, `idType`, `x`, `y`, `z`, `step`, `img`, `name`)";
+	$query.= " VALUES (NULL, '1', '2', '2', '2', '1', '0', 'p/001PC.png', '@1');";
+	echo $query."\n";
+	mysqli_query($db, $query);
 	mysqli_close($db);

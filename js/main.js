@@ -12,7 +12,6 @@ function getFullBoard(){
 			var arrItems = rq.responseText.split("\n");
 			arrItems.forEach(function(sItem){
 				if (sItem !== ""){
-					console.log("ITEM: "+sItem);
 					const arrRq = sItem.split(" ");
 					const item = {
 						x: arrRq[0],
@@ -20,8 +19,10 @@ function getFullBoard(){
 						z: arrRq[2],
 						step: arrRq[3],
 						img: arrRq[4],
-						name: arrRq[5]
+						name: arrRq[5],
+						idType: arrRq[6]
 					}
+					//console.log(item);
 					var sq = document.createElement("img");
 					sq.src = "img/"+item.img;
 					sq.style.position = "absolute";
@@ -38,12 +39,42 @@ function getFullBoard(){
 					*/
 					sq.style.left = x.toString()+"px";
 					sq.style.top = y.toString()+"px";
+					if (item.idType == "2"){	// Is a PC
+						sq.style.border = "4px green solid";
+						sq.style.borderRadius = "50%";
+						sq.style.width = "64px";
+						if (item.name.charAt(1)=="4"){
+							sq.style.border = "4px red solid";
+						}
+					}
+					
 					//sq.style.zIndex = Math.round(mod);
 					sq.onload = function () { canvas.appendChild(sq); }
 					//console.log("POS "+posx+","+posy+" MOD "+mod);
 				}
 			});
 		}
+	}
+}
+
+function drawCellsNames(){
+	for (var x=0; x!=10; ++x){
+		var txt = document.createElement("div");	
+		txt.innerHTML = String.fromCharCode(65+x);
+		txt.style.color = "white";
+		txt.style.position = "absolute";
+		txt.style.left = x*65+340+"px";
+		txt.style.top = "30px";
+		canvas.appendChild(txt);
+	}
+	for (var y=0; y!=9; ++y){
+		var txt = document.createElement("div");	
+		txt.innerHTML = y+1;
+		txt.style.color = "white";
+		txt.style.position = "absolute";
+		txt.style.top = y*65+90+"px";
+		txt.style.left = "270px";
+		canvas.appendChild(txt);
 	}
 }
 
@@ -54,7 +85,7 @@ window.addEventListener("load", function() {
 	canvas.style.width = MAXX+"px";
 	canvas.style.height = MAXY+"px";
 	getFullBoard();
-
+	drawCellsNames();
 });
 
 window.addEventListener("resize", function() {
