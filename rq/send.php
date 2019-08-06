@@ -12,16 +12,8 @@
 				$name = mysqli_real_escape_string($db, $arrM[0]);
 				$toX = ord(mb_strtoupper($arrM[1]))-ord('A')+1;
 				$toY = $arrM[2];
-				//	Update the items table
-				$query = "UPDATE items SET x='$toX', y='$toY' WHERE idBoard = 1 AND name like '$name';";
-				$result = mysqli_query($db, $query);
-				if ($result == false){
-					echo "ERROR: Can not update position";
-				} else {
-					echo mysqli_insert_id($db)."\n".getTime()." mv $name -> ".mb_strtoupper($arrM[1])." $toY";
-				}
-				// Insert into actions table
-				insert_action($db, $m, 1);
+				update_items(1, $name, $toX, $toY);	// Update items table
+				insert_action($db, $m, 1);			// Insert into action table
 				break;
 			case '#':	// If received "#1d6" generate a random number
 				$mod = 0;
@@ -40,13 +32,6 @@
 				$sum += $mod;
 				$action = "$m -> $sum";
 				insert_action($db, $action, 1);
-				/*
-				$query = "INSERT INTO `actions` (`id`, `idUser`, `idBoard`, `ts`, `action`) VALUES (NULL, '1', '1',";
-				$query.= " CURRENT_TIMESTAMP, '$action');";
-				$result = mysqli_query($db, $query);
-				if ($result == false) {
-					echo "ERROR: Can not insert # into DB.actions";
-				} */
 				break;
 			default:
 				insert_action($db, $m, 1);
