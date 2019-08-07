@@ -1,12 +1,21 @@
 <?php
-	$db = mysqli_connect("localhost", "gea", "gea", "Gea");
-	//$_GET['id'] = 1;
-	$id = (array_key_exists('id', $_GET))?mysqli_real_escape_string($db, $_GET['id']):NULL;
-	if ($id != NULL) {
-		$query = "SELECT * FROM actions WHERE id=$id AND idBoard = 1;";
-		$result = mysqli_query($db, $query);
-		if ($result != false){
+	include_once('../lib.php');
+
+	connectDB();
+
+	$idAction = secure_param('idAction');
+	$idBoard = secure_param('idBoard');
+	//$idAction = 1;
+	//$idBoard = 2;
+	$query = "SELECT * FROM actions WHERE idAction=$idAction AND idBoard = $idBoard AND idUser = 1 LIMIT 1;";
+	$result = mysqli_query($db, $query);
+	if ($result == false){
+		error_mysqli($query);
+	} else {
+		if ($result->num_rows > 0){	// If this action exists in DB
 			$row = mysqli_fetch_array($result);
-			echo $row['id']."\n".$row['ts']."\n".$row['action'];
+			echo $row['idAction']."\n".$row['ts']."\n".$row['action'];
+		} else {
+			echo $idAction."\n"."!NO_EXISTS\n";
 		}
 	}

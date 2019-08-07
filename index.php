@@ -3,6 +3,6 @@
 	<div id="stdOutput"><?php echo date("> d/m/Y G:i");?></div>
 	<input type="text" id="stdInput" placeholder="Input...">
 </div>
-<div id="container">
+<div id="canvas">
 </div>
 <?php include('templates/foot.php'); ?>

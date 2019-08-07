@@ -1,9 +1,11 @@
 html {
 	background-color: black;
 	font-family: sans-serif;
+	/*overflow: hidden;*/
+	scrollbar-color: grey black;
 }
 body {
-	/* overflow: hidden; */
+	/*overflow: auto;*/
 	position: relative;
 }
 
@@ -40,7 +42,7 @@ body {
 	margin: 1rem;
 }
 
-#container {
+#canvas {
 	margin: 0 0 0 300px;
 	width: 100%;
 	height: 100%;

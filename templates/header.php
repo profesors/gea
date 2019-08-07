@@ -7,6 +7,7 @@
 
 	<script src='js/libGeneral.js'></script>
 	<script src='js/main.js'></script>
+	<script src='js/load.js'></script>
 
 </head>
 <body id="body">

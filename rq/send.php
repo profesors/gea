@@ -1,10 +1,11 @@
 <?php	
 	include_once('../lib.php');
+	connectDB();
 
-	$r = session_start();
-	$db = mysqli_connect("localhost", "gea", "gea", "Gea");
-	//$_GET['m'] = "d";
-	$m = (array_key_exists('m', $_GET))?$_GET['m']:NULL;
+	//$_GET['m'] = "@1 B 3";
+	//$_GET['idBoard'] = 2;
+	$m = secure_param('m');
+	$idBoard = secure_param('idBoard');
 	if ($m != NULL){
 		switch ($m[0]){
 			case '@':	// If receive "@1 d 4"	it means Move @1 to cell D 4
@@ -12,8 +13,17 @@
 				$name = mysqli_real_escape_string($db, $arrM[0]);
 				$toX = ord(mb_strtoupper($arrM[1]))-ord('A')+1;
 				$toY = $arrM[2];
-				update_items(1, $name, $toX, $toY);	// Update items table
-				insert_action($db, $m, 1);			// Insert into action table
+				update_items($idBoard, $name, $toX, $toY);	// Update items table
+				insert_action($idBoard, $m);			// Insert into action table
+				break;
+			case '_':
+				$arrM = explode(' ', $m);
+				$name = '@'.ltrim(mysqli_real_escape_string($db, $arrM[0]), '_');
+				$x = ord(mb_strtoupper($arrM[1]))-ord('A')+1;
+				$y = $arrM[2];
+				$img_src = $arrM[3];
+				insert_item($idBoard, 2, $x, $y, 1, 1, $img_src, $name);
+				insert_action($idBoard, $m);
 				break;
 			case '#':	// If received "#1d6" generate a random number
 				$mod = 0;
@@ -31,10 +41,10 @@
 				}
 				$sum += $mod;
 				$action = "$m -> $sum";
-				insert_action($db, $action, 1);
+				insert_action($idBoard, $action);
 				break;
 			default:
-				insert_action($db, $m, 1);
+				insert_action($idBoard, $m);
 		}
 	} else {
 		echo "Param m is NULL: $m";
