@@ -34,14 +34,10 @@ function inputKeyPress(event){
 				iCommands = arrCommands.length-1;
 			}
 		break;
-	case 190:	// :
-		setOpacityCoordinates(1);
-		break;
-	case 50:	// @
-		setOpacityCoordinates(1);
-		break;
 	}
-	input.value.includes('@')?setOpacityCoordinates(1):setOpacityCoordinates(0);
+	var opacity = input.value.includes('@')?1:0;
+	setOpacityCoordinates(opacity);
+	setOpacityTagNames(opacity);
 }
 
 function checkUpdates(){

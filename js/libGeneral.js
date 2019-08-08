@@ -28,8 +28,9 @@ function setOpacityCoordinates(newVal){
 	}
 }
 
-function toggleCoordinates(){
-	var newOpacity = showCoordinates?0:1;
-	setOpacityCoordinates(newOpacity);
-	showCoordinates = !showCoordinates;
+function setOpacityTagNames(newVal){
+	console.log("Set Opacitu tag names");
+	for (var i=0; i<arrTokens.length; i++){
+		arrTokens[i].tagName.style.opacity = newVal;
+	}
 }

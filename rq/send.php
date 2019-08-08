@@ -2,16 +2,19 @@
 	include_once('../lib.php');
 	connectDB();
 
-	//$_GET['m'] = ":reset";
+	//$_GET['m'] = "@1, 10,  10";
 	//$_GET['idBoard'] = 2;
-	$m = secure_param('m');
-	$idBoard = secure_param('idBoard');
+	$m = preg_replace('/[ ,]+/', ' ', secure_param('m'));
+	$idBoard = intval(secure_param('idBoard'));
+
+	if ($m == '' && $idBoard <= 0) die("ERROR: Wrong parameters");
 
 	if ($m != NULL){
 		switch ($m[0]){
 			case '@':
 				$arrM = explode(' ', $m);
-				$name = ltrim(mysqli_real_escape_string($db, $arrM[0]), '_');
+				#$name = ltrim(mysqli_real_escape_string($db, $arrM[0]), '@');
+				$name = mysqli_real_escape_string($db, mb_substr(ltrim($arrM[0],'@'), 0, 3));
 				$x = $arrM[1];
 				$y = $arrM[2];
 				$img_src = (array_key_exists(3, $arrM))?$arrM[3]:'';

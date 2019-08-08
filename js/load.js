@@ -51,41 +51,65 @@ function getTokens(idBoard){
 					step: arrOneToken[3],
 					src: arrOneToken[4],
 					name: arrOneToken[5],
-					lastActionIdUpdated: 0,
-					img: document.createElement("img"),	// Pointer to 'html img' tag
-					border: arrOneToken[6].replace(/\+/g, ' ')
+					div: document.createElement("div"),	// Pointer to 'html div' tag
+					border: arrOneToken[6].replace(/\+/g, ' '),
+					tagName: document.createElement("div")
 				}
-				console.log(token);
+				//console.log(token);
 				// Position of the token
 				var x = getPixel(token.x, board.tilew);
 				var y = getPixel(token.y, board.tileh)
-				token.img.style.left = x.toString()+"px";
-				token.img.style.top = y.toString()+"px";
-				token.img.style.border = "4px lime solid";
-				token.img.style.border = token.border;
-				token.img.src = "img/tokens/"+token.src;
+				token.div.style.left = x.toString()+"px";
+				token.div.style.top = y.toString()+"px";
+				token.div.style.width = board.tilew;
+				token.div.style.height = board.tileh;
+				
+				token.div.img = document.createElement("img");
+				token.div.img.style.border = token.border;
+				token.div.img.src = "img/tokens/"+token.src;
 				
 				// As the token is inserted, we just need update its possition
 				// so do not do anything more
 				var currentToken = getTokenFromArrTokens(token.name);
 				if (currentToken != null){
-					console.log("Ya existe este token. Actualizo " +currentToken.name);
-					currentToken.img.style.left = token.img.style.left;
-					currentToken.img.style.top = token.img.style.top;
-					currentToken.img.style.border = token.img.style.border;
-					currentToken.img.src = "img/tokens/"+token.src;
+					//console.log("Ya existe este token. Actualizo " +currentToken.name);
+					currentToken.div.style.left = token.div.style.left;
+					currentToken.div.style.top = token.div.style.top;
+					currentToken.div.img.style.border = token.div.img.style.border;
+					currentToken.div.img.src = "img/tokens/"+token.src;
 					continue;
 				} else {
-					console.log("No existe este token. Añado "+token.name);
+					//console.log("No existe este token. Añado "+token.name);
 				}
 				//console.log(token);
-				token.img.setAttribute("class", "token");
-				token.img.name = token.name;
-				token.img.style.position = "absolute";
-				token.img.style.borderRadius = "50%";
-				token.img.style.width = board.tilew+"px";
+				token.div.setAttribute("class", "token");
+				token.div.style.position = "absolute";
+				token.div.style.textAlign = "center";
+				
+				token.div.img.name = token.name;
+				token.div.img.style.position = "relative";
+				token.div.img.style.left = 0;
+				token.div.img.style.top = 0;
+				token.div.img.style.borderRadius = "50%";
+				token.div.img.style.width = board.tilew+"px";
+				
+				// Tag with the NAME 
+				token.tagName.innerHTML = "@"+token.name;
+				token.tagName.style.color = "yellow";
+				token.tagName.style.position = "absolute";
+				token.tagName.style.fontWeight = "bold";
+				token.tagName.style.top = 0.5*board.tileh+"px";
+				token.tagName.style.width = board.tilew+"px";
+				token.tagName.style.textShadow = "2px 2px black";
+				token.tagName.style.zIndex = 100;
+				token.tagName.style.opacity = 0;
+				token.div.appendChild(token.tagName);
+
 				arrTokens.push(token);
-				token.img.onload = function () { canvas.appendChild(token.img); }
+
+				token.div.img.onload = function () { 
+					canvas.appendChild(token.div);
+					token.div.appendChild(token.div.img); }
 			} // if
 		}	// forEach
 	} // if STATUS 200
@@ -109,6 +133,8 @@ function drawCellNames(){
 			txt.style.top = getPixel(y, board.tileh)+"px";
 			txt.style.position = "absolute";
 			txt.style.color = "white";
+			txt.style.zIndex = 100;
+			txt.style.textShadow = "2px 2px black";
 			txt.style.opacity = "0";
 			txt.setAttribute("class", "coordinates");
 			canvas.appendChild(txt);
