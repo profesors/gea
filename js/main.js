@@ -4,10 +4,10 @@ var arrCommands = [], iCommands = 0;	// Commands sended. Array and index to Arro
 var timerUpdates;						// Timer to check each second for updates from the server
 var arrActions = [], localLastActionId=0, arrRq = [];	// All actions of the game {ts, action}
 var board;	// Info about the board {name, tilew, tileh, ntilesw, ntilesh, bg, drawGrid}
-
+var showCoordinates = false;
 
 function inputKeyPress(event){
-	// console.log(event.keyCode);
+	//console.log(event.keyCode);
 	switch (event.keyCode){
 	case 13:
 		var rq = new XMLHttpRequest();
@@ -16,6 +16,7 @@ function inputKeyPress(event){
 		arrCommands.push(input.value);
 		iCommands = arrCommands.length;	// Index of commands for historial
 		input.value="";	// Empty the input
+		setOpacityCoordinates(0);
 		break;
 	case 38:	// UP arrow
 		iCommands--;
@@ -32,6 +33,12 @@ function inputKeyPress(event){
 			} else {
 				iCommands = arrCommands.length-1;
 			}
+		break;
+	case 190:	// :
+		setOpacityCoordinates(1);
+		break;
+	case 50:	// @
+		setOpacityCoordinates(1);
 		break;
 	}
 }

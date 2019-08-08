@@ -20,3 +20,16 @@ function getTokenFromArrTokens(name){
 	}
 	return token;
 }
+
+function setOpacityCoordinates(newVal){
+	var arrCoordinates = document.getElementsByClassName("coordinates");
+	for (var i=0; i<arrCoordinates.length; i++){
+		arrCoordinates[i].style.opacity = newVal;
+	}
+}
+
+function toggleCoordinates(){
+	var newOpacity = showCoordinates?0:1;
+	setOpacityCoordinates(newOpacity);
+	showCoordinates = !showCoordinates;
+}

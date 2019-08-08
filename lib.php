@@ -64,7 +64,7 @@ function insert_action($idBoard, $m){
 	write_last_actionId($idBoard, $nextActionId);
 }
 
-# Update tokens table
+# Update tokens table @TODO UPDATE colors and other columns
 function update_token($idBoard, $name, $x, $y){
 	global $db;
 	$query = "UPDATE tokens SET x=$x, y=$y WHERE idBoard = $idBoard AND name = '$name';";
@@ -72,14 +72,17 @@ function update_token($idBoard, $name, $x, $y){
 	run_sql($query) or die();
 }
 
-function insert_token($idBoard, $name, $x, $y, $z, $step, $img_src){
+function insert_token($idBoard, $name, $x, $y, $z, $step, $img_src, $border){
 	global $db;
 	$name = ($name=='')?'NULL':$name;
-	$query = "INSERT INTO `tokens` (`idBoard`, `name`, `x`, `y`, `z`, `step`, `img`) VALUES ('$idBoard', '$name', '$x', '$y', '$z', '$step', '$img_src')";
+	$query = "INSERT INTO `tokens` (`idBoard`, `name`, `x`, `y`, `z`, `step`, `img`, `border`) ";
+	$query.= " VALUES ('$idBoard', '$name', '$x', '$y', '$z', '$step', '$img_src', '$border') ";
+	$query.= " ON DUPLICATE KEY UPDATE x=$x, y=$y";
 	if ($img_src != ''){
-		$query.= " ON DUPLICATE KEY UPDATE x=$x, y=$y, img='$img_src';";
-	} else {
-		$query.= " ON DUPLICATE KEY UPDATE x=$x, y=$y;";
+		$query.= ", img='$img_src'";
+	}
+	if ($border != ''){
+		$query.= ", border='$border'";
 	}
 	run_sql($query) or die();
 }

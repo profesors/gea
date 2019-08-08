@@ -52,14 +52,17 @@ function getTokens(idBoard){
 					src: arrOneToken[4],
 					name: arrOneToken[5],
 					lastActionIdUpdated: 0,
-					img: document.createElement("img")	// Pointer to 'html img' tag
+					img: document.createElement("img"),	// Pointer to 'html img' tag
+					border: arrOneToken[6].replace(/\+/g, ' ')
 				}
+				console.log(token);
 				// Position of the token
 				var x = getPixel(token.x, board.tilew);
 				var y = getPixel(token.y, board.tileh)
 				token.img.style.left = x.toString()+"px";
 				token.img.style.top = y.toString()+"px";
 				token.img.style.border = "4px lime solid";
+				token.img.style.border = token.border;
 				token.img.src = "img/tokens/"+token.src;
 				
 				// As the token is inserted, we just need update its possition
@@ -81,9 +84,6 @@ function getTokens(idBoard){
 				token.img.style.position = "absolute";
 				token.img.style.borderRadius = "50%";
 				token.img.style.width = board.tilew+"px";
-				if (token.name.charAt(1)=="4"){
-					token.img.style.border = "4px red solid";
-				}
 				arrTokens.push(token);
 				token.img.onload = function () { canvas.appendChild(token.img); }
 			} // if
@@ -101,22 +101,17 @@ function removeAllLoadedTokens(){
 }
 
 function drawCellNames(){
-	for (var x=0; x<=board.ntilesw; ++x){
-		var txt = document.createElement("div");	
-		txt.innerHTML = String.fromCharCode(65+x); // 65 = A
-		txt.style.color = "white";
-		txt.style.position = "absolute";
-		txt.style.left = x*(board.tilew+1)+(board.tilew*0.5)+"px";
-		txt.style.top = "5px";
-		canvas.appendChild(txt);
-	}
-	for (var y=0; y<=board.ntilesh; ++y){
-		var txt = document.createElement("div");	
-		txt.innerHTML = y+1;
-		txt.style.color = "white";
-		txt.style.position = "absolute";
-		txt.style.top = y*(board.tileh+1)+(board.tileh*0.5)+"px";
-		txt.style.left = "10px";
-		canvas.appendChild(txt);
+	for (var y=1; y<=board.ntilesh; y++){
+		for (var x=1; x<=board.ntilesw; x++){
+			var txt = document.createElement("div");	
+			txt.innerHTML = x+", "+y;
+			txt.style.left = getPixel(x, board.tilew)+"px";
+			txt.style.top = getPixel(y, board.tileh)+"px";
+			txt.style.position = "absolute";
+			txt.style.color = "white";
+			txt.style.opacity = "0";
+			txt.setAttribute("class", "coordinates");
+			canvas.appendChild(txt);
+		}
 	}
 }
