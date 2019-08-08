@@ -1,9 +1,9 @@
 <?php
-	include('../lib.php');
+include('../lib.php');
 
-	connectDB();
+connectDB();
 
-	$idBoard = secure_param('idBoard');
-	//$idBoard = 2;
-	$lastId = read_last_actionId($idBoard);
-	echo $lastId;
+$idBoard = secure_param('idBoard');
+//$idBoard = 2;
+$lastId = read_last_actionId($idBoard);
+echo $lastId;

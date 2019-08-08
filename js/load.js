@@ -1,15 +1,10 @@
-function getPixel(pos, sizeOfTile){
-	return (pos-1)*sizeOfTile; 
-}
-
 // Load functions of the board
-function getFullBoard(){
+function getBoard(idBoard){
 	const rq = new XMLHttpRequest();
-	rq.open("GET", "rq/getFullBoard.php?idBoard=2");
+	rq.open("GET", "rq/getBoard.php?idBoard="+idBoard);
 	rq.send();
 	rq.onreadystatechange = function(e) {
 		if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
-			//console.log(rq.responseText);
 			var arrResponse = rq.responseText.split("\n");
 			board = {
 				id: arrResponse.shift(),
@@ -22,7 +17,7 @@ function getFullBoard(){
 				drawGrid: (arrResponse.shift()=='1'),
 				lastActionId: parseInt(arrResponse.shift())
 			}
-			console.log(board);
+			//console.log(board);
 			// BG
 			if (board.bg != ""){
 				var canvas = document.getElementById("canvas");
@@ -31,61 +26,82 @@ function getFullBoard(){
 				canvas.style.width = (board.tilew*board.ntilesw)+0.5*board.tilew+"px";
 				canvas.style.height = (board.tileh*board.ntilesh)+0.5*board.tileh+"px";
 			}
-			// Create arr items
-			arrResponse.forEach(function(sItem){
-				if (sItem !== ""){
-					const arrRq = sItem.split(" ");
-					const item = {
-						x: arrRq[0],
-						y: arrRq[1],
-						z: arrRq[2],
-						step: arrRq[3],
-						src: arrRq[4],
-						name: arrRq[5],
-						idType: arrRq[6],
-						lastActionIdUpdated: 0,
-						img: document.createElement("img")
-					}
-					arrItems.push(item);
-					//console.log(item);
-					//item.img = document.createElement("img");
-					item.img.src = "img/"+item.src;
-					item.img.name = item.name;
-					item.img.style.position = "absolute";
-					var x = getPixel(item.x, board.tilew);
-					var y = getPixel(item.y, board.tileh)
-					/*
-					var posx = item.x-1;
-					var posy = item.y-1;
-					var posz = item.z*1.75;
-					var x = 0.5*IMGW*posx+600 - 0.5*IMGW*posy;
-					var y = 0.25*IMGH*posy + posx*IMGH*0.25 - posz*IMGH*0.25 + 100;
-				
-					var mod = Math.sqrt(item.x*item.x+item.y+item.y)*100;
-					*/
-					item.img.style.left = x.toString()+"px";
-					item.img.style.top = y.toString()+"px";
-					if (item.idType == "2"){	// Is a PC
-						item.img.style.border = "4px green solid";
-						item.img.style.borderRadius = "50%";
-						item.img.style.width = board.tilew+"px";
-						if (item.name.charAt(1)=="4"){
-							item.img.style.border = "4px red solid";
-						}
-					}
-					
-					//item.img.style.zIndex = Math.round(mod);
-					item.img.onload = function () { canvas.appendChild(item.img); }
-					//console.log("POS "+posx+","+posy+" MOD "+mod);
-				}
-			});	// END push items into array 
 			drawCellNames();
+			getTokens(board.id);
 		}
 	}
 }
 
+function getTokens(idBoard){
+	const rq = new XMLHttpRequest();
+	rq.open("GET", "rq/getTokens.php?idBoard="+idBoard);
+	rq.send();
+	rq.onreadystatechange = function(e) {
+	if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
+		var arrResponse = rq.responseText.split("\n");
+		// Create arr tokens
+		for(var i=0; i<arrResponse.length; i++){
+			var sToken = arrResponse[i];
+			if (sToken !== ""){
+				const arrOneToken = sToken.split(" ");
+				const token = {
+					x: arrOneToken[0],
+					y: arrOneToken[1],
+					z: arrOneToken[2],
+					step: arrOneToken[3],
+					src: arrOneToken[4],
+					name: arrOneToken[5],
+					lastActionIdUpdated: 0,
+					img: document.createElement("img")	// Pointer to 'html img' tag
+				}
+				// Position of the token
+				var x = getPixel(token.x, board.tilew);
+				var y = getPixel(token.y, board.tileh)
+				token.img.style.left = x.toString()+"px";
+				token.img.style.top = y.toString()+"px";
+				token.img.style.border = "4px lime solid";
+				token.img.src = "img/tokens/"+token.src;
+				
+				// As the token is inserted, we just need update its possition
+				// so do not do anything more
+				var currentToken = getTokenFromArrTokens(token.name);
+				if (currentToken != null){
+					console.log("Ya existe este token. Actualizo " +currentToken.name);
+					currentToken.img.style.left = token.img.style.left;
+					currentToken.img.style.top = token.img.style.top;
+					currentToken.img.style.border = token.img.style.border;
+					currentToken.img.src = "img/tokens/"+token.src;
+					continue;
+				} else {
+					console.log("No existe este token. Añado "+token.name);
+				}
+				//console.log(token);
+				token.img.setAttribute("class", "token");
+				token.img.name = token.name;
+				token.img.style.position = "absolute";
+				token.img.style.borderRadius = "50%";
+				token.img.style.width = board.tilew+"px";
+				if (token.name.charAt(1)=="4"){
+					token.img.style.border = "4px red solid";
+				}
+				arrTokens.push(token);
+				token.img.onload = function () { canvas.appendChild(token.img); }
+			} // if
+		}	// forEach
+	} // if STATUS 200
+	} // onReadyStateChange
+}
+
+function removeAllLoadedTokens(){
+	while (arrTokens.length > 0){
+		var token = arrTokens.shift();
+		console.log("REMOVE TOKEN "+token.name);
+		canvas.removeChild(token.img);
+	}
+}
+
 function drawCellNames(){
-	for (var x=0; x!=board.ntilesw; ++x){
+	for (var x=0; x<=board.ntilesw; ++x){
 		var txt = document.createElement("div");	
 		txt.innerHTML = String.fromCharCode(65+x); // 65 = A
 		txt.style.color = "white";
@@ -94,7 +110,7 @@ function drawCellNames(){
 		txt.style.top = "5px";
 		canvas.appendChild(txt);
 	}
-	for (var y=0; y!=board.ntilesh; ++y){
+	for (var y=0; y<=board.ntilesh; ++y){
 		var txt = document.createElement("div");	
 		txt.innerHTML = y+1;
 		txt.style.color = "white";

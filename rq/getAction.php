@@ -8,14 +8,10 @@
 	//$idAction = 1;
 	//$idBoard = 2;
 	$query = "SELECT * FROM actions WHERE idAction=$idAction AND idBoard = $idBoard AND idUser = 1 LIMIT 1;";
-	$result = mysqli_query($db, $query);
-	if ($result == false){
-		error_mysqli($query);
+	$result = run_sql($query) or die();
+	if ($result->num_rows > 0){	// If this action exists in DB
+		$row = mysqli_fetch_array($result);
+		echo $row['idAction']."\n".$row['ts']."\n".$row['action'];
 	} else {
-		if ($result->num_rows > 0){	// If this action exists in DB
-			$row = mysqli_fetch_array($result);
-			echo $row['idAction']."\n".$row['ts']."\n".$row['action'];
-		} else {
-			echo $idAction."\n"."!NO_EXISTS\n";
-		}
+		echo $idAction."\n"."!NO_EXISTS\n";
 	}

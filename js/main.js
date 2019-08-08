@@ -1,14 +1,9 @@
 var canvas, panel1, input, output;
-var arrItems = [];						// Items in the board
+var arrTokens = [];						// Tokens in the board
 var arrCommands = [], iCommands = 0;	// Commands sended. Array and index to ArrowUp and ArrowDown recover
 var timerUpdates;						// Timer to check each second for updates from the server
-var arrActions = [], lastActionId=0, arrRq = [];	// All actions of the game {ts, action}
-var tilew = 0, tileh = 0;
+var arrActions = [], localLastActionId=0, arrRq = [];	// All actions of the game {ts, action}
 var board;	// Info about the board {name, tilew, tileh, ntilesw, ntilesh, bg, drawGrid}
-
-
-const IMGW = 111;
-const IMGH = 128;
 
 
 function inputKeyPress(event){
@@ -48,63 +43,16 @@ function checkUpdates(){
 	rq.send();
 	rq.onreadystatechange = function () {
 		if (rq.readyState == XMLHttpRequest.DONE && rq.status == 200){
-			lastActionId = rq.responseText;	// lastActionId is the last action recorded in the server
+			board.lastActionId = parseInt(rq.responseText);	// lastActionId is the last action recorded in the server
 		}
 	}
-	//console.log("SIZE "+arrActions.length);
-	
-	// Get actions I do not have in my arrActions
-	for(var i=1; i<=lastActionId; i++){
-		if (arrActions[i] == undefined){	// Client needs the 'i' action
-			arrRq[i] = new XMLHttpRequest();
-			arrRq[i].open("GET", "rq/getAction.php?idAction="+i+"&idBoard="+board.id);	// Asyncronous
-			arrRq[i].send();
-			arrRq[i].onreadystatechange = function () {
-				if (this.readyState == XMLHttpRequest.DONE && this.status == 200){
-					var arrResponse = this.responseText.split("\n");	// id, action
-					var actionId = arrResponse[0];
-					arrActions[actionId] = {
-						'ts': arrResponse[1],
-						'action': arrResponse[2]
-					}
-					//arrRq[arrResponse[0]] = null;
-					
-					// Move TOKENS
-
-					if (arrActions[actionId].action.charAt(0) == "@"){
-						var arr = arrActions[actionId].action.split(" ");
-						var name = arr[0];
-						arrItems.forEach(function (item) {
-							if (item.name == name && item.lastActionIdUpdated < actionId){
-								item.x = (arr[1].charCodeAt(0))-'A'.charCodeAt(0)+1;
-								item.y = arr[2];
-								item.lastActionIdUpdated = actionId;
-								var xPixel = getPixel(item.x, board.tilew);
-								var yPixel = getPixel(item.y, board.tileh);
-								item.img.style.left = xPixel.toString()+"px";
-								item.img.style.top = yPixel.toString()+"px";
-							}
-						});
-					}
-				}
-			}
-		}
+	if (localLastActionId < board.lastActionId){	// Update tokens
+		getTokens(board.id);
+		localLastActionId = board.lastActionId;
 	}
-	
-	// If I am updated dump it into standard output
-	if (lastActionId == arrActions.length-1){
-		//console.log("UPDATE TEXT");
-		output.innerHTML = "";
-		//console.log(arrActions);
-		for (var i=1; i<arrActions.length; i++){
-			if (arrActions[i] != undefined){
-				var time = arrActions[i].ts.substring(10, 16);
-				output.innerHTML += '<p><time>'+time+'</time> '+arrActions[i].action+'</p>';
-				output.scrollTop = output.scrollHeight;
-			}
-		}
-	} else {
-		console.log("Sync Server: "+lastActionId+" Local"+(arrActions.length-1));
+	if (localLastActionId > board.lastActionId){	// Remove all tokens and update all of them
+		removeAllLoadedTokens();	
+		localLastActionId = 0;
 	}
 }
 
@@ -121,7 +69,7 @@ window.addEventListener("load", function() {
 	input.addEventListener("keyup", function (event) {inputKeyPress(event);});
 	input.focus();
 	input.value = "";
-	getFullBoard();
+	getBoard(2);
 	timerUpdates = setInterval(checkUpdates,1000);
 });
 
