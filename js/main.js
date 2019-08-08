@@ -41,6 +41,7 @@ function inputKeyPress(event){
 		setOpacityCoordinates(1);
 		break;
 	}
+	input.value.includes('@')?setOpacityCoordinates(1):setOpacityCoordinates(0);
 }
 
 function checkUpdates(){
