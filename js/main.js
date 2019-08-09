@@ -3,8 +3,8 @@ var arrTokens = [];						// Tokens in the board
 var arrCommands = [], iCommands = 0;	// Commands sended. Array and index to ArrowUp and ArrowDown recover
 var timerUpdates;						// Timer to check each second for updates from the server
 var arrActions = [], localLastActionId=0, arrRq = [];	// All actions of the game {ts, action}
-var board;	// Info about the board {name, tilew, tileh, ntilesw, ntilesh, bg, drawGrid}
-var showCoordinates = false;
+var board;	// Info about the board {name, tilew, tileh, ntilesw, ntilesh, bg, drawGridi, lastActionId}
+//var showCoordinates = false;
 
 function inputKeyPress(event){
 	//console.log(event.keyCode);
@@ -35,9 +35,19 @@ function inputKeyPress(event){
 			}
 		break;
 	}
-	var opacity = input.value.includes('@')?1:0;
+	var opacity = 0, name = '';
+	if (input.value.includes('@')){
+		opacity = 1;
+		if (input.value.includes('#')){
+			var arrM = input.value.split('@');
+			if (arrM.length>0) {
+				var name = arrM[1];
+			}
+		}
+	}
 	setOpacityCoordinates(opacity);
 	setOpacityTagNames(opacity);
+	//setOpacityTagDice(name, opacity);
 }
 
 function checkUpdates(){
@@ -48,15 +58,16 @@ function checkUpdates(){
 	rq.onreadystatechange = function () {
 		if (rq.readyState == XMLHttpRequest.DONE && rq.status == 200){
 			board.lastActionId = parseInt(rq.responseText);	// lastActionId is the last action recorded in the server
+			
+			if (localLastActionId < board.lastActionId){	// Update tokens
+				getTokens(board.id);
+				//localLastActionId = board.lastActionId;
+			}
+			if (localLastActionId > board.lastActionId){	// Remove all tokens and update all of them
+				removeAllLoadedTokens();	
+				localLastActionId = 0;
+			}
 		}
-	}
-	if (localLastActionId < board.lastActionId){	// Update tokens
-		getTokens(board.id);
-		localLastActionId = board.lastActionId;
-	}
-	if (localLastActionId > board.lastActionId){	// Remove all tokens and update all of them
-		removeAllLoadedTokens();	
-		localLastActionId = 0;
 	}
 }
 

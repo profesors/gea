@@ -64,10 +64,10 @@ function insert_action($idBoard, $m){
 	write_last_actionId($idBoard, $nextActionId);
 }
 
-# Update tokens table @TODO UPDATE colors and other columns
-function update_token($idBoard, $name, $x, $y){
+# Update token position X, Y, Z
+function update_position_token($idBoard, $name, $x, $y, $z){
 	global $db;
-	$query = "UPDATE tokens SET x=$x, y=$y WHERE idBoard = $idBoard AND name = '$name';";
+	$query = "UPDATE tokens SET x=$x, y=$y, z=1 WHERE idBoard = $idBoard AND name = '$name';";
 	$result = mysqli_query($db, $query);
 	run_sql($query) or die();
 }
@@ -75,8 +75,8 @@ function update_token($idBoard, $name, $x, $y){
 function insert_token($idBoard, $name, $x, $y, $z, $step, $img_src, $border){
 	global $db;
 	$name = ($name=='')?'NULL':$name;
-	$query = "INSERT INTO `tokens` (`idBoard`, `name`, `x`, `y`, `z`, `step`, `img`, `border`) ";
-	$query.= " VALUES ('$idBoard', '$name', '$x', '$y', '$z', '$step', '$img_src', '$border') ";
+	$query = "INSERT INTO `tokens` (`idBoard`, `name`, `x`, `y`, `z`, `step`, `img`, `border`, `dice_result`) ";
+	$query.= " VALUES ('$idBoard', '$name', '$x', '$y', '$z', '$step', '$img_src', '$border', NULL) ";
 	$query.= " ON DUPLICATE KEY UPDATE x=$x, y=$y";
 	if ($img_src != ''){
 		$query.= ", img='$img_src'";
@@ -95,5 +95,16 @@ function reset_board($idBoard){
 	run_sql($query) or die();
 	$query = "DELETE FROM tokens WHERE idBoard = $idBoard;";
 	run_sql($query);
+}
+
+# Updates the dice column of a token
+function set_dice($idBoard, $name, $value){
+	global $db;
+	$query = "SELECT lastActionId FROM boards WHERE id = $idBoard LIMIT 1;";
+	$result = run_sql($query) or die();
+	$row = mysqli_fetch_array($result);
+	$nextActionId = $row['lastActionId']+1;	# current last action + 1 because it will be increased
+	$query = "UPDATE tokens SET dice_result = $value, dice_actionId = $nextActionId WHERE idBoard = $idBoard AND name = '$name';";
+	run_sql($query) or die();
 }
 ?>

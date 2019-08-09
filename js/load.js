@@ -51,14 +51,18 @@ function getTokens(idBoard){
 					step: arrOneToken[3],
 					src: arrOneToken[4],
 					name: arrOneToken[5],
-					div: document.createElement("div"),	// Pointer to 'html div' tag
+					div: document.createElement("div"),	// Pointer to 'html div' tag with the container
 					border: arrOneToken[6].replace(/\+/g, ' '),
-					tagName: document.createElement("div")
+					tagName: document.createElement("div"),
+					tagDice: document.createElement("div"),
+					dice: arrOneToken[7],
+					diceActionId: arrOneToken[8]
 				}
 				//console.log(token);
 				// Position of the token
 				var x = getPixel(token.x, board.tilew);
 				var y = getPixel(token.y, board.tileh)
+				token.div.id = token.name;
 				token.div.style.left = x.toString()+"px";
 				token.div.style.top = y.toString()+"px";
 				token.div.style.width = board.tilew;
@@ -67,6 +71,8 @@ function getTokens(idBoard){
 				token.div.img = document.createElement("img");
 				token.div.img.style.border = token.border;
 				token.div.img.src = "img/tokens/"+token.src;
+				
+				token.tagDice.innerHTML = token.dice;
 				
 				// As the token is inserted, we just need update its possition
 				// so do not do anything more
@@ -77,6 +83,13 @@ function getTokens(idBoard){
 					currentToken.div.style.top = token.div.style.top;
 					currentToken.div.img.style.border = token.div.img.style.border;
 					currentToken.div.img.src = "img/tokens/"+token.src;
+					currentToken.tagDice.innerHTML = token.tagDice.innerHTML;
+					//showDiceResult(currentToken.name);
+					//console.log("local "+localLastActionId+" token "+token.diceActionId);
+					if (localLastActionId < token.diceActionId){
+						var name = currentToken.name;
+						setTimeout(function () {showDiceResult(name)} ,0);
+					}
 					continue;
 				} else {
 					//console.log("No existe este token. Añado "+token.name);
@@ -86,6 +99,7 @@ function getTokens(idBoard){
 				token.div.style.position = "absolute";
 				token.div.style.textAlign = "center";
 				
+				// IMG of the token
 				token.div.img.name = token.name;
 				token.div.img.style.position = "relative";
 				token.div.img.style.left = 0;
@@ -94,6 +108,7 @@ function getTokens(idBoard){
 				token.div.img.style.width = board.tilew+"px";
 				
 				// Tag with the NAME 
+				token.tagName.id = "tagName"+token.name;
 				token.tagName.innerHTML = "@"+token.name;
 				token.tagName.style.color = "yellow";
 				token.tagName.style.position = "absolute";
@@ -105,6 +120,20 @@ function getTokens(idBoard){
 				token.tagName.style.opacity = 0;
 				token.div.appendChild(token.tagName);
 
+				// Tag with DICE results
+				token.tagDice.id = "tagDice"+token.name;
+				token.tagDice.innerHTML = "";
+				token.tagDice.style.color = "white";
+				token.tagDice.style.position = "absolute";
+				token.tagDice.style.fontWeight = "bold";
+				token.tagDice.style.top = -0.2*board.tileh+"px";
+				token.tagDice.style.width = board.tilew+"px";
+				token.tagDice.style.textShadow = "-2px 0 black, 0 2px black, 2px 0 black, 0 -2px black";
+				token.tagDice.style.fontSize = "180%";
+				token.tagDice.style.zIndex = 100;
+				token.tagDice.style.opacity = 0;
+				token.div.appendChild(token.tagDice);
+
 				arrTokens.push(token);
 
 				token.div.img.onload = function () { 
@@ -112,6 +141,7 @@ function getTokens(idBoard){
 					token.div.appendChild(token.div.img); }
 			} // if
 		}	// forEach
+		localLastActionId = board.lastActionId;	// QUITAR @TODO @1
 	} // if STATUS 200
 	} // onReadyStateChange
 }
@@ -123,6 +153,19 @@ function removeAllLoadedTokens(){
 		canvas.removeChild(token.img);
 	}
 }
+
+// NO TESTED
+/*
+function getDice(idBoard, name){
+	const rq = new XMLHttpRequest();
+	rq.open("GET", "rq/getDice.php?idBoard="+idBoard+"&name="+name);
+	rq.send();
+	rq.onreadystatechange = function(e) {
+	if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
+		console.log("DICE "+name+":"+rq.responseText);
+	}
+	}
+}*/
 
 function drawCellNames(){
 	for (var y=1; y<=board.ntilesh; y++){

@@ -1,6 +1,7 @@
 var MAXX = 0, MAXY = 0;
 
 // Wait for a time
+// You can use it so: await sleep(ms);	Remember your delayed function must be 'async'
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -21,6 +22,7 @@ function getTokenFromArrTokens(name){
 	return token;
 }
 
+// Change opacity of ALL coordinates
 function setOpacityCoordinates(newVal){
 	var arrCoordinates = document.getElementsByClassName("coordinates");
 	for (var i=0; i<arrCoordinates.length; i++){
@@ -28,9 +30,37 @@ function setOpacityCoordinates(newVal){
 	}
 }
 
+// Change tag names of ALL tokens
 function setOpacityTagNames(newVal){
-	console.log("Set Opacitu tag names");
 	for (var i=0; i<arrTokens.length; i++){
 		arrTokens[i].tagName.style.opacity = newVal;
+	}
+}
+
+// Change just ONE tag Dice, if name=='' hide all
+function setOpacityTagDice(name, newVal){
+	if (name == ''){
+		for (var i=0; i<arrTokens.length; i++){
+			arrTokens[i].tagDice.style.opacity = 0;
+		}
+	} else {
+		var tagDice = document.getElementById("tagDice"+name);
+		if (tagDice != undefined){
+			tagDice.style.opacity = newVal;
+		}
+	}
+}
+
+async function showDiceResult(name){
+	setOpacityTagDice(name, 0);
+	var wait = 25;
+	for (var i=0; i<=1; i+=0.025){
+		setOpacityTagDice(name, i);
+		await sleep(wait);
+	}
+	await sleep(200*wait);
+	for (var i=1; i>=0; i-=0.025){
+		setOpacityTagDice(name, i);
+		await sleep(wait);
 	}
 }

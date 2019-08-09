@@ -24,21 +24,30 @@
 				break;
 			case '#':	// If received "#1d6" generate a random number
 				$mod = 0;
-				echo "$m";
-				$arrM = explode('+', ltrim($m, '#'));
-				if (count($arrM)>1)	$mod = $arrM[1];
-				$arrM = explode('-', $arrM[0]);
-				if (count($arrM)>1) $mod = -$arrM[1];
-				$arrM = explode('d', $arrM[0]);
-				$n = $arrM[0];
-				$d = $arrM[1];
-				$sum = 0;
-				for($i=0; $i<$n; $i++){
-					$sum += rand(1,$d);
+				$arrM = explode(' ', $m);
+				$sDice = $arrM[0];
+				# Malus
+				$arrD = explode('-', $sDice);
+				if (count($arrD)>1) $mod = -$arrD[1];	// mod == modificatior, can be positive or negative
+				# Dices
+				$arrPositives = explode('+', ltrim($arrD[0], '#'));	// arrD == array dice
+				foreach ($arrPositives as $arrPositive){	// Foreach thing to add: {dice, bonus}
+					$arrItem = explode('d', $arrPositive);
+					if (count($arrItem) > 0){	// It is a dice
+						$n = $arrItem[0];
+						$d = $arrItem[1];
+						for($i=0; $i<$n; $i++){
+							$sum += rand(1,$d);
+						}
+					} else {	// It is a bonus
+						$sum += $arrItem[0];
+					}
 				}
-				$sum += $mod;
-				$action = "$m -> $sum";
-				insert_action($idBoard, $action);
+				$action = "$sDice -> $sum";
+				$name = ltrim($arrM[1], '@');
+				echo "$action __ $name";
+				set_dice($idBoard, $name, $sum);
+				insert_action($idBoard, "$action @$name");
 				break;
 			case ':':	// Command as :reset or :reload
 				$command = ltrim($m, ':');
