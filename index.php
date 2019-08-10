@@ -3,7 +3,7 @@
 	<div id="stdOutput"><?php echo date("> d/m/Y G:i");?></div>
 </div>
 
-
+<div id="input_hidden"></div>
 <div id="canvas">
 	<input type="text" id="stdInput" placeholder="Input...">
 </div>

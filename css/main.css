@@ -41,12 +41,14 @@ body {
 	font-size: 80%;
 }
 
-#stdInput{	/* M */
+
+#stdInput{
 	position: fixed;
-	left: 6rem;
-	top: 0;
-	font-size: 3rem;
-	width: 25%;
+	top: unset;
+	bottom: 1rem;
+	margin-left: 25%;
+	font-size: 300%;
+	width: 50%;
 	z-index: 101;
 	display: none;
 }
@@ -58,22 +60,25 @@ body {
 	background-color: black;
 	position: relative;
 }
-/************************ Desktop *****************************************/
-@media only screen and (min-width: 1000px) {
 
-#stdInput{
-	position: fixed;
-	top: unset;
-	bottom: 1rem;
-	margin-left: 25%;
-	font-size: 100%;
-	width: 50%;
-	z-index: 101;
-	display: none;
+#input_hidden{
+	display: block;
 }
+
+/************************ Desktop *****************************************/
+@media only screen and (min-width: 800px) {
+
 
 #canvas{
 	margin: 0;
+}
+
+#stdInput{
+	font-size: 100%;
+}
+
+#input_hidden{
+	display: none;
 }
 
 }

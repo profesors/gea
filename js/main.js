@@ -17,11 +17,12 @@ function inputKeyPress_inputBox(event){
 		iCommands = arrCommands.length;	// Index of commands for historial
 		input.value="";	// Empty the input
 		setOpacityCoordinates(0);
-		input.style.display = "none";
+		input.style.display = document.getElementById("input_hidden").style.display;
+		input.blur();
 		break;
 	case 27:	// ESC
 		input.value = "";
-		input.style.display = "none";
+		input.style.display = document.getElementById("input_hidden").style.display;
 		break;
 	case 38:	// UP arrow
 		iCommands--;
@@ -62,7 +63,8 @@ function inputKeyPress_allDocument(event){
 	switch(event.keyCode){
 	case 27:	// ESC
 		input.value = "";
-		input.style.display = "none";
+		input.style.display = document.getElementById("input_hidden").style.display;
+		console.log(document.getElementById("input_hidden").style.display);
 		break;
 	case 48:	// =
 		input.value = "=";
