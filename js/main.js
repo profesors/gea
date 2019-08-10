@@ -90,7 +90,7 @@ function inputKeyPress_allDocument(event){
 }
 
 function touch(event){
-	if ((Date.now() - lastTouch) < 5000)	{
+	if ((Date.now() - lastTouch) < 500)	{
 		//alert(canvas.offsetLeft);
 		//showInputBox(event.touches[0].clientX, event.touches[0].clientY);
 		showInputBox();
