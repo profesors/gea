@@ -30,11 +30,20 @@ function setOpacityCoordinates(newVal){
 	}
 }
 
+function getOpacityCoordinates(){
+	var arrCoordinates = document.getElementsByClassName("coordinates");
+	return arrCoordinates[0].style.opacity;
+}
+
 // Change tag names of ALL tokens
 function setOpacityTagNames(newVal){
 	for (var i=0; i<arrTokens.length; i++){
 		arrTokens[i].tagName.style.opacity = newVal;
 	}
+}
+
+function getOpacityTagNAmes(){
+	return arrTokens[0].tagName.style.opacity;
 }
 
 // Change just ONE tag Dice, if name=='' hide all

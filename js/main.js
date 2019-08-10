@@ -90,12 +90,17 @@ function inputKeyPress_allDocument(event){
 }
 
 function touch(event){
-	if ((Date.now() - lastTouch) < 500)	{
+	if ((Date.now() - lastTouch) < 300)	{
 		//alert(canvas.offsetLeft);
 		//showInputBox(event.touches[0].clientX, event.touches[0].clientY);
-		showInputBox();
+		//showInputBox();
+		var opacity = getOpacityCoordinates();
+		setOpacityCoordinates(1-opacity);
+		setOpacityTagNames(1-opacity);
+		lastTouch = 0;
+	} else {
+		lastTouch = Date.now();
 	}
-	lastTouch = Date.now();
 }
 
 function showInputBox(){
