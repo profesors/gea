@@ -4,9 +4,9 @@ var arrCommands = [], iCommands = 0;	// Commands sended. Array and index to Arro
 var timerUpdates;						// Timer to check each second for updates from the server
 var arrActions = [], localLastActionId=0, arrRq = [];	// All actions of the game {ts, action}
 var board;	// Info about the board {name, tilew, tileh, ntilesw, ntilesh, bg, drawGridi, lastActionId}
-//var showCoordinates = false;
+var lastTouch = 0;
 
-function inputKeyPress(event){
+function inputKeyPress_inputBox(event){
 	//console.log(event.keyCode);
 	switch (event.keyCode){
 	case 13:
@@ -17,6 +17,11 @@ function inputKeyPress(event){
 		iCommands = arrCommands.length;	// Index of commands for historial
 		input.value="";	// Empty the input
 		setOpacityCoordinates(0);
+		input.style.display = "none";
+		break;
+	case 27:	// ESC
+		input.value = "";
+		input.style.display = "none";
 		break;
 	case 38:	// UP arrow
 		iCommands--;
@@ -47,7 +52,57 @@ function inputKeyPress(event){
 	}
 	setOpacityCoordinates(opacity);
 	setOpacityTagNames(opacity);
-	//setOpacityTagDice(name, opacity);
+	event.stopPropagation();
+}
+
+function inputKeyPress_allDocument(event){
+	//console.log("DOCUMENT KeyCode "+event.keyCode);
+	var input = document.getElementById("stdInput");
+	var bShowInput = false;
+	switch(event.keyCode){
+	case 27:	// ESC
+		input.value = "";
+		input.style.display = "none";
+		break;
+	case 48:	// =
+		input.value = "=";
+		bShowInput = true;
+		break;
+	case 50:	// @
+		input.value = "@";
+		bShowInput = true;
+		break;
+	case 51:	// #
+		input.value = "#";
+		bShowInput = true;
+		break;
+	case 190:	// :
+		input.value = ":";
+		bShowInput = true;
+		break;
+	}
+	if (bShowInput){
+		input.style.display = "block";
+		input.focus();
+	}
+}
+
+function touch(event){
+	if ((Date.now() - lastTouch) < 5000)	{
+		//alert(canvas.offsetLeft);
+		//showInputBox(event.touches[0].clientX, event.touches[0].clientY);
+		showInputBox();
+	}
+	lastTouch = Date.now();
+}
+
+function showInputBox(){
+	var input = document.getElementById("stdInput");
+	input.style.display = "block";
+	input.focus();
+	//input.style.top = x+"px";
+	//input.style.left = y+"px";
+
 }
 
 function checkUpdates(){
@@ -81,7 +136,10 @@ window.addEventListener("load", function() {
 	//canvas.style.width = MAXX+"px";
 	//canvas.style.height = MAXY+"px";
 	output.style.height = (MAXY-100)+"px";
-	input.addEventListener("keyup", function (event) {inputKeyPress(event);});
+	input.addEventListener("keyup", function (event) {inputKeyPress_inputBox(event);});
+	document.addEventListener("keyup", function (event) {inputKeyPress_allDocument(event);});
+	document.addEventListener("touchend", function (event) {touch(event)});
+
 	input.focus();
 	input.value = "";
 	getBoard(2);
@@ -98,3 +156,10 @@ window.addEventListener("resize", function() {
 	output.style.height = (MAXY-100)+"px";
 });
 
+/*
+window.addEventListener("scroll", function (){
+	var input = document.getElementById("stdInput");
+	var canvas = document.getElementById("casnvas");
+	input.style.top = canvas.scroll.top;
+	input.style.left = canvas.scroll.left;
+});*/

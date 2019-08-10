@@ -23,8 +23,14 @@ body {
 	height: 100%;
 	z-index: 10000000;
 	background-color: grey;
+	display: none;
 }
 
+#btnShowInput{
+
+}
+
+/*********************** Mobile ***********************************************/
 #stdOutput{
 	overflow-x: scroll;
 	background-color: white;
@@ -35,17 +41,39 @@ body {
 	font-size: 80%;
 }
 
-#stdInput{
-	position: absolute;
-	bottom: 1rem;
-	width: 100%-2rem;
-	margin: 1rem;
+#stdInput{	/* M */
+	position: fixed;
+	left: 6rem;
+	top: 0;
+	font-size: 3rem;
+	width: 25%;
+	z-index: 101;
+	display: none;
 }
 
 #canvas {
-	margin: 0 0 0 300px;
+	margin: 6rem;
 	width: 100%;
 	height: 100%;
 	background-color: black;
 	position: relative;
+}
+/************************ Desktop *****************************************/
+@media only screen and (min-width: 1000px) {
+
+#stdInput{
+	position: fixed;
+	top: unset;
+	bottom: 1rem;
+	margin-left: 25%;
+	font-size: 100%;
+	width: 50%;
+	z-index: 101;
+	display: none;
+}
+
+#canvas{
+	margin: 0;
+}
+
 }
