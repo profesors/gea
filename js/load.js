@@ -76,11 +76,13 @@ function getTokens(idBoard){
 				
 				// As the token is inserted, we just need update its possition
 				// so do not do anything more
+				// IF THE TOKEN EXISTS previously... execute this IF
 				var currentToken = getTokenFromArrTokens(token.name);
 				if (currentToken != null){
 					//console.log("Ya existe este token. Actualizo " +currentToken.name);
-					currentToken.div.style.left = token.div.style.left;
-					currentToken.div.style.top = token.div.style.top;
+					moveToken(currentToken, token.x, token.y);
+					//currentToken.div.style.left = token.div.style.left;
+					//currentToken.div.style.top = token.div.style.top;
 					currentToken.div.img.style.border = token.div.img.style.border;
 					currentToken.div.img.src = "img/tokens/"+token.src;
 					currentToken.tagDice.innerHTML = token.tagDice.innerHTML;

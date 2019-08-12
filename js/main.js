@@ -66,6 +66,24 @@ function inputKeyPress_allDocument(event){
 		input.style.display = document.getElementById("input_hidden").style.display;
 		console.log(document.getElementById("input_hidden").style.display);
 		break;
+	case 38:	// Arrow UP
+		iCommands--;
+		if (iCommands>=0){
+			input.value = arrCommands[iCommands];
+		} else {
+			iCommands = 0;
+		}
+		bShowInput = true;
+		break;
+	case 40:	// DOWN arrow
+		iCommands++;
+		if (iCommands<arrCommands.length){
+			input.value = arrCommands[iCommands];
+		} else {
+			iCommands = arrCommands.length-1;
+		}
+		bShowInput = true;
+		break;
 	case 48:	// =
 		input.value = "=";
 		bShowInput = true;
@@ -146,7 +164,6 @@ window.addEventListener("load", function() {
 	input.addEventListener("keyup", function (event) {inputKeyPress_inputBox(event);});
 	document.addEventListener("keyup", function (event) {inputKeyPress_allDocument(event);});
 	document.addEventListener("touchend", function (event) {touch(event)});
-
 	input.focus();
 	input.value = "";
 	getBoard(2);

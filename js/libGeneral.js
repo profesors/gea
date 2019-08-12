@@ -60,16 +60,49 @@ function setOpacityTagDice(name, newVal){
 	}
 }
 
+// It shows the result of the dice fadeIn and then fadoOut
 async function showDiceResult(name){
 	setOpacityTagDice(name, 0);
+	var dice = document.getElementById("tagDice"+name);
+	var y = board.tileh/2;
+	const oy = y, p2 = Math.PI/2;
+	dice.style.top = y+"px";
 	var wait = 25;
 	for (var i=0; i<=1; i+=0.025){
+		y = oy - Math.sin(i*p2)*oy;
+		dice.style.top = y+"px";
 		setOpacityTagDice(name, i);
 		await sleep(wait);
 	}
 	await sleep(200*wait);
 	for (var i=1; i>=0; i-=0.025){
+		y = -oy * (Math.cos(i*p2));
+		dice.style.top = y+"px";
 		setOpacityTagDice(name, i);
 		await sleep(wait);
+	}
+	dice.style.opacity = 0;
+}
+
+async function moveToken(token, toX, toY){
+	// From (ox, oy) to (ox+dx, oy+dy)
+	if (token.x != toX || token.y != toY){
+		const ox = getPixel(token.x, board.tilew);
+		const oy = getPixel(token.y, board.tileh);
+		const dx = getPixel(toX, board.tilew)-ox;
+		const dy = getPixel(toY, board.tileh)-oy;
+		const oz = token.z;
+		token.div.style.zIndex = 200;
+		const pi2 = Math.PI/2;
+		for (var i=0; i<=pi2; i+=0.01){
+			token.div.style.left = (ox+Math.sin(i)*dx)+"px";
+			token.div.style.top = (oy+Math.sin(i)*dy)+"px";
+			token.div.style.transform = "scale("+(0.5*Math.sin(2*i)+1)+")";
+			await sleep(1);
+		}
+		token.x = toX;
+		token.y = toY;
+		token.div.style.zIndex = 100;
+		token.div.style.transform = "scale(1)";
 	}
 }
