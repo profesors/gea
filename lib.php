@@ -1,10 +1,17 @@
 <?php
 
+# 1.0
 $db = null;
 
 function connectDB(){
 	global $db;
-	$db = mysqli_connect("localhost", "gea", "gea", "Gea");
+	// Host, user, passwd, db_name
+	$db = mysqli_connect("localhost", "gea", "gea", "gea");
+	//$db = mysqli_connect("db5000148109.hosting-data.io:3306", "dbu120009", "S4!4m4nc4", "dbs143332");
+	if (!$db){
+		echo "ERROR: Cannot connect to DB\n";
+		die();
+	}
 }
 
 function secure_param($name){

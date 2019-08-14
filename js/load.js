@@ -13,6 +13,8 @@ function getBoard(idBoard){
 				tileh: parseInt(arrResponse.shift()),
 				ntilesw: parseInt(arrResponse.shift()),
 				ntilesh: parseInt(arrResponse.shift()),
+				offsetx: parseInt(arrResponse.shift()),
+				offsety: parseInt(arrResponse.shift()),
 				bg: arrResponse.shift(),
 				drawGrid: (arrResponse.shift()=='1'),
 				lastActionId: parseInt(arrResponse.shift())
@@ -60,8 +62,8 @@ function getTokens(idBoard){
 				}
 				//console.log(token);
 				// Position of the token
-				var x = getPixel(token.x, board.tilew);
-				var y = getPixel(token.y, board.tileh)
+				var x = getPixel(token.x, board.tilew, board.offsetx);
+				var y = getPixel(token.y, board.tileh, board.offsety)
 				token.div.id = token.name;
 				token.div.style.left = x.toString()+"px";
 				token.div.style.top = y.toString()+"px";
@@ -173,9 +175,9 @@ function drawCellNames(){
 	for (var y=1; y<=board.ntilesh; y++){
 		for (var x=1; x<=board.ntilesw; x++){
 			var txt = document.createElement("div");	
-			txt.innerHTML = x+", "+y;
-			txt.style.left = getPixel(x, board.tilew)+"px";
-			txt.style.top = getPixel(y, board.tileh)+"px";
+			txt.innerHTML = x+","+y;
+			txt.style.left = getPixel(x, board.tilew, board.offsetx)+"px";
+			txt.style.top = getPixel(y, board.tileh, board.offsety)+"px";
 			txt.style.position = "absolute";
 			txt.style.color = "white";
 			txt.style.zIndex = 100;

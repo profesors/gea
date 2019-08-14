@@ -7,8 +7,8 @@ function sleep(ms) {
 }
 
 // Return pixels from the screen
-function getPixel(pos, sizeOfTile){
-	return (pos-1)*sizeOfTile; 
+function getPixel(pos, sizeOfTile, offset){
+	return (pos-1)*sizeOfTile+offset; 
 }
 
 function getTokenFromArrTokens(name){
@@ -87,10 +87,10 @@ async function showDiceResult(name){
 async function moveToken(token, toX, toY){
 	// From (ox, oy) to (ox+dx, oy+dy)
 	if (token.x != toX || token.y != toY){
-		const ox = getPixel(token.x, board.tilew);
-		const oy = getPixel(token.y, board.tileh);
-		const dx = getPixel(toX, board.tilew)-ox;
-		const dy = getPixel(toY, board.tileh)-oy;
+		const ox = getPixel(token.x, board.tilew, board.offsetx);
+		const oy = getPixel(token.y, board.tileh, board.offsety);
+		const dx = getPixel(toX, board.tilew, board.offsetx)-ox;
+		const dy = getPixel(toY, board.tileh, board.offsety)-oy;
 		const oz = token.z;
 		token.div.style.zIndex = 200;
 		const pi2 = Math.PI/2;

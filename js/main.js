@@ -24,22 +24,6 @@ function inputKeyPress_inputBox(event){
 		input.value = "";
 		input.style.display = document.getElementById("input_hidden").style.display;
 		break;
-	case 38:	// UP arrow
-		iCommands--;
-		if (iCommands>=0){
-			input.value = arrCommands[iCommands];
-		} else {
-			iCommands = 0;
-		}
-		break;
-	case 40:	// DOWN arrow
-		iCommands++;
-			if (iCommands<arrCommands.length){
-				input.value = arrCommands[iCommands];
-			} else {
-				iCommands = arrCommands.length-1;
-			}
-		break;
 	}
 	var opacity = 0, name = '';
 	if (input.value.includes('@')){
@@ -56,15 +40,17 @@ function inputKeyPress_inputBox(event){
 	event.stopPropagation();
 }
 
+// Key pressed out of the input box
 function inputKeyPress_allDocument(event){
 	//console.log("DOCUMENT KeyCode "+event.keyCode);
 	var input = document.getElementById("stdInput");
 	var bShowInput = false;
 	switch(event.keyCode){
 	case 27:	// ESC
-		input.value = "";
+		//input.value = "";
 		input.style.display = document.getElementById("input_hidden").style.display;
 		console.log(document.getElementById("input_hidden").style.display);
+		iCommands = arrCommands.length;
 		break;
 	case 38:	// Arrow UP
 		iCommands--;
@@ -80,24 +66,25 @@ function inputKeyPress_allDocument(event){
 		if (iCommands<arrCommands.length){
 			input.value = arrCommands[iCommands];
 		} else {
-			iCommands = arrCommands.length-1;
+			iCommands = arrCommands.length;
+			input.value = "";
 		}
 		bShowInput = true;
 		break;
 	case 48:	// =
-		input.value = "=";
+		//input.value = "=";
 		bShowInput = true;
 		break;
 	case 50:	// @
-		input.value = "@";
+		//input.value = "@";
 		bShowInput = true;
 		break;
 	case 51:	// #
-		input.value = "#";
+		//input.value = "#";
 		bShowInput = true;
 		break;
 	case 190:	// :
-		input.value = ":";
+		//input.value = ":";
 		bShowInput = true;
 		break;
 	}
@@ -108,7 +95,7 @@ function inputKeyPress_allDocument(event){
 }
 
 function touch(event){
-	if ((Date.now() - lastTouch) < 300)	{
+	if ((Date.now() - lastTouch) < 250)	{
 		//alert(canvas.offsetLeft);
 		//showInputBox(event.touches[0].clientX, event.touches[0].clientY);
 		//showInputBox();
@@ -119,6 +106,7 @@ function touch(event){
 	} else {
 		lastTouch = Date.now();
 	}
+	event.preventDefault();
 }
 
 function showInputBox(){
@@ -158,15 +146,13 @@ window.addEventListener("load", function() {
 	panel1 = document.getElementById("panel1");
 	input = document.getElementById("stdInput");
 	output = document.getElementById("stdOutput");
-	//canvas.style.width = MAXX+"px";
-	//canvas.style.height = MAXY+"px";
 	output.style.height = (MAXY-100)+"px";
 	input.addEventListener("keyup", function (event) {inputKeyPress_inputBox(event);});
-	document.addEventListener("keyup", function (event) {inputKeyPress_allDocument(event);});
+	document.addEventListener("keydown", function (event) {inputKeyPress_allDocument(event);});
 	document.addEventListener("touchend", function (event) {touch(event)});
 	input.focus();
 	input.value = "";
-	getBoard(2);
+	getBoard(1);
 	timerUpdates = setInterval(checkUpdates,1000);
 });
 
