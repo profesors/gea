@@ -80,7 +80,12 @@ function inputKeyPress_allDocument(event){
 	case 72:	// h
 		const panel = document.getElementById("panel1");
 		console.log(panel.style.display);
-		panel.style.display = panel.style.display!='block'?'block':'none';
+		if (panel.style.display != 'block'){
+			panel.style.display = 'block';
+			updateActionsPanel(board.id);
+		} else {
+			panel.style.display = 'none';
+		}
 		break
 	case 190:	// :
 		bShowInput = true;
@@ -126,7 +131,7 @@ function checkUpdates(){
 			if (localLastActionId < board.lastActionId){	// Update tokens
 				getTokens(board.id);
 				//localLastActionId = board.lastActionId;
-				updateActions(board.id);
+				if (panel1.style.display == 'block')	updateActionsPanel(board.id);
 			}
 			if (localLastActionId > board.lastActionId){	// Remove all tokens and update all of them
 				removeAllLoadedTokens();	
@@ -150,7 +155,7 @@ window.addEventListener("load", function() {
 	input.focus();
 	input.value = "";
 	getBoard(1);
-	updateActions(1)
+	updateActionsPanel(1)
 	timerUpdates = setInterval(checkUpdates,1000);
 });
 

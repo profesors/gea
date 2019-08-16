@@ -107,7 +107,7 @@ async function moveToken(token, toX, toY){
 	}
 }
 
-function updateActions(idBoard){
+function updateActionsPanel(idBoard){
 	const rq = new XMLHttpRequest();
 	rq.open("GET", "rq/getActions.php?idBoard="+idBoard);
 	rq.send();
