@@ -106,3 +106,19 @@ async function moveToken(token, toX, toY){
 		token.div.style.transform = "scale(1)";
 	}
 }
+
+function updateActions(idBoard){
+	const rq = new XMLHttpRequest();
+	rq.open("GET", "rq/getActions.php?idBoard="+idBoard);
+	rq.send();
+	rq.onreadystatechange = function(e) {
+	if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
+		console.log(rq.responseText);
+		const stdOutput = document.getElementById("stdOutput");
+		stdOutput.innerHTML = rq.responseText;
+		stdOutput.scrollTop = stdOutput.scrollHeight;
+	}
+	}
+
+
+}

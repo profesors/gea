@@ -145,7 +145,7 @@ function getTokens(idBoard){
 					token.div.appendChild(token.div.img); }
 			} // if
 		}	// forEach
-		localLastActionId = board.lastActionId;	// QUITAR @TODO @1
+		localLastActionId = board.lastActionId;
 	} // if STATUS 200
 	} // onReadyStateChange
 }

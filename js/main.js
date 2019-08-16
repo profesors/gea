@@ -77,6 +77,11 @@ function inputKeyPress_allDocument(event){
 	case 51:	// #
 		bShowInput = true;
 		break;
+	case 72:	// h
+		const panel = document.getElementById("panel1");
+		console.log(panel.style.display);
+		panel.style.display = panel.style.display!='block'?'block':'none';
+		break
 	case 190:	// :
 		bShowInput = true;
 		break;
@@ -106,8 +111,6 @@ function showInputBox(){
 	var input = document.getElementById("stdInput");
 	input.style.display = "block";
 	input.focus();
-	//input.style.top = x+"px";
-	//input.style.left = y+"px";
 
 }
 
@@ -123,6 +126,7 @@ function checkUpdates(){
 			if (localLastActionId < board.lastActionId){	// Update tokens
 				getTokens(board.id);
 				//localLastActionId = board.lastActionId;
+				updateActions(board.id);
 			}
 			if (localLastActionId > board.lastActionId){	// Remove all tokens and update all of them
 				removeAllLoadedTokens();	
@@ -139,13 +143,14 @@ window.addEventListener("load", function() {
 	panel1 = document.getElementById("panel1");
 	input = document.getElementById("stdInput");
 	output = document.getElementById("stdOutput");
-	output.style.height = (MAXY-100)+"px";
+	output.style.height = MAXY+"px";
 	input.addEventListener("keyup", function (event) {inputKeyPress_inputBox(event);});
 	document.addEventListener("keydown", function (event) {inputKeyPress_allDocument(event);});
 	document.addEventListener("touchend", function (event) {touch(event)});
 	input.focus();
 	input.value = "";
 	getBoard(1);
+	updateActions(1)
 	timerUpdates = setInterval(checkUpdates,1000);
 });
 
@@ -156,7 +161,7 @@ window.addEventListener("resize", function() {
 	//canvas.style.width = MAXX+"px";
 	//canvas.style.height = MAXY+"px";
 	panel1.style.height = MAXY+"px";
-	output.style.height = (MAXY-100)+"px";
+	output.style.height = MAXY+"px";
 });
 
 /*
