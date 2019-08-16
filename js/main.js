@@ -20,10 +20,6 @@ function inputKeyPress_inputBox(event){
 		input.style.display = document.getElementById("input_hidden").style.display;
 		input.blur();
 		break;
-	case 27:	// ESC
-		input.value = "";
-		input.style.display = document.getElementById("input_hidden").style.display;
-		break;
 	}
 	var opacity = 0, name = '';
 	if (input.value.includes('@')){
@@ -47,9 +43,10 @@ function inputKeyPress_allDocument(event){
 	var bShowInput = false;
 	switch(event.keyCode){
 	case 27:	// ESC
-		//input.value = "";
+		input.value = "";
 		input.style.display = document.getElementById("input_hidden").style.display;
-		console.log(document.getElementById("input_hidden").style.display);
+		setOpacityCoordinates(0);
+		setOpacityTagNames(0);
 		iCommands = arrCommands.length;
 		break;
 	case 38:	// Arrow UP
@@ -72,19 +69,15 @@ function inputKeyPress_allDocument(event){
 		bShowInput = true;
 		break;
 	case 48:	// =
-		//input.value = "=";
 		bShowInput = true;
 		break;
 	case 50:	// @
-		//input.value = "@";
 		bShowInput = true;
 		break;
 	case 51:	// #
-		//input.value = "#";
 		bShowInput = true;
 		break;
 	case 190:	// :
-		//input.value = ":";
 		bShowInput = true;
 		break;
 	}

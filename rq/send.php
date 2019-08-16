@@ -23,12 +23,12 @@
 				insert_action($idBoard, $m);
 				break;
 			case '#':	// If received "#1d6" generate a random number
-				$mod = 0;
+				$sum = 0;
 				$arrM = explode(' ', $m);
 				$sDice = $arrM[0];
 				# Malus
 				$arrD = explode('-', $sDice);
-				if (count($arrD)>1) $mod = -$arrD[1];	// mod == modificatior, can be positive or negative
+				if (count($arrD)>1) $sum = -$arrD[1];	// mod == modificatior, can be positive or negative
 				# Dices
 				$arrPositives = explode('+', ltrim($arrD[0], '#'));	// arrD == array dice
 				foreach ($arrPositives as $arrPositive){	// Foreach thing to add: {dice, bonus}
