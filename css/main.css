@@ -2,7 +2,8 @@ html {
 	background-color: black;
 	font-family: sans-serif;
 	/*overflow: hidden;*/
-	scrollbar-color: grey black;
+	scrollbar-color: #111111 black;
+	scroll-behavior: smooth;
 }
 body {
 	/*overflow: auto;*/

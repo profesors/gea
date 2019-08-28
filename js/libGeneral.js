@@ -113,12 +113,11 @@ function updateActionsPanel(idBoard){
 	rq.send();
 	rq.onreadystatechange = function(e) {
 	if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
-		console.log(rq.responseText);
+		//console.log(rq.responseText);
 		const stdOutput = document.getElementById("stdOutput");
 		stdOutput.innerHTML = rq.responseText;
 		stdOutput.scrollTop = stdOutput.scrollHeight;
 	}
 	}
-
-
 }
+

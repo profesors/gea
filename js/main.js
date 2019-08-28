@@ -120,13 +120,28 @@ function showInputBox(){
 }
 
 function checkUpdates(){
+	// Save current scroll
+	const scrollTop = window.pageYOffset;
+	const scrollLeft = window.pageXOffset;
+	Cookies.set("scrollTop", scrollTop, 1);
+	Cookies.set("scrollLeft", scrollLeft, 1);
+
 	// Get Last Action ID
 	var rq = new XMLHttpRequest();
 	rq.open("GET", "rq/getLastActionId.php?idBoard="+board.id);
 	rq.send();
 	rq.onreadystatechange = function () {
 		if (rq.readyState == XMLHttpRequest.DONE && rq.status == 200){
-			board.lastActionId = parseInt(rq.responseText);	// lastActionId is the last action recorded in the server
+			var arrLastAction = rq.responseText.split(" ");
+			board.lastActionId = parseInt(arrLastAction[0]);	// lastActionId is the last action recorded in the server
+			var bg_ts = parseInt(arrLastAction[1]);
+			if (board.bg_ts < bg_ts){
+				// Update BG
+				const tsNow = new Date().getTime();
+				canvas.style.backgroundImage = "url('img/bg/"+board.bg+"?cache="+tsNow+"')";
+				board.bg_ts = bg_ts;
+				console.log("UPDATE BG:"+canvas.style.backgroundImage);
+			}
 			
 			if (localLastActionId < board.lastActionId){	// Update tokens
 				getTokens(board.id);
@@ -154,8 +169,8 @@ window.addEventListener("load", function() {
 	document.addEventListener("touchend", function (event) {touch(event)});
 	input.focus();
 	input.value = "";
-	getBoard(1);
-	updateActionsPanel(1)
+	getBoard(3);
+	updateActionsPanel(3)
 	timerUpdates = setInterval(checkUpdates,1000);
 });
 

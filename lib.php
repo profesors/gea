@@ -1,7 +1,9 @@
 <?php
 
-# 1.0
+# 1.1
 $db = null;
+const DIR_BASE = '/home/samuel/Web/Gea';
+const DIR_BG = DIR_BASE.'/img/bg';
 
 function connectDB(){
 	global $db;
@@ -114,4 +116,22 @@ function set_dice($idBoard, $name, $value){
 	$query = "UPDATE tokens SET dice_result = $value, dice_actionId = $nextActionId WHERE idBoard = $idBoard AND name = '$name';";
 	run_sql($query) or die();
 }
+
+
+function get_bg_filename($idBoard){
+	global $db;
+	$query = "SELECT bg FROM boards WHERE id = $idBoard LIMIT 1;";
+	$result = run_sql($query) or die();
+	$row = mysqli_fetch_array($result);
+	$bg_name = $row['bg'];
+	return $bg_name;
+}
+
+function get_bg_ts($idBoard){
+	global $db;
+	$bg_file_name = get_bg_filename($idBoard);
+	$bg_ts = filemtime(DIR_BG.'/'.$bg_file_name);
+	return $bg_ts;
+}
+
 ?>

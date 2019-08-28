@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
 
+	<script src='js/cookie.js'></script>
 	<script src='js/libGeneral.js'></script>
 	<script src='js/main.js'></script>
 	<script src='js/load.js'></script>

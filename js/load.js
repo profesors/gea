@@ -16,6 +16,7 @@ function getBoard(idBoard){
 				offsetx: parseInt(arrResponse.shift()),
 				offsety: parseInt(arrResponse.shift()),
 				bg: arrResponse.shift(),
+				bg_ts: 0,
 				drawGrid: (arrResponse.shift()=='1'),
 				lastActionId: parseInt(arrResponse.shift())
 			}
@@ -23,13 +24,18 @@ function getBoard(idBoard){
 			// BG
 			if (board.bg != ""){
 				var canvas = document.getElementById("canvas");
-				canvas.style.backgroundImage = "url(img/"+board.bg+")";
+				canvas.style.backgroundImage = "url(img/bg/"+board.bg+")";
 				canvas.style.backgroundRepeat = "no-repeat";
 				canvas.style.width = (board.tilew*board.ntilesw)+0.5*board.tilew+"px";
 				canvas.style.height = (board.tileh*board.ntilesh)+0.5*board.tileh+"px";
 			}
 			drawCellNames();
 			getTokens(board.id);
+			
+			const scrollTop = Cookies.get("scrollTop");
+			const scrollLeft =Cookies.get("scrollLeft"); 
+			window.scrollTo(scrollLeft, scrollTop);
+			//alert("SCROLL: "+scrollTop+" "+scrollLeft);
 		}
 	}
 }
@@ -83,6 +89,7 @@ function getTokens(idBoard){
 				if (currentToken != null){
 					//console.log("Ya existe este token. Actualizo " +currentToken.name);
 					moveToken(currentToken, token.x, token.y);
+					//window.scrollTo(x-MAXX/2, y-MAXY/2);
 					//currentToken.div.style.left = token.div.style.left;
 					//currentToken.div.style.top = token.div.style.top;
 					currentToken.div.img.style.border = token.div.img.style.border;
@@ -179,9 +186,9 @@ function drawCellNames(){
 			txt.style.left = getPixel(x, board.tilew, board.offsetx)+"px";
 			txt.style.top = getPixel(y, board.tileh, board.offsety)+"px";
 			txt.style.position = "absolute";
-			txt.style.color = "white";
+			txt.style.color = "#aaaaaa";//"white";
 			txt.style.zIndex = 100;
-			txt.style.textShadow = "2px 2px black";
+			txt.style.textShadow = "1px 1px black";
 			txt.style.opacity = "0";
 			txt.setAttribute("class", "coordinates");
 			canvas.appendChild(txt);
