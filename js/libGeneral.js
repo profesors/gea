@@ -87,6 +87,8 @@ async function showDiceResult(name){
 async function moveToken(token, toX, toY){
 	// From (ox, oy) to (ox+dx, oy+dy)
 	if (token.x != toX || token.y != toY){
+		setOpacityCoordinates(0);
+		setOpacityTagNames(0);
 		const ox = getPixel(token.x, board.tilew, board.offsetx);
 		const oy = getPixel(token.y, board.tileh, board.offsety);
 		const dx = getPixel(toX, board.tilew, board.offsetx)-ox;

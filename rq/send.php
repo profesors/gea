@@ -7,25 +7,26 @@
 	$m = preg_replace('/[ ,]+/', ' ', secure_param('m'));
 	$idBoard = intval(secure_param('idBoard'));
 
-	if ($m == '' && $idBoard <= 0) die("ERROR: Wrong parameters");
-
-	if ($m != NULL){
+	if ($m == '' && $m != NULL && $idBoard <= 0) die("ERROR: Wrong parameters");
+	$arrCommands = explode(';', $m);
+	foreach($arrCommands as $kCommand => $command){
+		$command = trim($command);
 		switch ($m[0]){
 			case '@':
-				$arrM = explode(' ', $m);
-				#$name = ltrim(mysqli_real_escape_string($db, $arrM[0]), '@');
-				$name = mysqli_real_escape_string($db, mb_substr(ltrim($arrM[0],'@'), 0, 3));
-				$x = $arrM[1];
-				$y = $arrM[2];
-				$img_src = (array_key_exists(3, $arrM))?$arrM[3]:'';
-				$border = (array_key_exists(4, $arrM))?$arrM[4]:'';
+				$arrParameter = explode(' ', $command);
+				#$name = ltrim(mysqli_real_escape_string($db, $arrParameter[0]), '@');
+				$name = mysqli_real_escape_string($db, mb_substr(ltrim($arrParameter[0],'@'), 0, 3));
+				$x = $arrParameter[1];
+				$y = $arrParameter[2];
+				$img_src = (array_key_exists(3, $arrParameter))?$arrParameter[3]:'';
+				$border = (array_key_exists(4, $arrParameter))?$arrParameter[4]:'';
 				insert_token($idBoard, $name, $x, $y, 1, 1, $img_src, $border);
 				insert_action($idBoard, $m);
 				break;
 			case '#':	// If received "#1d6" generate a random number
 				$sum = 0;
-				$arrM = explode(' ', $m);
-				$sDice = $arrM[0];
+				$arrParameter = explode(' ', $command);
+				$sDice = $arrParameter[0];
 				# Malus
 				$arrD = explode('-', $sDice);
 				if (count($arrD)>1) $sum = -$arrD[1];	// mod == modificatior, can be positive or negative
@@ -44,7 +45,7 @@
 					}
 				}
 				$action = "$sDice -> $sum";
-				$name = ltrim($arrM[1], '@');
+				$name = ltrim($arrParameter[1], '@');
 				echo "$action __ $name";
 				set_dice($idBoard, $name, $sum);
 				insert_action($idBoard, "$action @$name");
@@ -58,8 +59,6 @@
 				}
 				break;
 			default:
-				insert_action($idBoard, $m);
+				insert_action($idBoard, $command);
 		}
-	} else {
-		echo "Param m is NULL: $m";
 	}

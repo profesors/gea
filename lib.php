@@ -81,6 +81,8 @@ function update_position_token($idBoard, $name, $x, $y, $z){
 	run_sql($query) or die();
 }
 
+# Insert token in database, if there is not $img_src or $border ignore it
+# If the token id is duplicate, just update it
 function insert_token($idBoard, $name, $x, $y, $z, $step, $img_src, $border){
 	global $db;
 	$name = ($name=='')?'NULL':$name;

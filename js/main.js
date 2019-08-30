@@ -4,7 +4,12 @@ var arrCommands = [], iCommands = 0;	// Commands sended. Array and index to Arro
 var timerUpdates;						// Timer to check each second for updates from the server
 var arrActions = [], localLastActionId=0, arrRq = [];	// All actions of the game {ts, action}
 var board;	// Info about the board {name, tilew, tileh, ntilesw, ntilesh, bg, drawGridi, lastActionId}
-var lastTouch = 0;
+var touch = {
+	ts: 0,
+	ts2: 0,
+	x: 0,
+	y: 0
+}
 
 function inputKeyPress_inputBox(event){
 	//console.log(event.keyCode);
@@ -97,18 +102,22 @@ function inputKeyPress_allDocument(event){
 	}
 }
 
-function touch(event){
-	if ((Date.now() - lastTouch) < 250)	{
+function eventTouch(event){
+	touch.x = event.touches[0].clientX;
+	touch.y = event.touches[0].clientY;
+	if ((Math.abs(Date.now() - touch.ts) < 150) && (Math.abs(touch.ts - touch.ts2) < 150))	{
 		//alert(canvas.offsetLeft);
 		//showInputBox(event.touches[0].clientX, event.touches[0].clientY);
 		//showInputBox();
+		//alert((Date.now() - touch.ts)+"     "+(touch.ts-touch.ts2));
 		var opacity = getOpacityCoordinates();
 		setOpacityCoordinates(1-opacity);
 		setOpacityTagNames(1-opacity);
-		lastTouch = 0;
 	} else {
-		lastTouch = Date.now();
+		//alert(Date.now()+"         "+touch.ts+"        "+touch.ts2);
 	}
+	touch.ts2 = touch.ts;
+	touch.ts = Date.now();
 	event.preventDefault();
 }
 
@@ -166,7 +175,7 @@ window.addEventListener("load", function() {
 	output.style.height = MAXY+"px";
 	input.addEventListener("keyup", function (event) {inputKeyPress_inputBox(event);});
 	document.addEventListener("keydown", function (event) {inputKeyPress_allDocument(event);});
-	document.addEventListener("touchend", function (event) {touch(event)});
+	document.addEventListener("touchstart", function (event) {eventTouch(event)});
 	input.focus();
 	input.value = "";
 	getBoard(3);
