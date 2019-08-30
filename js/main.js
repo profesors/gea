@@ -105,7 +105,7 @@ function inputKeyPress_allDocument(event){
 function eventTouch(event){
 	touch.x = event.touches[0].clientX;
 	touch.y = event.touches[0].clientY;
-	if ((Math.abs(Date.now() - touch.ts) < 150) && (Math.abs(touch.ts - touch.ts2) < 150))	{
+	if ((Math.abs(Date.now() - touch.ts) < 250) && (Math.abs(touch.ts - touch.ts2) < 250))	{
 		//alert(canvas.offsetLeft);
 		//showInputBox(event.touches[0].clientX, event.touches[0].clientY);
 		//showInputBox();
