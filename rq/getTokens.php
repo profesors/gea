@@ -8,7 +8,8 @@ $idBoard = secure_param('idBoard');
 $query = "SELECT * FROM tokens WHERE idBoard = $idBoard;";
 $result = run_sql($query) or die();
 while($row = mysqli_fetch_array($result)){
-	echo $row['x'].' '.$row['y'].' '.$row['z'].' '.$row['step'].' '.$row['img'].' ';
+	echo $row['x'].' '.$row['y'].' '.$row['z'].' '.$row['w'].' '.$row['h'].' ';
+	echo $row['step'].' '.$row['img'].' ';
 	echo $row['name'].' '.$row['border'].' '.$row['dice_result'].' '.$row['dice_actionId']."\n";
 }
 

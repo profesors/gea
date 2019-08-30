@@ -56,15 +56,17 @@ function getTokens(idBoard){
 					x: arrOneToken[0],
 					y: arrOneToken[1],
 					z: arrOneToken[2],
-					step: arrOneToken[3],
-					src: arrOneToken[4],
-					name: arrOneToken[5],
+					w: arrOneToken[3],
+					h: arrOneToken[4],
+					step: arrOneToken[5],
+					src: arrOneToken[6],
+					name: arrOneToken[7],
 					div: document.createElement("div"),	// Pointer to 'html div' tag with the container
-					border: arrOneToken[6].replace(/\+/g, ' '),
+					border: arrOneToken[8].replace(/\+/g, ' '),
 					tagName: document.createElement("div"),
 					tagDice: document.createElement("div"),
-					dice: arrOneToken[7],
-					diceActionId: arrOneToken[8]
+					dice: arrOneToken[9],
+					diceActionId: arrOneToken[10]
 				}
 				//console.log(token);
 				// Position of the token
@@ -73,8 +75,9 @@ function getTokens(idBoard){
 				token.div.id = token.name;
 				token.div.style.left = x.toString()+"px";
 				token.div.style.top = y.toString()+"px";
-				token.div.style.width = board.tilew;
-				token.div.style.height = board.tileh;
+				// AQUI
+				token.div.style.width = board.tilew*token.w;
+				token.div.style.height = board.tileh*token.h;
 				
 				token.div.img = document.createElement("img");
 				token.div.img.style.border = token.border;
@@ -89,14 +92,12 @@ function getTokens(idBoard){
 				if (currentToken != null){
 					//console.log("Ya existe este token. Actualizo " +currentToken.name);
 					moveToken(currentToken, token.x, token.y);
-					//window.scrollTo(x-MAXX/2, y-MAXY/2);
-					//currentToken.div.style.left = token.div.style.left;
-					//currentToken.div.style.top = token.div.style.top;
 					currentToken.div.img.style.border = token.div.img.style.border;
 					currentToken.div.img.src = "img/tokens/"+token.src;
 					currentToken.tagDice.innerHTML = token.tagDice.innerHTML;
-					//showDiceResult(currentToken.name);
-					//console.log("local "+localLastActionId+" token "+token.diceActionId);
+
+					currentToken.div.style.width = board.tilew*token.w;
+					currentToken.div.style.height = board.tileh*token.h;
 					if (localLastActionId < token.diceActionId){
 						var name = currentToken.name;
 						setTimeout(function () {showDiceResult(name)} ,0);
@@ -116,7 +117,7 @@ function getTokens(idBoard){
 				token.div.img.style.left = 0;
 				token.div.img.style.top = 0;
 				token.div.img.style.borderRadius = "50%";
-				token.div.img.style.width = board.tilew+"px";
+				token.div.img.style.width = (board.tilew*token.w)+"px";
 				
 				// Tag with the NAME 
 				token.tagName.id = "tagName"+token.name;
@@ -124,8 +125,8 @@ function getTokens(idBoard){
 				token.tagName.style.color = "yellow";
 				token.tagName.style.position = "absolute";
 				token.tagName.style.fontWeight = "bold";
-				token.tagName.style.top = 0.5*board.tileh+"px";
-				token.tagName.style.width = board.tilew+"px";
+				token.tagName.style.top = 0.5*board.tileh*token.h+"px";
+				token.tagName.style.width = board.tilew*token.w+"px";
 				token.tagName.style.textShadow = "2px 2px black";
 				token.tagName.style.zIndex = 100;
 				token.tagName.style.opacity = 0;
