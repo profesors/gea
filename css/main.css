@@ -4,6 +4,7 @@ html {
 	/*overflow: hidden;*/
 	scrollbar-color: #111111 black;
 	scroll-behavior: smooth;
+	cursor: default;
 }
 body {
 	/*overflow: auto;*/

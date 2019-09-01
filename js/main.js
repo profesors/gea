@@ -1,4 +1,4 @@
-var canvas, panel1, input, output;
+var canvas, svg, panel1, input, output;
 var arrTokens = [];						// Tokens in the board
 var arrCommands = [], iCommands = 0;	// Commands sended. Array and index to ArrowUp and ArrowDown recover
 var timerUpdates;						// Timer to check each second for updates from the server
@@ -10,14 +10,21 @@ var touch = {
 	x: 0,
 	y: 0
 }
+var movement = {
+	pixel_x0: -1,
+	pixel_y0: -1,
+	pixel_x1: -1,
+	pixel_y1: -1,
+	token: null,
+	toTileX: 0,
+	toTileY: 0
+}
 
 function inputKeyPress_inputBox(event){
 	//console.log(event.keyCode);
 	switch (event.keyCode){
 	case 13:
-		var rq = new XMLHttpRequest();
-		rq.open("GET", "rq/send.php?m="+encodeURIComponent(input.value)+"&idBoard="+board.id);
-		rq.send();
+		sendCommand(input.value);
 		arrCommands.push(input.value);
 		iCommands = arrCommands.length;	// Index of commands for historial
 		input.value="";	// Empty the input
@@ -106,7 +113,6 @@ function eventTouch(event){
 	touch.x = event.touches[0].clientX;
 	touch.y = event.touches[0].clientY;
 	if ((Math.abs(Date.now() - touch.ts) < 250) && (Math.abs(touch.ts - touch.ts2) < 250))	{
-		//alert(canvas.offsetLeft);
 		//showInputBox(event.touches[0].clientX, event.touches[0].clientY);
 		//showInputBox();
 		//alert((Date.now() - touch.ts)+"     "+(touch.ts-touch.ts2));
@@ -165,6 +171,78 @@ function checkUpdates(){
 	}
 }
 
+function mouseDown(event){
+	event.preventDefault();
+	const scrollTop = window.pageYOffset;
+	const scrollLeft = window.pageXOffset;
+	const x = event.clientX + scrollLeft;
+	const y = event.clientY + scrollTop;
+	movement.pixel_x0 = movement.pixel_x1 = x;
+	movement.pixel_y0 = movement.pixel_y1 = y;
+	// Tiles selected
+	const tilex = Math.floor((x-board.offsetx)/board.tilew)+1;
+	const tiley = Math.floor((y-board.offsety)/board.tileh)+1;
+	console.log(tilex+" "+tiley);
+	// Select Token
+	movement.token = null;
+	for (var i=0; i<arrTokens.length; i++){
+		const token = arrTokens[i];
+		const w = parseInt(token.w);
+		const h = parseInt(token.h);
+		token.x = parseInt(token.x);
+		token.y = parseInt(token.y);
+		//console.log(tilex+" >= "+token.x+" && "+tilex+" <= "+(token.x+w)+" && "+tiley+" >= "+token.y+" && "+tiley+" <= "+(token.y+h));
+		//if (token.x == tilex && token.y == tiley){
+		if (tilex >= token.x && tilex <= parseInt(token.x+w) && tiley >=token.y && tiley <= parseInt(token.y+h)){
+			//console.log("MOV: "+token.name+" -> "+tilex+","+tiley);
+			addSvgLine("line_movement", movement.pixel_x0, movement.pixel_y0, movement.pixel_x1, movement.pixel_y1, "red", 4);
+			movement.token = token;
+			bMoved = true;
+			break;
+		}
+	}
+}
+
+
+function mouseUp(event){
+	event.preventDefault();
+	const m = movement;
+	if (m.token != null){
+		const scrollTop = window.pageYOffset;
+		const scrollLeft = window.pageXOffset;
+		const x = event.clientX + scrollLeft;
+		const y = event.clientY + scrollTop;
+		// Tiles selected
+		const tilex = Math.floor((x-board.offsetx)/board.tilew)+1;
+		const tiley = Math.floor((y-board.offsety)/board.tileh)+1;
+		m.pixel_x0 = m.pixel_x1 = m.pixel_y0 = m.pixel_y1 = -1;
+		//moveToken(m.token, tilex, tiley);
+		console.log(m.token.name+" -> "+tilex+","+tiley);
+		sendCommand("@"+m.token.name+" "+tilex+","+tiley);
+		const l = document.getElementById("line_movement");
+		svg.removeChild(l);
+	}
+}
+
+function mouseMove(event){
+	event.preventDefault();
+	if (movement.token != null){
+		const scrollTop = window.pageYOffset;
+		const scrollLeft = window.pageXOffset;
+		const x = event.clientX + scrollLeft;
+		const y = event.clientY + scrollTop;
+		movement.pixel_x1 = x;
+		movement.pixel_y1 = y;
+		const l = document.getElementById("line_movement");
+		if (l != null){
+			l.setAttribute("x1", movement.pixel_x0);
+			l.setAttribute("y1", movement.pixel_y0);
+			l.setAttribute("x2", x);
+			l.setAttribute("y2", y);
+		}
+	}
+}
+
 window.addEventListener("load", function() {
 	MAXX = window.innerWidth;
 	MAXY = window.innerHeight;
@@ -176,6 +254,10 @@ window.addEventListener("load", function() {
 	input.addEventListener("keyup", function (event) {inputKeyPress_inputBox(event);});
 	document.addEventListener("keydown", function (event) {inputKeyPress_allDocument(event);});
 	document.addEventListener("touchstart", function (event) {eventTouch(event)});
+	document.addEventListener("mousedown", function(event) {mouseDown(event)});
+	document.addEventListener("mouseup", function(event) {mouseUp(event)});
+	document.addEventListener("mousemove", function (event) {mouseMove(event)});
+
 	input.focus();
 	input.value = "";
 	getBoard(3);

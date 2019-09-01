@@ -123,3 +123,42 @@ function updateActionsPanel(idBoard){
 	}
 }
 
+// Add the SVG child
+function addSvgCanvas(){
+	var w = board.ntilesw*board.tilew;
+	var h = board.ntilesh*board.tileh;
+	svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+	svg.setAttribute("id", "svgCanvas");
+	svg.setAttribute("width", w);
+	svg.setAttribute("height", h);
+	//svg.setAttribute("viewBox", board.offsetx+" "+board.offsety+" "+w+" "+h);
+	svg.setAttribute("version", "1.1");
+	canvas.appendChild(svg);
+}
+
+function addSvgCircle(id, x, y, r, fill){
+	var el = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+	el.setAttribute("id",id);
+	el.setAttribute("cx",x);
+	el.setAttribute("cy",y);
+	el.setAttribute("r",r);
+	el.setAttribute("fill",fill);
+	svg.appendChild(el);
+}
+
+function addSvgLine(id, x0, y0, x1, y1, color, width){
+	var el = document.createElementNS("http://www.w3.org/2000/svg", "line");
+	el.setAttribute("id",id);
+	el.setAttribute("x1",x0);
+	el.setAttribute("y1",y0);
+	el.setAttribute("x2",x1);
+	el.setAttribute("y2",y1);
+	el.setAttribute("style","stroke: "+color+"; stroke-width: "+width);
+	svg.appendChild(el);
+}
+
+function sendCommand(command){
+	var rq = new XMLHttpRequest();
+	rq.open("GET", "rq/send.php?m="+encodeURIComponent(command)+"&idBoard="+board.id);
+	rq.send();
+}

@@ -22,13 +22,11 @@ function getBoard(idBoard){
 			}
 			//console.log(board);
 			// BG
-			if (board.bg != ""){
-				var canvas = document.getElementById("canvas");
-				canvas.style.backgroundImage = "url(img/bg/"+board.bg+")";
-				canvas.style.backgroundRepeat = "no-repeat";
-				canvas.style.width = (board.tilew*board.ntilesw)+0.5*board.tilew+"px";
-				canvas.style.height = (board.tileh*board.ntilesh)+0.5*board.tileh+"px";
-			}
+			var canvas = document.getElementById("canvas");
+			//canvas.style.backgroundImage = "url(img/bg/"+board.bg+")";
+			canvas.style.backgroundRepeat = "no-repeat";
+			canvas.style.width = (board.tilew*board.ntilesw)+0.5*board.tilew+"px";
+			canvas.style.height = (board.tileh*board.ntilesh)+0.5*board.tileh+"px";
 			drawCellNames();
 			getTokens(board.id);
 			
@@ -36,6 +34,7 @@ function getBoard(idBoard){
 			const scrollLeft =Cookies.get("scrollLeft"); 
 			window.scrollTo(scrollLeft, scrollTop);
 			//alert("SCROLL: "+scrollTop+" "+scrollLeft);
+			addSvgCanvas();
 		}
 	}
 }
