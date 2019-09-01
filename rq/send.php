@@ -2,16 +2,44 @@
 	include_once('../lib.php');
 	connectDB();
 
-	//$_GET['m'] = "@1, 10,  10";
-	//$_GET['idBoard'] = 2;
-	$m = preg_replace('/[ ,]+/', ' ', secure_param('m'));
+	//$_GET['m'] = ":reset";
+	//$_GET['idBoard'] = 3;
+	$m = preg_replace('/[ ]+/', ' ', secure_param('m'));
 	$idBoard = intval(secure_param('idBoard'));
 
 	if ($m == '' && $m != NULL && $idBoard <= 0) die("ERROR: Wrong parameters");
 	$arrCommands = explode(';', $m);
 	foreach($arrCommands as $kCommand => $command){
 		$command = trim($command);
-		switch ($m[0]){
+	
+		preg_match("/@([^ ]*)/", $command, $arrTmp);
+		$name = array_key_exists(1, $arrTmp)?$arrTmp[1]:'';
+		preg_match("/(\d+),(\d+)/", $command, $arrTmp);
+		$x = array_key_exists(1, $arrTmp)?$arrTmp[1]:'';
+		$y = array_key_exists(2, $arrTmp)?$arrTmp[2]:'';
+		preg_match("/!([^ ]*)/", $command, $arrTmp);
+		$img_src = array_key_exists(1, $arrTmp)?$arrTmp[1]:'';
+		preg_match("/_([^ ]*)/", $command, $arrTmp);
+		$border = array_key_exists(1, $arrTmp)?$arrTmp[1]:'';
+		preg_match("/:([^ ]*)/", $command, $arrTmp);
+		$manual_command = array_key_exists(1, $arrTmp)?$arrTmp[1]:'';
+		preg_match("/%([^ ]*)/", $command, $arrTmp);
+		$size = array_key_exists(1, $arrTmp)?$arrTmp[1]:1;
+		
+		if ($manual_command != ''){
+			switch ($manual_command){
+			case 'reset':
+				echo "RESET";
+				reset_board($idBoard);
+				break;
+			}
+		} else {
+			insert_token($idBoard, $name, $x, $y, 1, 1, $img_src, $border, $size);
+			insert_action($idBoard, $m);
+		}
+
+		/*
+		switch ($command[0]){
 			case '@':
 				$arrParameter = explode(' ', $command);
 				#$name = ltrim(mysqli_real_escape_string($db, $arrParameter[0]), '@');
@@ -61,4 +89,5 @@
 			default:
 				insert_action($idBoard, $command);
 		}
+		 */
 	}
