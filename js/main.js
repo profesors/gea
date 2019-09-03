@@ -175,11 +175,8 @@ function checkUpdates(){
 function movementClick(event){
 	//event.preventDefault();
     //event.stopImmediatePropagation();
-	console.log("CLICK");
 	const x = (isNaN(event.clientX)?event.touches[0].screenX:event.clientX) + window.pageXOffset;	// En el tablero
 	const y = (isNaN(event.clientY)?event.touches[0].screenY:event.clientY) + window.pageYOffset;
-	console.log(event);
-	console.log("XY: "+x+" "+y);
 	if (movement.token == null){
 		movementSelectToken(x, y, false);
 	} else {
@@ -203,12 +200,14 @@ function movementSelectToken(x, y, bLine){
 		const h = parseInt(token.h);
 		token.x = parseInt(token.x);
 		token.y = parseInt(token.y);
-		if (tilex >= token.x && tilex <= parseInt(token.x+w) && tiley >=token.y && tiley <= parseInt(token.y+h)){
+		//console.log(tilex+">="+token.x+" && "+tilex+" <= "+parseInt(token.x+w-1)+" && "+tiley+" >= "+token.y+" && "+tiley+" <= "+parseInt(token.y+h-1));
+		if (tilex >= token.x && tilex <= parseInt(token.x+w-1) && tiley >=token.y && tiley <= parseInt(token.y+h-1)){
 			if (bLine){
 				addSvgLine("line_movement", movement.pixel_x0, movement.pixel_y0, movement.pixel_x1, movement.pixel_y1, "red", 4);
 			}
 			movement.token = token;
-			console.log("SELECTED "+token.name+" from "+tilex+" "+tiley);
+			token.tagName.style.opacity = 1;	// BORRAR
+			//console.log("SELECTED "+token.name+" from "+tilex+" "+tiley);
 			break;
 		}
 	}
@@ -220,11 +219,12 @@ function movementMoveToken(x, y, bLine){
 		// Tiles selected
 		const tilex = Math.floor((x-board.offsetx)/board.tilew)+1;
 		const tiley = Math.floor((y-board.offsety)/board.tileh)+1;
-		console.log("TILE DEST: "+tilex+" "+tiley);
+		//console.log("TILE DEST: "+tilex+" "+tiley);
 		m.pixel_x0 = m.pixel_x1 = m.pixel_y0 = m.pixel_y1 = -1;
 		//moveToken(m.token, tilex, tiley);
 		//console.log(m.token.name+" -> "+tilex+","+tiley);
 		sendCommand("@"+m.token.name+" "+tilex+","+tiley);
+		m.token.tagName.style.opacity = 0;
 		if (bLine){
 			const l = document.getElementById("line_movement");
 			svg.removeChild(l);
@@ -313,7 +313,7 @@ window.addEventListener("load", function() {
 	//document.addEventListener("mouseup", function(event) {mouseUp(event)});
 	//document.addEventListener("mousemove", function (event) {mouseMove(event)});
 	
-	//document.addEventListener("touchstart", function (event) {eventTouch(event)});	// Show coordinates
+	document.addEventListener("touchstart", function (event) {eventTouch(event)});	// Show coordinates
 	//document.addEventListener("touchstart", function (event) {movementClick(event)},hasQuiet() ? {passive: false} : false);
 
 	//document.addEventListener("touchmove", function (event) {touchMove(event)},hasQuiet() ? {passive: false} : false);
