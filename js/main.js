@@ -124,7 +124,6 @@ function eventTouch(event){
 	}
 	touch.ts2 = touch.ts;
 	touch.ts = Date.now();
-	event.preventDefault();
 }
 
 function showInputBox(){
@@ -171,18 +170,31 @@ function checkUpdates(){
 	}
 }
 
-function mouseDown(event){
-	event.preventDefault();
-	const scrollTop = window.pageYOffset;
-	const scrollLeft = window.pageXOffset;
-	const x = event.clientX + scrollLeft;
-	const y = event.clientY + scrollTop;
-	movement.pixel_x0 = movement.pixel_x1 = x;
-	movement.pixel_y0 = movement.pixel_y1 = y;
+// ************* PHASE 1 ****************
+
+function movementClick(event){
+	//event.preventDefault();
+    //event.stopImmediatePropagation();
+	console.log("CLICK");
+	const x = (isNaN(event.clientX)?event.touches[0].screenX:event.clientX) + window.pageXOffset;	// En el tablero
+	const y = (isNaN(event.clientY)?event.touches[0].screenY:event.clientY) + window.pageYOffset;
+	console.log(event);
+	console.log("XY: "+x+" "+y);
+	if (movement.token == null){
+		movementSelectToken(x, y, false);
+	} else {
+		movementMoveToken(x, y, false);
+		movement.token = null;
+	}
+}
+
+// Generic, both for touch and mouse
+function movementSelectToken(x, y, bLine){
+	//movement.pixel_x0 = movement.pixel_x1 = x;
+	//movement.pixel_y0 = movement.pixel_y1 = y;
 	// Tiles selected
 	const tilex = Math.floor((x-board.offsetx)/board.tilew)+1;
 	const tiley = Math.floor((y-board.offsety)/board.tileh)+1;
-	console.log(tilex+" "+tiley);
 	// Select Token
 	movement.token = null;
 	for (var i=0; i<arrTokens.length; i++){
@@ -191,46 +203,54 @@ function mouseDown(event){
 		const h = parseInt(token.h);
 		token.x = parseInt(token.x);
 		token.y = parseInt(token.y);
-		//console.log(tilex+" >= "+token.x+" && "+tilex+" <= "+(token.x+w)+" && "+tiley+" >= "+token.y+" && "+tiley+" <= "+(token.y+h));
-		//if (token.x == tilex && token.y == tiley){
 		if (tilex >= token.x && tilex <= parseInt(token.x+w) && tiley >=token.y && tiley <= parseInt(token.y+h)){
-			//console.log("MOV: "+token.name+" -> "+tilex+","+tiley);
-			addSvgLine("line_movement", movement.pixel_x0, movement.pixel_y0, movement.pixel_x1, movement.pixel_y1, "red", 4);
+			if (bLine){
+				addSvgLine("line_movement", movement.pixel_x0, movement.pixel_y0, movement.pixel_x1, movement.pixel_y1, "red", 4);
+			}
 			movement.token = token;
-			bMoved = true;
+			console.log("SELECTED "+token.name+" from "+tilex+" "+tiley);
 			break;
 		}
 	}
 }
 
-
-function mouseUp(event){
-	event.preventDefault();
+function movementMoveToken(x, y, bLine){
 	const m = movement;
 	if (m.token != null){
-		const scrollTop = window.pageYOffset;
-		const scrollLeft = window.pageXOffset;
-		const x = event.clientX + scrollLeft;
-		const y = event.clientY + scrollTop;
 		// Tiles selected
 		const tilex = Math.floor((x-board.offsetx)/board.tilew)+1;
 		const tiley = Math.floor((y-board.offsety)/board.tileh)+1;
+		console.log("TILE DEST: "+tilex+" "+tiley);
 		m.pixel_x0 = m.pixel_x1 = m.pixel_y0 = m.pixel_y1 = -1;
 		//moveToken(m.token, tilex, tiley);
-		console.log(m.token.name+" -> "+tilex+","+tiley);
+		//console.log(m.token.name+" -> "+tilex+","+tiley);
 		sendCommand("@"+m.token.name+" "+tilex+","+tiley);
-		const l = document.getElementById("line_movement");
-		svg.removeChild(l);
+		if (bLine){
+			const l = document.getElementById("line_movement");
+			svg.removeChild(l);
+		}
 	}
 }
-
+// **************** PHASE 2
+/*
 function mouseMove(event){
 	event.preventDefault();
+    event.stopImmediatePropagation();
+	const x = event.clientX + window.pageXOffset;
+	const y = event.clientY + window.pageYOffset;
+	movementGenericMove(x, y);
+}
+
+function touchMove(event){
+	event.preventDefault();
+    event.stopImmediatePropagation();
+	const x = event.touches[0].clientX;
+	const y = event.touches[0].clientY;
+	//movementGenericMove(x, y);
+}
+
+function movementGenericMove(x, y){
 	if (movement.token != null){
-		const scrollTop = window.pageYOffset;
-		const scrollLeft = window.pageXOffset;
-		const x = event.clientX + scrollLeft;
-		const y = event.clientY + scrollTop;
 		movement.pixel_x1 = x;
 		movement.pixel_y1 = y;
 		const l = document.getElementById("line_movement");
@@ -241,6 +261,41 @@ function mouseMove(event){
 			l.setAttribute("y2", y);
 		}
 	}
+}
+*/
+// **************** PHASE 3
+/*
+function mouseUp(event){
+	event.preventDefault();
+    event.stopImmediatePropagation();
+	const x = event.clientX + window.pageXOffset;
+	const y = event.clientY + window.pageYOffset;
+	movementGenericMoveToken(x, y, true);
+}
+
+function touchUp(event){
+	console.log(event);
+	const x = event.changedTouches[0].clientX;
+	const y = event.changedTouches[0].clientY;
+	console.log("Touch END: "+x+" "+y);
+	movementGenericMoveToken(x, y, false);
+}
+*/
+
+function hasQuiet() {
+
+  var cold = false,
+  hike = function() {};
+
+  try {
+  var aid = Object.defineProperty({}, 'passive', {
+  get() {cold = true}
+  });
+  window.addEventListener('test', hike, aid);
+  window.removeEventListener('test', hike, aid);
+  } catch (e) {}
+
+  return cold;
 }
 
 window.addEventListener("load", function() {
@@ -253,10 +308,16 @@ window.addEventListener("load", function() {
 	output.style.height = MAXY+"px";
 	input.addEventListener("keyup", function (event) {inputKeyPress_inputBox(event);});
 	document.addEventListener("keydown", function (event) {inputKeyPress_allDocument(event);});
-	document.addEventListener("touchstart", function (event) {eventTouch(event)});
-	document.addEventListener("mousedown", function(event) {mouseDown(event)});
-	document.addEventListener("mouseup", function(event) {mouseUp(event)});
-	document.addEventListener("mousemove", function (event) {mouseMove(event)});
+	document.addEventListener("click", function (event) {movementClick(event);});
+	//document.addEventListener("mousedown", function(event) {mouseDown(event)});
+	//document.addEventListener("mouseup", function(event) {mouseUp(event)});
+	//document.addEventListener("mousemove", function (event) {mouseMove(event)});
+	
+	//document.addEventListener("touchstart", function (event) {eventTouch(event)});	// Show coordinates
+	//document.addEventListener("touchstart", function (event) {movementClick(event)},hasQuiet() ? {passive: false} : false);
+
+	//document.addEventListener("touchmove", function (event) {touchMove(event)},hasQuiet() ? {passive: false} : false);
+	//document.addEventListener("touchend", function (event) {touchUp(event)},hasQuiet() ? {passive: false} : false);
 
 	input.focus();
 	input.value = "";
