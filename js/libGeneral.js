@@ -27,6 +27,7 @@ function setOpacityCoordinates(newVal){
 	var arrCoordinates = document.getElementsByClassName("coordinates");
 	for (var i=0; i<arrCoordinates.length; i++){
 		arrCoordinates[i].style.opacity = newVal;
+		//arrCoordinates[i].style.opacity = 0;
 	}
 }
 

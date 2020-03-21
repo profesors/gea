@@ -20,10 +20,10 @@ function getBoard(idBoard){
 				drawGrid: (arrResponse.shift()=='1'),
 				lastActionId: parseInt(arrResponse.shift())
 			}
-			//console.log(board);
+			console.log(board);
 			// BG
 			var canvas = document.getElementById("canvas");
-			//canvas.style.backgroundImage = "url(img/bg/"+board.bg+")";
+			canvas.style.backgroundImage = "url(img/bg/"+board.bg+")";
 			canvas.style.backgroundRepeat = "no-repeat";
 			canvas.style.width = (board.tilew*board.ntilesw)+0.5*board.tilew+"px";
 			canvas.style.height = (board.tileh*board.ntilesh)+0.5*board.tileh+"px";
@@ -64,10 +64,10 @@ function getTokens(idBoard){
 					border: arrOneToken[8].replace(/\+/g, ' '),
 					tagName: document.createElement("div"),
 					tagDice: document.createElement("div"),
-					dice: arrOneToken[9],
+					dice: arrOneToken[9].replace(/;/g, ' '),
 					diceActionId: arrOneToken[10]
 				}
-				//console.log(token);
+				console.log("DICE: "+token.dice);
 				// Position of the token
 				var x = getPixel(token.x, board.tilew, board.offsetx);
 				var y = getPixel(token.y, board.tileh, board.offsety)
@@ -160,8 +160,8 @@ function getTokens(idBoard){
 function removeAllLoadedTokens(){
 	while (arrTokens.length > 0){
 		var token = arrTokens.shift();
-		console.log("REMOVE TOKEN "+token.name);
-		canvas.removeChild(token.img);
+		var divToken = document.getElementById(token.name);
+		canvas.removeChild(divToken);
 	}
 }
 

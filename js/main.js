@@ -147,7 +147,8 @@ function checkUpdates(){
 	rq.onreadystatechange = function () {
 		if (rq.readyState == XMLHttpRequest.DONE && rq.status == 200){
 			var arrLastAction = rq.responseText.split(" ");
-			board.lastActionId = parseInt(arrLastAction[0]);	// lastActionId is the last action recorded in the server
+			// lastActionId is the last action recorded in the server
+			board.lastActionId = parseInt(arrLastAction[0]);	
 			var bg_ts = parseInt(arrLastAction[1]);
 			if (board.bg_ts < bg_ts){
 				// Update BG
@@ -156,13 +157,14 @@ function checkUpdates(){
 				board.bg_ts = bg_ts;
 				console.log("UPDATE BG:"+canvas.style.backgroundImage);
 			}
-			
+			//console.log("l:"+localLastActionId+" b:"+board.lastActionId);			
 			if (localLastActionId < board.lastActionId){	// Update tokens
 				getTokens(board.id);
 				//localLastActionId = board.lastActionId;
 				if (panel1.style.display == 'block')	updateActionsPanel(board.id);
 			}
-			if (localLastActionId > board.lastActionId){	// Remove all tokens and update all of them
+			// Remove all tokens and update all of them
+			if (localLastActionId > board.lastActionId){	
 				removeAllLoadedTokens();	
 				localLastActionId = 0;
 			}
@@ -321,7 +323,7 @@ window.addEventListener("load", function() {
 
 	input.focus();
 	input.value = "";
-	getBoard(3);
+	getBoard(2);
 	updateActionsPanel(3)
 	timerUpdates = setInterval(checkUpdates,1000);
 });

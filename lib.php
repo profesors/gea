@@ -83,11 +83,13 @@ function update_position_token($idBoard, $name, $x, $y, $z){
 
 # Insert token in database, if there is not $img_src or $border ignore it
 # If the token id is duplicate, just update it
-function insert_token($idBoard, $name, $x, $y, $z, $step, $img_src, $border, $size=1){
+function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border){
 	global $db;
+	echo "NAME $img_src";
 	$name = ($name=='')?'NULL':$name;
 	$query = "INSERT INTO `tokens` (`idBoard`, `name`, `x`, `y`, `z`, `w`, `h`, `step`, `img`, `border`, `dice_result`) ";
-	$query.= " VALUES ('$idBoard', '$name', '$x', '$y', '$z', '$size', '$size', '$step', '$img_src', '$border', NULL) ";
+	$query.= " VALUES ('$idBoard', '$name', $x, $y, $z, $w, $h, 1, ";
+	$query.= "'$img_src', '$border', NULL) ";
 	$query.= " ON DUPLICATE KEY UPDATE x=$x, y=$y";
 	if ($img_src != ''){
 		$query.= ", img='$img_src'";
@@ -115,7 +117,7 @@ function set_dice($idBoard, $name, $value){
 	$result = run_sql($query) or die();
 	$row = mysqli_fetch_array($result);
 	$nextActionId = $row['lastActionId']+1;	# current last action + 1 because it will be increased
-	$query = "UPDATE tokens SET dice_result = $value, dice_actionId = $nextActionId WHERE idBoard = $idBoard AND name = '$name';";
+	$query = "UPDATE tokens SET dice_result = '$value', dice_actionId = $nextActionId WHERE idBoard = $idBoard AND name = '$name';";
 	run_sql($query) or die();
 }
 

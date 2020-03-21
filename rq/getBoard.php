@@ -14,5 +14,3 @@ echo $row['ntilesw']."\n".$row['ntilesh']."\n";
 echo $row['offsetx']."\n".$row['offsety']."\n";
 echo $row['bg']."\n";
 echo $row['drawGrid']."\n".$row['lastActionId']."\n";
-
-
