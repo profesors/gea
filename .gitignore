@@ -1,4 +1,5 @@
 *.swp
 *.swo
 *.png
-img/tokens/original/
+img/tokens/original
+img/tokens/procesar

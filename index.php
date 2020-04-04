@@ -8,6 +8,7 @@
 	<div id="canvas">
 		<input type="text" id="stdInput" placeholder="Input...">
 	<div id="canvas_dados"></div>
+	<div id="panelD"></div>
 	</div>
 </div>
 <?php include('templates/foot.php'); ?>
