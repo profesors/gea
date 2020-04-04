@@ -323,7 +323,7 @@ window.addEventListener("load", function() {
 
 	input.focus();
 	input.value = "";
-	getBoard(2);
+	getBoard(6);	/* Number of board */
 	updateActionsPanel(3)
 	timerUpdates = setInterval(checkUpdates,1000);
 });

@@ -63,6 +63,14 @@ body {
 	position: relative;
 }
 
+#canvas_dados{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 50%;
+	z-index: 102;
+}
+
 #input_hidden{
 	display: block;
 }
