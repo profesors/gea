@@ -67,7 +67,7 @@ function getTokens(idBoard){
 					dice: arrOneToken[9].replace(/;/g, ' '),
 					diceActionId: arrOneToken[10]
 				}
-				console.log("DICE: "+token.dice);
+				//console.log("DICE: "+token.dice);
 				// Position of the token
 				var x = getPixel(token.x, board.tilew, board.offsetx);
 				var y = getPixel(token.y, board.tileh, board.offsety)

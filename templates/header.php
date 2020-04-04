@@ -11,8 +11,9 @@
 	<script src='js/libGeneral.js'></script>
 	<script src='js/main.js'></script>
 	<script src='js/load.js'></script>
-	<script src='js/three.js'></script>
-	<script src='js/three_main.js'></script>
+	<script src='js/interface.js'></script>
+	<!--<script src='js/three.js'></script>
+	<script src='js/three_main.js'></scrip>-->
 
 </head>
 <body id="body">

@@ -32,6 +32,23 @@ function inputKeyPress_inputBox(event){
 		input.style.display = document.getElementById("input_hidden").style.display;
 		input.blur();
 		break;
+	case 38:	// Arrow UP
+		iCommands--;
+		if (iCommands>=0){
+			input.value = arrCommands[iCommands];
+		} else {
+			iCommands = 0;
+		}
+		break;
+	case 40:	// DOWN arrow
+		iCommands++;
+		if (iCommands<arrCommands.length){
+			input.value = arrCommands[iCommands];
+		} else {
+			iCommands = arrCommands.length;
+			input.value = "";
+		}
+		break;
 	}
 	var opacity = 0, name = '';
 	if (input.value.includes('@')){
@@ -62,6 +79,7 @@ function inputKeyPress_allDocument(event){
 		iCommands = arrCommands.length;
 		break;
 	case 38:	// Arrow UP
+			/*
 		iCommands--;
 		if (iCommands>=0){
 			input.value = arrCommands[iCommands];
@@ -69,8 +87,10 @@ function inputKeyPress_allDocument(event){
 			iCommands = 0;
 		}
 		bShowInput = true;
+		*/
 		break;
 	case 40:	// DOWN arrow
+		/*
 		iCommands++;
 		if (iCommands<arrCommands.length){
 			input.value = arrCommands[iCommands];
@@ -79,6 +99,7 @@ function inputKeyPress_allDocument(event){
 			input.value = "";
 		}
 		bShowInput = true;
+		*/
 		break;
 	case 48:	// =
 		bShowInput = true;
@@ -323,7 +344,7 @@ window.addEventListener("load", function() {
 
 	input.focus();
 	input.value = "";
-	getBoard(6);	/* Number of board */
+	getBoard(4);	/* Number of board */
 	updateActionsPanel(3)
 	timerUpdates = setInterval(checkUpdates,1000);
 });

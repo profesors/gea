@@ -29,6 +29,21 @@ body {
 	opacity: 0.8;
 }
 
+#panelD{
+	background-color: black;
+	width: 130px;
+	height: 100%;
+	z-index: 101;
+	position: fixed;
+	right: 0;
+	top: 0;
+	text-align: right;
+}
+
+#panelD .portrait{
+	width: 100px;
+}
+
 #btnShowInput{
 
 }
