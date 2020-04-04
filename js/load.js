@@ -116,7 +116,9 @@ function getTokens(idBoard){
 				token.div.img.style.left = 0;
 				token.div.img.style.top = 0;
 				token.div.img.style.borderRadius = "50%";
-				token.div.img.style.width = (board.tilew*token.w)+"px";
+				var arrBorder = token.border.split(" ");
+				var spaceBorder = parseInt(arrBorder[0].substring(0,arrBorder[0].length-2))*2;
+				token.div.img.style.width = (board.tilew*token.w-spaceBorder)+"px";
 				
 				// Tag with the NAME 
 				token.tagName.id = "tagName"+token.name;
