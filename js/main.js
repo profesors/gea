@@ -1,4 +1,4 @@
-var canvas, svg, panel1, input, output;
+var canvas, svg, panelI, input, output;
 var arrTokens = [];						// Tokens in the board
 var arrCommands = [], iCommands = 0;	// Commands sended. Array and index to ArrowUp and ArrowDown recover
 var timerUpdates;						// Timer to check each second for updates from the server
@@ -67,7 +67,7 @@ function inputKeyPress_inputBox(event){
 
 // Key pressed out of the input box
 function inputKeyPress_allDocument(event){
-	//console.log("DOCUMENT KeyCode "+event.keyCode);
+	console.log("DOCUMENT KeyCode "+event.keyCode);
 	var input = document.getElementById("stdInput");
 	var bShowInput = false;
 	switch(event.keyCode){
@@ -77,6 +77,10 @@ function inputKeyPress_allDocument(event){
 		setOpacityCoordinates(0);
 		setOpacityTagNames(0);
 		iCommands = arrCommands.length;
+		break;
+	case 32:	// Space
+			bShowInput = true;
+			event.stopPropagation();
 		break;
 	case 38:	// Arrow UP
 			/*
@@ -104,14 +108,18 @@ function inputKeyPress_allDocument(event){
 	case 48:	// =
 		bShowInput = true;
 		break;
-	case 50:	// @
+	case 50:	// @ arroba
+		input.value = "@";
 		bShowInput = true;
 		break;
 	case 51:	// #
 		bShowInput = true;
 		break;
+	case 67:	// c Coordenadas
+		setOpacityCoordinates(1-getOpacityCoordinates());
+		break;
 	case 72:	// h
-		const panel = document.getElementById("panel1");
+		const panel = document.getElementById("panelI");
 		console.log(panel.style.display);
 		if (panel.style.display != 'block'){
 			panel.style.display = 'block';
@@ -120,6 +128,9 @@ function inputKeyPress_allDocument(event){
 			panel.style.display = 'none';
 		}
 		break
+	case 78:	// n	Muestra los nombres
+		setOpacityTagNames(1-getOpacityTagNames());
+		break;
 	case 190:	// :
 		bShowInput = true;
 		break;
@@ -182,7 +193,7 @@ function checkUpdates(){
 			if (localLastActionId < board.lastActionId){	// Update tokens
 				getTokens(board.id);
 				//localLastActionId = board.lastActionId;
-				if (panel1.style.display == 'block')	updateActionsPanel(board.id);
+				if (panelI.style.display == 'block')	updateActionsPanel(board.id);
 			}
 			// Remove all tokens and update all of them
 			if (localLastActionId > board.lastActionId){	
@@ -325,7 +336,7 @@ window.addEventListener("load", function() {
 	MAXX = window.innerWidth;
 	MAXY = window.innerHeight;
 	canvas = document.getElementById("canvas");
-	panel1 = document.getElementById("panel1");
+	panelI = document.getElementById("panelI");
 	input = document.getElementById("stdInput");
 	output = document.getElementById("stdOutput");
 	output.style.height = MAXY+"px";
@@ -355,7 +366,7 @@ window.addEventListener("resize", function() {
 	MAXY = window.innerHeight;
 	//canvas.style.width = MAXX+"px";
 	//canvas.style.height = MAXY+"px";
-	panel1.style.height = MAXY+"px";
+	panelI.style.height = MAXY+"px";
 	output.style.height = MAXY+"px";
 });
 

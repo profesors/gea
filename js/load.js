@@ -25,7 +25,7 @@ function getBoard(idBoard){
 			var canvas = document.getElementById("canvas");
 			canvas.style.backgroundImage = "url(img/bg/"+board.bg+")";
 			canvas.style.backgroundRepeat = "no-repeat";
-			canvas.style.width = (board.tilew*board.ntilesw)+0.5*board.tilew+"px";
+			canvas.style.width = (board.tilew*board.ntilesw)+0.5*board.tilew+100+"px";
 			canvas.style.height = (board.tileh*board.ntilesh)+0.5*board.tileh+"px";
 			drawCellNames();
 			getTokens(board.id);

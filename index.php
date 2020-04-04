@@ -1,6 +1,6 @@
 <?php include('templates/header.php'); ?>
 <div onclick="void(0);">	<!-- For Safari bug-feature https://stackoverflow.com/questions/24077725/mobile-safari-sometimes-does-not-trigger-the-click-event -->
-	<div id="panel1">
+	<div id="panelI">
 		<div id="stdOutput"><?php echo date("> d/m/Y G:i");?></div>
 	</div>
 

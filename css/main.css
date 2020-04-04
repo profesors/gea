@@ -16,12 +16,16 @@ body {
 	width: 100%;
 }
 
-#panel1{
+svg{
+	opacity: 1;
+}
+
+#panelI{
 	position: fixed;
 	left: 0;
 	top: 0;
 	bottom: 0;
-	width: 300px;
+	width: 400px;
 	height: 100%;
 	z-index: 1000;
 	background-color: grey;
@@ -92,6 +96,10 @@ body {
 
 .token{
 	touch-action: none;
+}
+
+.red{
+	color: red;
 }
 
 /************************ Desktop *****************************************/

@@ -43,7 +43,7 @@ function setOpacityTagNames(newVal){
 	}
 }
 
-function getOpacityTagNAmes(){
+function getOpacityTagNames(){
 	return arrTokens[0].tagName.style.opacity;
 }
 
@@ -54,6 +54,9 @@ function setOpacityTagDice(name, newVal){
 			arrTokens[i].tagDice.style.opacity = 0;
 		}
 	} else {
+		var bPj= document.getElementById("b"+name);
+		bPj.style.opacity="0.3";
+		setTimeout(function(){bPj.style.opacity="1";}, 8000);
 		var tagDice = document.getElementById("tagDice"+name);
 		if (tagDice != undefined){
 			tagDice.style.opacity = newVal;
@@ -64,6 +67,7 @@ function setOpacityTagDice(name, newVal){
 // It shows the result of the dice fadeIn and then fadoOut
 async function showDiceResult(name){
 	setOpacityTagDice(name, 0);
+	document.getElementById("aDado").play();
 	var dice = document.getElementById("tagDice"+name);
 	var y = board.tileh/2;
 	const oy = y, p2 = Math.PI/2;
@@ -112,11 +116,10 @@ async function moveToken(token, toX, toY){
 
 function updateActionsPanel(idBoard){
 	const rq = new XMLHttpRequest();
-	rq.open("GET", "rq/getActions.php?idBoard="+idBoard);
+	rq.open("GET", "rq/getActions.php?idBoard="+idBoard+"&op=player");
 	rq.send();
 	rq.onreadystatechange = function(e) {
 	if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
-		//console.log(rq.responseText);
 		const stdOutput = document.getElementById("stdOutput");
 		stdOutput.innerHTML = rq.responseText;
 		stdOutput.scrollTop = stdOutput.scrollHeight;
