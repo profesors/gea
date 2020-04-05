@@ -6,6 +6,7 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="stylesheet" type="text/css" href="css/reset.css?t=1">
     <link rel="stylesheet" type="text/css" href="css/main.css?t=1">
+    <link rel="stylesheet" type="text/css" href="css/sheet.css?t=1">
 
 	<script src='js/cookie.js'></script>
 	<script src='js/libGeneral.js?t=1'></script>

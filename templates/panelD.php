@@ -1,7 +1,7 @@
 <div id="panelD">
 	<!-- PJ 1 ------------------------------>
 	<svg id="bbar" width="128px" height="140px">
-	<image href="img/tokens/005.png" width="100px" x="30px" y="0"/>
+	<image class="portrait" href="img/tokens/005.png" width="100px" x="30px" y="0"/>
 	<rect x="17" y="0" width="8px" height="100" fill="white" stroke-width="1px" stroke="white"/>
 	<rect id="hpbar_bar" x="18" y="50" width="6px" height="50" fill="lime"/>
 	<text id="hpnum_bar" x="0" y="60" fill="white" font-size="0.7rem" font-weight="bold"></text>
@@ -29,7 +29,7 @@
 	
 	<!-- PJ 2 ------------------------------>
 	<svg id="bexp" width="128px" height="140px">
-	<image href="img/tokens/006.png" width="100px" x="30px" y="0"/>
+	<image class="portrait" href="img/tokens/006.png" width="100px" x="30px" y="0"/>
 	<rect x="17" y="0" width="8px" height="100" fill="white" stroke-width="1px" stroke="white"/>
 	<rect id="hpbar_exp" x="18" y="50" width="6px" height="50" fill="lime"/>
 	<text id="hpnum_exp" x="0" y="60" fill="white" font-size="0.7rem" font-weight="bold">20</text>
@@ -58,7 +58,7 @@
 
 	<!-- PJ 3 ------------------------------>
 	<svg id="belf" width="128px" height="140px">
-	<image href="img/tokens/007.png" width="100px" x="30px" y="0"/>
+	<image class="portrait" href="img/tokens/007.png" width="100px" x="30px" y="0"/>
 	<rect x="17" y="0" width="8px" height="100" fill="white" stroke-width="1px" stroke="white"/>
 	<rect id="hpbar_elf" x="18" y="50" width="6px" height="50" fill="lime"/>
 	<text id="hpnum_elf" x="0" y="60" fill="white" font-size="0.7rem" font-weight="bold">20</text>
@@ -87,7 +87,7 @@
 
 	<!-- PJ 4 ------------------------------>
 	<svg id="bcle" width="128px" height="140px">
-	<image href="img/tokens/011.png" width="100px" x="30px" y="0"/>
+	<image class="portrait" href="img/tokens/011.png" width="100px" x="30px" y="0"/>
 	<rect x="17" y="0" width="8px" height="100" fill="white" stroke-width="1px" stroke="white"/>
 	<rect id="hpbar_cle" x="18" y="50" width="6px" height="50" fill="lime"/>
 	<text id="hpnum_cle" x="0" y="60" fill="white" font-size="0.7rem" font-weight="bold">20</text>
@@ -115,7 +115,7 @@
 
 	<!-- PJ 5 ------------------------------>
 	<svg id="blad" width="128px" height="140px">
-	<image href="img/tokens/010.png" width="100px" x="30px" y="0"/>
+	<image class="portrait" href="img/tokens/010.png" width="100px" x="30px" y="0"/>
 	<rect x="17" y="0" width="8px" height="100" fill="white" stroke-width="1px" stroke="white"/>
 	<rect id="hpbar_lad" x="18" y="50" width="6px" height="50" fill="lime"/>
 	<text id="hpnum_lad" x="0" y="60" fill="white" font-size="0.7rem" font-weight="bold">20</text>

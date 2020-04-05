@@ -1,4 +1,5 @@
 var at;
+var overPortrait = [0,0];	// 0 Enter, 1 Exit
 document.addEventListener('DOMContentLoaded', function(){ 
 	/******************* PJ 1 ********************************/
 	document.querySelectorAll(".b11").forEach(function (item){
@@ -209,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	document.querySelectorAll(".b32").forEach(function (item){
 		item.addEventListener('click', function (){
 		if (item.parentElement.style.opacity!="0.3"){
-			sendCommand("@elf #1d20+2,1d8");
+			sendCommand("@elf #1d20+3,1d8");
 		}
 		event.stopPropagation();
 		}, false);
@@ -489,5 +490,25 @@ document.addEventListener('DOMContentLoaded', function(){
 		}
 		event.stopPropagation();
 		}, false);
+	});
+	document.querySelectorAll(".portrait").forEach(function (item) {
+		item.addEventListener('mouseover', function () {
+			overPortrait[0] = (new Date).getTime();
+			setTimeout(function (){
+				if (overPortrait[1]-overPortrait[0]<0){	// El ratón aún no ha salido de la imagen
+					var name = item.parentElement.id.substring(1);
+					var divInfo = document.getElementById("info_character");
+					divInfo.style.display = "block";
+					divInfo.innerHTML = name+" loading<br/>"+divInfo.innerHTML;
+					getSheetCharacter(name, board.id, divInfo);
+				}
+			}, 1000);	// Duración antes de saltar la ficha de personaje
+		});
+		item.addEventListener('mouseout', function (){
+			overPortrait[1] = (new Date).getTime();
+		});
+	});
+	document.getElementById("info_character").addEventListener('mouseout', function () {
+			document.getElementById("info_character").style.display = "none";
 	});
 }, false);

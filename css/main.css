@@ -94,6 +94,17 @@ svg{
 	z-index: 102;
 }
 
+#info_character{
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 104;
+	background-color: rgba(255,255,255,0.7);
+	width: 600px;
+	height: 100%;
+	display: none;
+}
+
 #input_hidden{
 	display: block;
 }
@@ -105,6 +116,7 @@ svg{
 .red{
 	color: red;
 }
+
 
 /************************ Desktop *****************************************/
 @media only screen and (min-width: 800px) {

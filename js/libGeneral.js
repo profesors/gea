@@ -210,3 +210,14 @@ function sendCommand(command){
 	rq.open("GET", "rq/send.php?m="+encodeURIComponent(command)+"&idBoard="+board.id);
 	rq.send();
 }
+
+function getSheetCharacter(name, idBoard, destDiv){
+	var rq = new XMLHttpRequest();
+	rq.open("GET", "rq/getSheet.php?idBoard="+board.id+"&name="+name);
+	rq.send();
+	rq.onreadystatechange = function(e) {
+		if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
+			destDiv.innerHTML = rq.responseText;
+		}
+	}
+}

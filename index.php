@@ -9,6 +9,7 @@
 		<input type="text" id="stdInput" placeholder="Input...">
 		<!--<div id="canvas_dados"></div>-->
 	</div>
+	<div id="info_character"><img src="img/loading.gif"></div>
 	<?php include('templates/panelD.php'); ?>
 </div>
 <?php include('templates/foot.php'); ?>
