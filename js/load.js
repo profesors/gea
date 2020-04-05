@@ -91,7 +91,9 @@ function getTokens(idBoard){
 					var oneAttr = item.split(':');
 					token.attrs.push(oneAttr);
 				});
-				updateHp(token);
+				if(getAttr(token,'hp')!=null){
+					updateHp(token);
+				}
 				
 				// As the token is inserted, we just need update its possition
 				// so do not do anything more

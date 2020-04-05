@@ -1,7 +1,7 @@
 <?php	
 	include_once('../lib.php');
 	connectDB();
-	#$_GET['m'] = "@bar [hp:8]";
+	#$_GET['m'] = "@g4 p13,7";
 	#$_GET['idBoard'] = 4;
 	$m = preg_replace('/[ ]+/', ' ', secure_param('m'));
 	$idBoard = intval(secure_param('idBoard'));
@@ -13,13 +13,13 @@
 		$manual_command = '';
 	
 		# Name
-		$name = '';
+		$name = null;
 		if (preg_match("/@([^ ]*)/", $command, $arrTmp)){
 			$name = array_key_exists(1, $arrTmp)?$arrTmp[1]:'';
 		}
 
 		# Position and size
-		$x=null;
+		$x=null; $y=null; $w=1; $h=1;
 		if (preg_match("/p(\d+),(\d+)(,(\d+))?(,(\d+))?/", $command, $arrTmp)){
 			$x = array_key_exists(1, $arrTmp)?$arrTmp[1]:'';
 			$y = array_key_exists(2, $arrTmp)?$arrTmp[2]:'';
@@ -29,11 +29,22 @@
 
 		# imagen.png
 		preg_match("/!([^ ]*)/", $command, $arrTmp);
-		$img_src = array_key_exists(1, $arrTmp)?$arrTmp[1]:'';
+		$img_src = array_key_exists(1, $arrTmp)?$arrTmp[1]:null;
 
 		# borde css
 		preg_match("/_([^ ]*)/", $command, $arrTmp);
-		$border = array_key_exists(1, $arrTmp)?$arrTmp[1]:'';
+		$border = array_key_exists(1, $arrTmp)?$arrTmp[1]:null;
+
+		# INSERCIÓN COMPLETA DE TOKEN
+		if ($name!=null && $x!=null && $y!=null && $img_src!=null && $border!=null){
+			insert_token($idBoard, $name, $x, $y, 1, $w, $h, $img_src, $border);
+			insert_action($idBoard, $command);
+		} else if ($name!=null && $x!=null && $y!=null){
+			# MOVIMIENTO DE TOKEN
+			move_token($idBoard, $name, $x, $y);
+			insert_action($idBoard, $command);
+		}
+
 
 		# attr
 		$arr_attr = Array();
@@ -44,11 +55,14 @@
 				$arr_field = explode(':',$v);
 				$arr_attr[$arr_field[0]] = $arr_field[1];	
 			}
+			foreach($arr_attr as $k => $v){
+				insert_attr($idBoard, $name, $k, $v);
+				insert_action($idBoard, $command);
+			}
 		}
 
 		# Dice command
 		#if(preg_match("/#(\d*)d(\d*)(([\+\-])(\d*))?/", $command, $arrTmp)){
-		echo "C: $command";
 		if(preg_match("/#([^ ]*)/", $command, $arrTmp)){
 			$strResults = '';
 			$manual_command = 'dice';
@@ -76,22 +90,10 @@
 		
 		# Other command		
 		if(preg_match("/:reset/", $command, $arrTmp)){
-			$manual_command = 'reset';
+			//for($i=1;$i<=7;$i++){
+			echo "RESET";
+			reset_board($idBoard);
+			//}
 		}
 	
-		if ($manual_command != ''){
-			switch ($manual_command){
-			case 'reset':
-				echo "RESET";
-				reset_board($idBoard);
-				break;
-			}
-		} else {
-			if ($x!=null) insert_token($idBoard, $name, $x, $y, 1, $w, $h, $img_src, $border);
-			# Insertar los atributos
-			foreach($arr_attr as $k => $v){
-				insert_attr($idBoard, $name, $k, $v);
-			}
-			insert_action($idBoard, $command);
-		}
 	}

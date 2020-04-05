@@ -55,8 +55,10 @@ function setOpacityTagDice(name, newVal){
 		}
 	} else {
 		var bPj= document.getElementById("b"+name);
-		bPj.style.opacity="0.3";
-		setTimeout(function(){bPj.style.opacity="1";}, 8000);
+		if (bPj!=null){
+			bPj.style.opacity="0.3";
+			setTimeout(function(){bPj.style.opacity="1";}, 8000);
+		}
 		var tagDice = document.getElementById("tagDice"+name);
 		if (tagDice != undefined){
 			tagDice.style.opacity = newVal;
@@ -156,6 +158,7 @@ function getAttr(token, attr){
 			return token.attrs[i][1];
 		}
 	}
+	return null;
 }
 
 function updateActionsPanel(idBoard){

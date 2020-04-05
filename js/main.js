@@ -143,6 +143,7 @@ function showInputBox(){
 
 }
 
+// La función más importante. El LOOP del juego
 function checkUpdates(){
 	// Save current scroll
 	const scrollTop = window.pageYOffset;

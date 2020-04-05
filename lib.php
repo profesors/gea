@@ -68,7 +68,7 @@ function insert_action($idBoard, $m){
 	global $db;
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
 	$query = "INSERT INTO `actions` (`idUser`, `idBoard`, `idAction`, `ts`, `action`) VALUES ('1', '$idBoard',";
-	$query.= " '$nextActionId', CURRENT_TIMESTAMP, '".utf8_decode(mysqli_real_escape_string($db, $m))."');";
+	$query.= " $nextActionId, CURRENT_TIMESTAMP, '".utf8_decode(mysqli_real_escape_string($db, $m))."');";
 	run_sql($query) or die();
 	write_last_actionId($idBoard, $nextActionId);
 }
@@ -85,7 +85,6 @@ function update_position_token($idBoard, $name, $x, $y, $z){
 # If the token id is duplicate, just update it
 function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border){
 	global $db;
-	# echo "NAME $img_src";
 	$name = ($name=='')?'NULL':$name;
 	$query = "INSERT INTO `tokens` (`idBoard`, `name`, `x`, `y`, `z`, `w`, `h`, `step`, `img`, `border`, `dice_result`) ";
 	$query.= " VALUES ('$idBoard', '$name', $x, $y, $z, $w, $h, 1, ";
@@ -98,6 +97,14 @@ function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border){
 		$query.= ", border='$border'";
 	}
 	run_sql($query) or die();
+}
+
+function move_token($idBoard, $name, $x, $y){
+	global $db;
+	$name = ($name=='')?'NULL':$name;
+	$query = "UPDATE `tokens` SET x=$x, y=$y WHERE idBoard=$idBoard AND name='$name'";
+	run_sql($query) or die();
+
 }
 
 function insert_attr($idBoard, $name, $attr, $val){
