@@ -67,7 +67,7 @@ function inputKeyPress_inputBox(event){
 
 // Key pressed out of the input box
 function inputKeyPress_allDocument(event){
-	console.log("DOCUMENT KeyCode "+event.keyCode);
+	//console.log("DOCUMENT KeyCode "+event.keyCode);
 	var input = document.getElementById("stdInput");
 	var bShowInput = false;
 	switch(event.keyCode){
@@ -80,37 +80,15 @@ function inputKeyPress_allDocument(event){
 		break;
 	case 32:	// Space
 			bShowInput = true;
+			//input.value="";
 			event.stopPropagation();
-		break;
-	case 38:	// Arrow UP
-			/*
-		iCommands--;
-		if (iCommands>=0){
-			input.value = arrCommands[iCommands];
-		} else {
-			iCommands = 0;
-		}
-		bShowInput = true;
-		*/
-		break;
-	case 40:	// DOWN arrow
-		/*
-		iCommands++;
-		if (iCommands<arrCommands.length){
-			input.value = arrCommands[iCommands];
-		} else {
-			iCommands = arrCommands.length;
-			input.value = "";
-		}
-		bShowInput = true;
-		*/
 		break;
 	case 48:	// =
 		bShowInput = true;
 		break;
 	case 50:	// @ arroba
-		input.value = "@";
-		bShowInput = true;
+		//input.value = "@";
+		//bShowInput = true;
 		break;
 	case 51:	// #
 		bShowInput = true;
@@ -257,7 +235,7 @@ function movementMoveToken(x, y, bLine){
 		m.pixel_x0 = m.pixel_x1 = m.pixel_y0 = m.pixel_y1 = -1;
 		//moveToken(m.token, tilex, tiley);
 		//console.log(m.token.name+" -> "+tilex+","+tiley);
-		sendCommand("@"+m.token.name+" "+tilex+","+tiley);
+		sendCommand("@"+m.token.name+" p"+tilex+","+tiley);
 		m.token.tagName.style.opacity = 0;
 		if (bLine){
 			const l = document.getElementById("line_movement");
@@ -265,59 +243,8 @@ function movementMoveToken(x, y, bLine){
 		}
 	}
 }
-// **************** PHASE 2
-/*
-function mouseMove(event){
-	event.preventDefault();
-    event.stopImmediatePropagation();
-	const x = event.clientX + window.pageXOffset;
-	const y = event.clientY + window.pageYOffset;
-	movementGenericMove(x, y);
-}
-
-function touchMove(event){
-	event.preventDefault();
-    event.stopImmediatePropagation();
-	const x = event.touches[0].clientX;
-	const y = event.touches[0].clientY;
-	//movementGenericMove(x, y);
-}
-
-function movementGenericMove(x, y){
-	if (movement.token != null){
-		movement.pixel_x1 = x;
-		movement.pixel_y1 = y;
-		const l = document.getElementById("line_movement");
-		if (l != null){
-			l.setAttribute("x1", movement.pixel_x0);
-			l.setAttribute("y1", movement.pixel_y0);
-			l.setAttribute("x2", x);
-			l.setAttribute("y2", y);
-		}
-	}
-}
-*/
-// **************** PHASE 3
-/*
-function mouseUp(event){
-	event.preventDefault();
-    event.stopImmediatePropagation();
-	const x = event.clientX + window.pageXOffset;
-	const y = event.clientY + window.pageYOffset;
-	movementGenericMoveToken(x, y, true);
-}
-
-function touchUp(event){
-	console.log(event);
-	const x = event.changedTouches[0].clientX;
-	const y = event.changedTouches[0].clientY;
-	console.log("Touch END: "+x+" "+y);
-	movementGenericMoveToken(x, y, false);
-}
-*/
 
 function hasQuiet() {
-
   var cold = false,
   hike = function() {};
 
@@ -356,7 +283,6 @@ window.addEventListener("load", function() {
 	input.focus();
 	input.value = "";
 	getBoard(4);	/* Number of board */
-	updateActionsPanel(3)
 	timerUpdates = setInterval(checkUpdates,1000);
 });
 
@@ -370,10 +296,3 @@ window.addEventListener("resize", function() {
 	output.style.height = MAXY+"px";
 });
 
-/*
-window.addEventListener("scroll", function (){
-	var input = document.getElementById("stdInput");
-	var canvas = document.getElementById("casnvas");
-	input.style.top = canvas.scroll.top;
-	input.style.left = canvas.scroll.left;
-});*/

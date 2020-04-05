@@ -85,7 +85,7 @@ function update_position_token($idBoard, $name, $x, $y, $z){
 # If the token id is duplicate, just update it
 function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border){
 	global $db;
-	echo "NAME $img_src";
+	# echo "NAME $img_src";
 	$name = ($name=='')?'NULL':$name;
 	$query = "INSERT INTO `tokens` (`idBoard`, `name`, `x`, `y`, `z`, `w`, `h`, `step`, `img`, `border`, `dice_result`) ";
 	$query.= " VALUES ('$idBoard', '$name', $x, $y, $z, $w, $h, 1, ";
@@ -100,6 +100,14 @@ function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border){
 	run_sql($query) or die();
 }
 
+function insert_attr($idBoard, $name, $attr, $val){
+	global $db;
+	$query = "INSERT INTO attrs (idBoard, tokenName, attr, val) ";
+	$query.= "VALUES ($idBoard,'$name','$attr',$val) ";
+	$query.= " ON DUPLICATE KEY UPDATE val='$val'";
+	run_sql($query) or die();
+}
+
 function reset_board($idBoard){
 	global $db;
 	$query = "DELETE FROM actions WHERE idBoard = $idBoard;";
@@ -107,6 +115,8 @@ function reset_board($idBoard){
 	$query = "UPDATE boards SET lastActionId = 0;";
 	run_sql($query) or die();
 	$query = "DELETE FROM tokens WHERE idBoard = $idBoard;";
+	run_sql($query);
+	$query = "DELETE FROM attrs WHERE idBoard = $idBoard;";
 	run_sql($query);
 }
 
@@ -137,5 +147,6 @@ function get_bg_ts($idBoard){
 	$bg_ts = filemtime(DIR_BG.'/'.$bg_file_name);
 	return $bg_ts;
 }
+
 
 ?>

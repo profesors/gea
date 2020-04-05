@@ -65,7 +65,8 @@ function getTokens(idBoard){
 					tagName: document.createElement("div"),
 					tagDice: document.createElement("div"),
 					dice: arrOneToken[9].replace(/;/g, ' '),
-					diceActionId: arrOneToken[10]
+					diceActionId: arrOneToken[10],
+					attrs: arrOneToken[11]
 				}
 				//console.log("DICE: "+token.dice);
 				// Position of the token
@@ -74,7 +75,6 @@ function getTokens(idBoard){
 				token.div.id = token.name;
 				token.div.style.left = x.toString()+"px";
 				token.div.style.top = y.toString()+"px";
-				// AQUI
 				token.div.style.width = board.tilew*token.w;
 				token.div.style.height = board.tileh*token.h;
 				
@@ -83,6 +83,15 @@ function getTokens(idBoard){
 				token.div.img.src = "img/tokens/"+token.src;
 				
 				token.tagDice.innerHTML = token.dice;
+
+				// Attrs		token.attrs is Array
+				var listOfAttrs = token.attrs.split(',');
+				token.attrs = [];
+				listOfAttrs.forEach(function (item){
+					var oneAttr = item.split(':');
+					token.attrs.push(oneAttr);
+				});
+				updateHp(token);
 				
 				// As the token is inserted, we just need update its possition
 				// so do not do anything more

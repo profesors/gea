@@ -2,7 +2,7 @@
 include_once('../lib.php');
 connectDB();
 $idBoard = secure_param('idBoard');
-//$idBoard = 2;
+# $idBoard = 4;
 
 # Get Board
 $query = "SELECT * FROM boards WHERE id = $idBoard LIMIT 1;";

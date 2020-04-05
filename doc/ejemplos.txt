@@ -1,3 +1,3 @@
 @gue 17,12 !001.png _5px+solid+lime; @dru 16,13 !002.png _5px+solid+lime; @cle 6,1 !003.png _5px+solid+lime; @pic 5,12 !004.png _5px+solid+lime@
-@bar 15,14 !005.png _5px+solid+lime; @exp 15,15 !006.png _5px+solid+lime; @elf 16,11 !007.png _5px+solid+lime; @cle 9,14 !011.png _5px+solid+lime; @lad 11,16 !010.png _5px+solid+lime;
-@g1 6,16 !goblin.jpg _5px+solid+red; @g2 7,16 !goblin.jpg _5px+solid+red; @g3 8,15 !goblin.jpg _5px+solid+red; @o1 8,13 !orc.jpg _5px+solid+red; @o2 6,13 !orc.jpg _5px+solid+red;
+@bar p15,14 !005.png _5px+solid+lime [maxhp:20,hp:20]; @exp p15,15 !006.png _5px+solid+lime [maxhp:20,hp:20]; @elf p16,11 !007.png _5px+solid+lime [maxhp:20,hp:20]; @cle p9,14 !011.png _5px+solid+lime [maxhp:20,hp:20]; @lad p11,16 !010.png _5px+solid+lime [maxhp:20,hp:20];
+@g1 p6,16 !goblin.jpg _5px+solid+red; @g2 p7,16 !goblin.jpg _5px+solid+red; @g3 p8,15 !goblin.jpg _5px+solid+red; @o1 p8,13 !orc.jpg _5px+solid+red; @o2 p6,13 !orc.jpg _5px+solid+red;

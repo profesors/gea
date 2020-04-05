@@ -114,6 +114,50 @@ async function moveToken(token, toX, toY){
 	}
 }
 
+async function updateHp(token){
+	var maxhp, currenthp;
+	token.attrs.forEach(function (item){
+		if (item[0]=="maxhp"){
+			maxhp = item[1];
+		}
+		if (item[0]=="hp"){
+			currenthp = item[1];
+		}
+	});
+	//currenthp = 7;
+	//maxhp=10;
+	var p = parseFloat(currenthp)/maxhp*100;	// Porcentaje
+	var hpbar = document.getElementById("hpbar_"+token.name)
+	if (hpbar == null) console.log("NULO PARA "+token.name);
+	var hpnum = document.getElementById("hpnum_"+token.name)
+	hpbar.setAttribute("y",101-p);
+	hpbar.setAttribute("height",p-1);
+	// Número con los puntos de golpe
+	var npy = 101-p+5;	// Posición Y del número de puntos de golpe
+	if (npy<20) npy=20;
+	if (npy>100) npy=100;
+	hpnum.setAttribute("y",npy);
+	hpnum.innerHTML = currenthp;
+	//sendCommand("@"+token.name+" [hp:"+currenthp+"]");
+}
+
+function setAttr(token, attr, val){
+	for(var i=0; i<token.attrs.length; i++){
+		if (token.attrs[i][0]==attr) {
+			token.attrs[i][1]=val;
+			return;
+		}
+	}
+}
+
+function getAttr(token, attr){
+	for(var i=0; i<token.attrs.length; i++){
+		if (token.attrs[i][0]==attr){
+			return token.attrs[i][1];
+		}
+	}
+}
+
 function updateActionsPanel(idBoard){
 	const rq = new XMLHttpRequest();
 	rq.open("GET", "rq/getActions.php?idBoard="+idBoard+"&op=player");

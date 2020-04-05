@@ -5,7 +5,11 @@ html {
 	scrollbar-color: #111111 black;
 	scroll-behavior: smooth;
 	cursor: default;
+	scrollbar-color: dark;
 }
+html::-webkit-scrollbar{display: none;}
+html::-moz-scrollbar{display: none;}
+
 body {
 	/*overflow: auto;*/
 	position: relative;

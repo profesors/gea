@@ -7,8 +7,8 @@
 	<div id="input_hidden"></div>
 	<div id="canvas">
 		<input type="text" id="stdInput" placeholder="Input...">
-	<div id="canvas_dados"></div>
-	<?php include('templates/panelD.php'); ?>
+		<!--<div id="canvas_dados"></div>-->
 	</div>
+	<?php include('templates/panelD.php'); ?>
 </div>
 <?php include('templates/foot.php'); ?>
