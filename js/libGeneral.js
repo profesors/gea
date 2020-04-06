@@ -11,6 +11,7 @@ function getPixel(pos, sizeOfTile, offset){
 	return (pos-1)*sizeOfTile+offset; 
 }
 
+// @TODO cambiar nombre a getTokenByName
 function getTokenFromArrTokens(name){
 	var token = null;
 	for (var i=0; i<arrTokens.length; i++){
@@ -20,6 +21,28 @@ function getTokenFromArrTokens(name){
 		}
 	}
 	return token;
+}
+
+function getTokenByTile(tilex,tiley){
+	console.log("GET TOKEN FROM COOR");
+	for (var i=0; i<arrTokens.length; i++){
+		if (arrTokens[i].x == tilex && arrTokens[i].y == tiley){
+			return arrTokens[i];
+		}
+		// If the token is grater than 1x1
+		if (arrTokens[i].w >1 || arrTokens[i].h>1){
+			if (tilex>=arrTokens[i].x && tilex<=arrTokens[i].x+arrTokens[i].w && 
+					tiley>=arrTokens[i].y && tiley<=arrTokens[i].y+arrTokenks[i].h){
+				return arrTokens[i];
+			}
+		}
+	}
+	return null;
+}
+
+// Rounded to floor
+function getDistanceTiles(tilex1, tiley1, tilex2, tiley2){
+	return Math.floor(Math.sqrt(((tilex2-tilex1)**2+(tiley2-tiley1)**2)));
 }
 
 // Change opacity of ALL coordinates

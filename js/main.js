@@ -186,22 +186,45 @@ function checkUpdates(){
 // ************* PHASE 1 ****************
 
 function movementClick(event){
-	//event.preventDefault();
-    //event.stopImmediatePropagation();
 	const x = (isNaN(event.clientX)?event.touches[0].screenX:event.clientX) + window.pageXOffset;	// En el tablero
 	const y = (isNaN(event.clientY)?event.touches[0].screenY:event.clientY) + window.pageYOffset;
-	if (movement.token == null){
-		movementSelectToken(x, y, false);
+	const tilex = Math.floor((x-board.offsetx)/board.tilew)+1;
+	const tiley = Math.floor((y-board.offsety)/board.tileh)+1;
+	if (movement.token == null){	// Select token (first click)
+		movementSelectTokenByTile(tilex, tiley, false);
 	} else {
-		movementMoveToken(x, y, false);
-		movement.token = null;
+		var destToken = getTokenByTile(tilex,tiley);
+		if (destToken==null){	// Destination is empty
+			movementMoveToken(x, y, false);
+			movement.token = null;
+		} else {	// There is a token in de destination
+			var d = getDistanceTiles(movement.token.x, movement.token.y, tilex, tiley);
+			if (d<=1){
+				console.log("ACCION 1");
+				sendCommand("@"+movement.token.name+" "+movement.token.guidelines[1]);
+			} else {
+				console.log("ACCION 2");
+				sendCommand("@"+movement.token.name+" "+movement.token.guidelines[2]);
+			}
+			movement.token.tagName.style.opacity = 0;
+			movement.token = null;
+		}
 	}
 }
 
+function movementSelectTokenByTile(tilex, tiley, bLine){
+	// Select Token
+	var token = getTokenByTile(tilex, tiley);
+	movement.token = token;
+	if (token!=null){
+		if (bLine) {addSvgLine("line_movement", movement.pixel_x0, movement.pixel_y0, movement.pixel_x1, 
+			movement.pixel_y1, "red", 4);}
+		token.tagName.style.opacity = 1;
+	}
+}
 // Generic, both for touch and mouse
+/*
 function movementSelectToken(x, y, bLine){
-	//movement.pixel_x0 = movement.pixel_x1 = x;
-	//movement.pixel_y0 = movement.pixel_y1 = y;
 	// Tiles selected
 	const tilex = Math.floor((x-board.offsetx)/board.tilew)+1;
 	const tiley = Math.floor((y-board.offsety)/board.tileh)+1;
@@ -213,7 +236,6 @@ function movementSelectToken(x, y, bLine){
 		const h = parseInt(token.h);
 		token.x = parseInt(token.x);
 		token.y = parseInt(token.y);
-		//console.log(tilex+">="+token.x+" && "+tilex+" <= "+parseInt(token.x+w-1)+" && "+tiley+" >= "+token.y+" && "+tiley+" <= "+parseInt(token.y+h-1));
 		if (tilex >= token.x && tilex <= parseInt(token.x+w-1) && tiley >=token.y && tiley <= parseInt(token.y+h-1)){
 			if (bLine){
 				addSvgLine("line_movement", movement.pixel_x0, movement.pixel_y0, movement.pixel_x1, movement.pixel_y1, "red", 4);
@@ -224,7 +246,7 @@ function movementSelectToken(x, y, bLine){
 			break;
 		}
 	}
-}
+}*/
 
 function movementMoveToken(x, y, bLine){
 	const m = movement;
