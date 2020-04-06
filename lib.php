@@ -137,13 +137,14 @@ function reset_board($idBoard){
 }
 
 # Updates the dice column of a token
-function set_dice($idBoard, $name, $value){
+function set_dice($idBoard, $name, $value, $tiles){
 	global $db;
 	$query = "SELECT lastActionId FROM boards WHERE id = $idBoard LIMIT 1;";
 	$result = run_sql($query) or die();
 	$row = mysqli_fetch_array($result);
 	$nextActionId = $row['lastActionId']+1;	# current last action + 1 because it will be increased
-	$query = "UPDATE tokens SET dice_result = '$value', dice_actionId = $nextActionId WHERE idBoard = $idBoard AND name = '$name';";
+	$dice_action = trim("$nextActionId,$tiles",',');
+	$query = "UPDATE tokens SET dice_result = '$value', dice_action = '$dice_action' WHERE idBoard = $idBoard AND name = '$name';";
 	run_sql($query) or die();
 }
 

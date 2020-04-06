@@ -3,6 +3,7 @@
 	connectDB();
 	#$_GET['m'] = "@bar #1d20+2";
 	#$_GET['idBoard'] = 4;
+
 	$m = preg_replace('/[ ]+/', ' ', secure_param('m'));
 	$idBoard = intval(secure_param('idBoard'));
 
@@ -45,6 +46,9 @@
 			insert_action($idBoard, $command);
 		}
 
+		# tiles
+		preg_match("/t([^ ]*)/", $command, $arrTmp);
+		$tiles = array_key_exists(1, $arrTmp)?$arrTmp[1]:null;
 
 		# attr
 		$arr_attr = Array();
@@ -63,7 +67,6 @@
 		# Guidelines (directrices)
 		# \(((\d+)\)([^ ]*))
 		if(preg_match_all("/\(((\d+)\)([^ ]*))/", $command, $arrTmp)){
-			print_r($arrTmp);die();
 			for($i=0; $i<sizeof($arrTmp[2]); $i++){
 				$n_guideline = $arrTmp[2][$i];	# Number
 				$s_guideline = $arrTmp[3][$i];	# String
@@ -96,7 +99,7 @@
 				$strResults .= ' '.$result;
 				$sDescription.= $n."d$size".($mod!="0"?$arrDice[4].$mod:"")."=<span class='red'>$result</span> ";
 			}
-			set_dice($idBoard, $name, $strResults);
+			set_dice($idBoard, $name, $strResults, $tiles);
 			insert_action($idBoard, "@$name $sDescription");
 		}
 		

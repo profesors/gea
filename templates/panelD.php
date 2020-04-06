@@ -1,4 +1,9 @@
 <div id="panelD">
+<style>
+svg circle, svg text{
+	cursor: pointer;
+}
+</style>
 	<!-- PJ 1 ------------------------------>
 	<svg id="bbar" width="128px" height="140px">
 	<image class="portrait" href="img/tokens/005.png" width="100px" x="30px" y="0"/>

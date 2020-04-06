@@ -123,7 +123,7 @@ async function moveToken(token, toX, toY){
 		const dx = getPixel(toX, board.tilew, board.offsetx)-ox;
 		const dy = getPixel(toY, board.tileh, board.offsety)-oy;
 		const oz = token.z;
-		token.div.style.zIndex = 200;
+		token.div.style.zIndex = 10;
 		const pi2 = Math.PI/2;
 		for (var i=0; i<=pi2; i+=0.01){
 			token.div.style.left = (ox+Math.sin(i)*dx)+"px";
@@ -133,7 +133,7 @@ async function moveToken(token, toX, toY){
 		}
 		token.x = toX;
 		token.y = toY;
-		token.div.style.zIndex = 100;
+		token.div.style.zIndex = 1;
 		token.div.style.transform = "scale(1)";
 	}
 }
@@ -148,21 +148,19 @@ async function updateHp(token){
 			currenthp = item[1];
 		}
 	});
-	//currenthp = 7;
-	//maxhp=10;
 	var p = parseFloat(currenthp)/maxhp*100;	// Porcentaje
 	var hpbar = document.getElementById("hpbar_"+token.name)
-	if (hpbar == null) console.log("NULO PARA "+token.name);
-	var hpnum = document.getElementById("hpnum_"+token.name)
-	hpbar.setAttribute("y",101-p);
-	hpbar.setAttribute("height",p-1);
-	// Número con los puntos de golpe
-	var npy = 101-p+5;	// Posición Y del número de puntos de golpe
-	if (npy<20) npy=20;
-	if (npy>100) npy=100;
-	hpnum.setAttribute("y",npy);
-	hpnum.innerHTML = currenthp;
-	//sendCommand("@"+token.name+" [hp:"+currenthp+"]");
+	if (hpbar != null) {	// Some tokens does not have hp bar
+		var hpnum = document.getElementById("hpnum_"+token.name)
+		hpbar.setAttribute("y",101-p);
+		hpbar.setAttribute("height",p-1);
+		// Number tag with HP
+		var npy = 101-p+5;	// Posición Y del número de puntos de golpe
+		if (npy<20) npy=20;
+		if (npy>100) npy=100;
+		hpnum.setAttribute("y",npy);
+		hpnum.innerHTML = currenthp;
+	}
 }
 
 function setAttr(token, attr, val){
@@ -204,7 +202,7 @@ function addSvgCanvas(){
 	svg.setAttribute("id", "svgCanvas");
 	svg.setAttribute("width", w);
 	svg.setAttribute("height", h);
-	svg.setAttribute("style", "z-index: 101; position: absolute;");
+	svg.setAttribute("style", "z-index: 5; position: absolute;");
 	svg.setAttribute("version", "1.1");
 	canvas.appendChild(svg);
 }
@@ -287,22 +285,23 @@ async function drawRangedCombatDisappears(token, tilex, tiley){
 	var pmy = (y2+y1)/2;	// Middle point in y
 	var tx = (x2-x1)/2;		// Transaltion in x
 	var ty = (y2-y1)/2;		// Translation in y
-	console.log("T:"+tx+" "+ty);
 	elLine.setAttribute("id",id);
 	elLine.setAttribute("x1", x1);
 	elLine.setAttribute("y1", y1);
 	elLine.setAttribute("x2", x2);
 	elLine.setAttribute("y2", y2);
 	var style = "stroke-width: 3; stroke:"+token.border.split(' ')[2]+"; ";
-	var animation= "animation-name: disappear; animation-duration: 2s; stroke-linecap:butt; stroke-dasharray:5,25;";
+	var animation= "animation-name: disappear; animation-duration: 3s; stroke-linecap:butt; stroke-dasharray:5,25;";
 	style+=animation;
 	elLine.setAttribute("style", style);
-	var transform = "translate("+tx+" "+ty+")"+pmx+" "+pmy+")";
-	elLine.setAttribute("transform",transform);
 	svg.appendChild(elLine);
-	setTimeout(function (){svg.removeChild(elLine);
-		var elCircle = addSvgCircle("circle",x2,y2,20,token.border.split(' ')[2], animation);
-		setTimeout(function (){svg.removeChild(elCircle);},1500);
+	setTimeout(function (){
+		var idC = "circ"+(new Date).getTime();
+		var elCircle = addSvgCircle(idC,x2,y2,20,token.border.split(' ')[2], animation);
+		setTimeout(function (){
+			svg.removeChild(elLine);
+			svg.removeChild(elCircle);
+		},2500);
 	},500);
 }
 function sendCommand(command){
@@ -317,7 +316,20 @@ function getSheetCharacter(name, idBoard, destDiv){
 	rq.send();
 	rq.onreadystatechange = function(e) {
 		if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
-			destDiv.innerHTML = "<a class='close' onclick='closeInfoCharacter();' href='#'>Cerrar</a><br>"+rq.responseText;
+			destDiv.innerHTML = "<a class='close' onclick='closeInfoCharacter();'>Cerrar</a><br>"+rq.responseText;
 		}
+	}
+}
+
+function runGuidelines(token, tilex, tiley, bSendCommand=false){
+	// Acording to de distance, use one guideline or other
+	var d = getDistanceTiles(token.x, token.y, tilex, tiley);
+	if (d<=1 && (1 in token.guidelines)){
+		if (bSendCommand) sendCommand("@"+token.name+" "+token.guidelines[1]+" t"+tilex+","+tiley);
+		drawCloseCombatDisappears(token, tilex, tiley);
+	}
+	if (d>1 && (2 in token.guidelines)){
+		if (bSendCommand) sendCommand("@"+token.name+" "+token.guidelines[2]+" t"+tilex+","+tiley);
+		drawRangedCombatDisappears(token, tilex, tiley);
 	}
 }

@@ -183,7 +183,7 @@ function checkUpdates(){
 	}
 }
 
-// ************* PHASE 1 ****************
+// *********** Movement Clic *********************
 
 function movementClick(event){
 	const x = (isNaN(event.clientX)?event.touches[0].screenX:event.clientX) + window.pageXOffset;	// En el tablero
@@ -192,27 +192,24 @@ function movementClick(event){
 	const tiley = Math.floor((y-board.offsety)/board.tileh)+1;
 	if (movement.token == null){	// Select token (first click)
 		movement.token = getTokenByTile(tilex, tiley);
-		movement.token.div.style.zIndex="103";
-		if (movement.token!=null) movement.token.tagName.style.opacity = 1;
+		if (movement.token!=null) {
+			movement.token.tagName.style.opacity = 1;
+		}
 	} else {	// Second click
 		var destToken = getTokenByTile(tilex,tiley);
-		if (destToken==null){	// Destination is empty
+		if (destToken==null){	// Destination is empty, you can move
 			sendCommand("@"+movement.token.name+" p"+tilex+","+tiley);
 			drawLineDisappears(movement.token,tilex, tiley);
 			movement.token.tagName.style.opacity = 0;
 			movement.token = null;
-		} else {	// There is a token in de destination
-			var d = getDistanceTiles(movement.token.x, movement.token.y, tilex, tiley);
-			if (d<=1){
+		} else {	// There is a token in de destination cell. Run guidelines
+			// If the token is enabled
+			if (document.getElementById("b"+movement.token.name)){	// It has b control panel (=portrait)
 				if (document.getElementById("b"+movement.token.name).style.opacity!="0.3"){
-					sendCommand("@"+movement.token.name+" "+movement.token.guidelines[1]);
-					drawCloseCombatDisappears(movement.token, tilex, tiley);
+					runGuidelines(movement.token, tilex, tiley, true);
 				}
-			} else {
-				if (document.getElementById("b"+movement.token.name).style.opacity!="0.3"){
-					sendCommand("@"+movement.token.name+" "+movement.token.guidelines[2]);
-					drawRangedCombatDisappears(movement.token, tilex, tiley);
-				}
+			} else {	// It is a monster
+					runGuidelines(movement.token, tilex, tiley, true);
 			}
 			movement.token.tagName.style.opacity = 0;
 			movement.token = null;
@@ -263,7 +260,6 @@ window.addEventListener("load", function() {
 });
 
 window.addEventListener("resize", function() {
-	console.log("RESIZE");
 	MAXX = window.innerWidth;
 	MAXY = window.innerHeight;
 	//canvas.style.width = MAXX+"px";

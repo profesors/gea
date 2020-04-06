@@ -13,7 +13,7 @@ while($row = mysqli_fetch_array($result)){
 	echo $row['x'].' '.$row['y'].' '.$row['z'].' '.$row['w'].' '.$row['h'].' ';
 	echo $row['step'].' '.$row['img'].' ';
 	echo $row['name'].' '.$row['border'].' ';
-	echo $dice_result.' '.$row['dice_actionId'];
+	echo $dice_result.' '.$row['dice_action'];
 	# Attrs
 	$query = "SELECT * FROM attrs WHERE idBoard=$idBoard AND tokenName='".$row['name']."';";
 	$result_attrs = run_sql($query) or die();

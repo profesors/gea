@@ -1,4 +1,5 @@
 #info_character .close{
+	cursor: pointer;
 	float: right;
 	margin: 1rem;
 }

@@ -31,7 +31,7 @@ svg{
 	bottom: 0;
 	width: 400px;
 	height: 100%;
-	z-index: 1000;
+	z-index: 101;
 	background-color: grey;
 	display: none;
 	opacity: 0.8;
@@ -41,7 +41,7 @@ svg{
 	background-color: black;
 	width: 130px;
 	height: 100%;
-	z-index: 101;
+	z-index: 11;
 	position: fixed;
 	right: 0;
 	top: 0;
@@ -99,7 +99,7 @@ svg{
 	position: fixed;
 	top: 0;
 	right: 0;
-	z-index: 104;
+	z-index: 11;
 	background-color: rgba(255,255,255,0.7);
 	width: 600px;
 	height: 100%;

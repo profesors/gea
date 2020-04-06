@@ -65,11 +65,10 @@ function getTokens(idBoard){
 					tagName: document.createElement("div"),
 					tagDice: document.createElement("div"),
 					dice: arrOneToken[9].replace(/;/g, ' '),
-					diceActionId: arrOneToken[10],
+					diceAction: arrOneToken[10],
 					attrs: arrOneToken[11],
 					guidelines: arrOneToken[12]
 				}
-				//console.log("DICE: "+token.dice);
 				// Position of the token
 				var x = getPixel(token.x, board.tilew, board.offsetx);
 				var y = getPixel(token.y, board.tileh, board.offsety)
@@ -121,9 +120,17 @@ function getTokens(idBoard){
 
 					currentToken.div.style.width = board.tilew*token.w;
 					currentToken.div.style.height = board.tileh*token.h;
-					if (localLastActionId < token.diceActionId){
+					// First element is diceActionId, nexts are coordinates
+					var arrDiceAction = token.diceAction.split(',');
+					//console.log(token.diceAction+"____"+localLastActionId+" "+arrDiceAction[0]);
+					if (localLastActionId < arrDiceAction[0]){	
+						// This token has pending acitions to show
 						var name = currentToken.name;
 						setTimeout(function () {showDiceResult(name)} ,0);
+						if (1 in arrDiceAction && 2 in arrDiceAction){
+							// INFO: tilex is arrDiceAction[1], tiley is arrDiceAction[2]
+							runGuidelines(token, arrDiceAction[1], arrDiceAction[2], false);
+						}
 					}
 					continue;
 				} else {
@@ -139,6 +146,7 @@ function getTokens(idBoard){
 				token.div.img.style.position = "relative";
 				token.div.img.style.left = 0;
 				token.div.img.style.top = 0;
+				token.div.img.style.zIndex = 1;
 				token.div.img.style.borderRadius = "50%";
 				var arrBorder = token.border.split(" ");
 				var spaceBorder = parseInt(arrBorder[0].substring(0,arrBorder[0].length-2))*2;
@@ -153,7 +161,7 @@ function getTokens(idBoard){
 				token.tagName.style.top = 0.5*board.tileh*token.h+"px";
 				token.tagName.style.width = board.tilew*token.w+"px";
 				token.tagName.style.textShadow = "2px 2px black";
-				token.tagName.style.zIndex = 100;
+				token.tagName.style.zIndex = 2;
 				token.tagName.style.opacity = 0;
 				token.div.appendChild(token.tagName);
 
@@ -167,7 +175,7 @@ function getTokens(idBoard){
 				token.tagDice.style.width = board.tilew+"px";
 				token.tagDice.style.textShadow = "-2px 0 black, 0 2px black, 2px 0 black, 0 -2px black";
 				token.tagDice.style.fontSize = "180%";
-				token.tagDice.style.zIndex = 100;
+				token.tagDice.style.zIndex = 3;
 				token.tagDice.style.opacity = 0;
 				token.div.appendChild(token.tagDice);
 
@@ -191,19 +199,6 @@ function removeAllLoadedTokens(){
 	}
 }
 
-// NO TESTED
-/*
-function getDice(idBoard, name){
-	const rq = new XMLHttpRequest();
-	rq.open("GET", "rq/getDice.php?idBoard="+idBoard+"&name="+name);
-	rq.send();
-	rq.onreadystatechange = function(e) {
-	if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
-		console.log("DICE "+name+":"+rq.responseText);
-	}
-	}
-}*/
-
 function drawCellNames(){
 	for (var y=1; y<=board.ntilesh; y++){
 		for (var x=1; x<=board.ntilesw; x++){
@@ -213,7 +208,7 @@ function drawCellNames(){
 			txt.style.top = getPixel(y, board.tileh, board.offsety)+"px";
 			txt.style.position = "absolute";
 			txt.style.color = "#aaaaaa";//"white";
-			txt.style.zIndex = 100;
+			txt.style.zIndex = 10;
 			txt.style.textShadow = "1px 1px black";
 			txt.style.opacity = "0";
 			txt.setAttribute("class", "coordinates");

@@ -5,18 +5,18 @@
 @elf p15,16 !007.png _5px+solid+lime [maxhp:24,hp:24] (1)#1d20+5,1d8+2 (2)#1d20+6,1d8+1;
 @cle p15,17 !011.png _5px+solid+lime [maxhp:28,hp:28] (1)#1d20+3,1d8+1 (2)#1d20+2,1d8; 
 @lad p18,15 !010.png _5px+solid+lime [maxhp:20,hp:20] (1)#1d20+2,1d8 (2)#1d20+2,1d6;
-@g1 p1,16 !goblin.jpg _5px+solid+red; 
-@g2 p2,17 !goblin.jpg _5px+solid+red; 
-@g3 p2,18 !goblin.jpg _5px+solid+red; 
-@g4 p12,7 !goblin.jpg _5px+solid+red; 
-@g5 p13,3 !goblin.jpg _5px+solid+red; 
-@g6 p10,2 !goblin.jpg _5px+solid+red; 
-@o1 p13,1 !orc.jpg _5px+dashed+red; 
-@o2 p12,2 !orc.jpg _5px+solid+red; 
-@o3 p17,4 !orc.jpg _5px+solid+red; 
-@o4 p10,1 !orc.jpg _5px+solid+red; 
-@o5 p1,15 !orc.jpg _5px+solid+red; 
-@o6 p3,17 !orc.jpg _5px+solid+red;
+@g1 p1,16 !goblin.jpg _5px+solid+red [maxhp:5,hp:5] (1)#1d20,1d6 (2)#1d20,1d4; 
+@g2 p2,17 !goblin.jpg _5px+solid+red [maxhp:5,hp:5] (1)#1d20,1d6 (2)#1d20,1d4; 
+@g3 p2,18 !goblin.jpg _5px+solid+red [maxhp:5,hp:5] (1)#1d20,1d6 (2)#1d20,1d4; 
+@g4 p12,7 !goblin.jpg _5px+solid+red [maxhp:5,hp:5] (1)#1d20,1d6 (2)#1d20,1d4; 
+@g5 p13,3 !goblin.jpg _5px+solid+red [maxhp:5,hp:5] (1)#1d20,1d6 (2)#1d20,1d4; 
+@g6 p10,2 !goblin.jpg _5px+solid+red [maxhp:5,hp:5] (1)#1d20,1d6 (2)#1d20,1d4; 
+@o1 p13,1 !orc.jpg _5px+dashed+red [maxhp:6,hp:6] (1)#1d20,1d6+2; 
+@o2 p12,2 !orc.jpg _5px+solid+red [maxhp:6,hp:6] (1)#1d20,1d6+2; 
+@o3 p17,4 !orc.jpg _5px+solid+red [maxhp:6,hp:6] (1)#1d20,1d6+2; 
+@o4 p10,1 !orc.jpg _5px+solid+red [maxhp:6,hp:6] (1)#1d20,1d6+2; 
+@o5 p1,15 !orc.jpg _5px+solid+red [maxhp:6,hp:6] (1)#1d20,1d6+2; 
+@o6 p3,17 !orc.jpg _5px+solid+red [maxhp:6,hp:6] (1)#1d20,1d6+2;
 
 # Asalto en mitad de la noche (2)
 @bar p12,11 !005.png _5px+solid+lime [maxhp:56,hp:56]; 
