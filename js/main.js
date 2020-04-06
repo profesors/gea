@@ -191,78 +191,29 @@ function movementClick(event){
 	const tilex = Math.floor((x-board.offsetx)/board.tilew)+1;
 	const tiley = Math.floor((y-board.offsety)/board.tileh)+1;
 	if (movement.token == null){	// Select token (first click)
-		movementSelectTokenByTile(tilex, tiley, false);
-	} else {
+		movement.token = getTokenByTile(tilex, tiley);
+		movement.token.div.style.zIndex="103";
+		if (movement.token!=null) movement.token.tagName.style.opacity = 1;
+	} else {	// Second click
 		var destToken = getTokenByTile(tilex,tiley);
 		if (destToken==null){	// Destination is empty
-			movementMoveToken(x, y, false);
+			sendCommand("@"+movement.token.name+" p"+tilex+","+tiley);
+			drawLineDisappears(movement.token,tilex, tiley);
+			movement.token.tagName.style.opacity = 0;
 			movement.token = null;
 		} else {	// There is a token in de destination
 			var d = getDistanceTiles(movement.token.x, movement.token.y, tilex, tiley);
 			if (d<=1){
 				console.log("ACCION 1");
 				sendCommand("@"+movement.token.name+" "+movement.token.guidelines[1]);
+				drawCloseCombatDisappears(movement.token, tilex, tiley);
 			} else {
 				console.log("ACCION 2");
 				sendCommand("@"+movement.token.name+" "+movement.token.guidelines[2]);
+				drawRangedCombatDisappears(movement.token, tilex, tiley);
 			}
 			movement.token.tagName.style.opacity = 0;
 			movement.token = null;
-		}
-	}
-}
-
-function movementSelectTokenByTile(tilex, tiley, bLine){
-	// Select Token
-	var token = getTokenByTile(tilex, tiley);
-	movement.token = token;
-	if (token!=null){
-		if (bLine) {addSvgLine("line_movement", movement.pixel_x0, movement.pixel_y0, movement.pixel_x1, 
-			movement.pixel_y1, "red", 4);}
-		token.tagName.style.opacity = 1;
-	}
-}
-// Generic, both for touch and mouse
-/*
-function movementSelectToken(x, y, bLine){
-	// Tiles selected
-	const tilex = Math.floor((x-board.offsetx)/board.tilew)+1;
-	const tiley = Math.floor((y-board.offsety)/board.tileh)+1;
-	// Select Token
-	movement.token = null;
-	for (var i=0; i<arrTokens.length; i++){
-		const token = arrTokens[i];
-		const w = parseInt(token.w);
-		const h = parseInt(token.h);
-		token.x = parseInt(token.x);
-		token.y = parseInt(token.y);
-		if (tilex >= token.x && tilex <= parseInt(token.x+w-1) && tiley >=token.y && tiley <= parseInt(token.y+h-1)){
-			if (bLine){
-				addSvgLine("line_movement", movement.pixel_x0, movement.pixel_y0, movement.pixel_x1, movement.pixel_y1, "red", 4);
-			}
-			movement.token = token;
-			token.tagName.style.opacity = 1;	// BORRAR
-			//console.log("SELECTED "+token.name+" from "+tilex+" "+tiley);
-			break;
-		}
-	}
-}*/
-
-function movementMoveToken(x, y, bLine){
-	const m = movement;
-	if (m.token != null){
-		// Tiles selected
-		const tilex = Math.floor((x-board.offsetx)/board.tilew)+1;
-		const tiley = Math.floor((y-board.offsety)/board.tileh)+1;
-		//console.log("TILE DEST: "+tilex+" "+tiley);
-		m.pixel_x0 = m.pixel_x1 = m.pixel_y0 = m.pixel_y1 = -1;
-		//moveToken(m.token, tilex, tiley);
-		//console.log(m.token.name+" -> "+tilex+","+tiley);
-		sendCommand("@"+m.token.name+" p"+tilex+","+tiley);
-		m.token.tagName.style.opacity = 0;
-		if (bLine){
-			const l = document.getElementById("line_movement");
-			svg.removeChild(l);
 		}
 	}
 }

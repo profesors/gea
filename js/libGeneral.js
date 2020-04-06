@@ -7,8 +7,8 @@ function sleep(ms) {
 }
 
 // Return pixels from the screen
-function getPixel(pos, sizeOfTile, offset){
-	return (pos-1)*sizeOfTile+offset; 
+function getPixel(nTile, sizeOfTile, offset){
+	return (nTile-1)*sizeOfTile+offset; 
 }
 
 // @TODO cambiar nombre a getTokenByName
@@ -24,7 +24,6 @@ function getTokenFromArrTokens(name){
 }
 
 function getTokenByTile(tilex,tiley){
-	console.log("GET TOKEN FROM COOR");
 	for (var i=0; i<arrTokens.length; i++){
 		if (arrTokens[i].x == tilex && arrTokens[i].y == tiley){
 			return arrTokens[i];
@@ -205,32 +204,106 @@ function addSvgCanvas(){
 	svg.setAttribute("id", "svgCanvas");
 	svg.setAttribute("width", w);
 	svg.setAttribute("height", h);
-	//svg.setAttribute("viewBox", board.offsetx+" "+board.offsety+" "+w+" "+h);
+	svg.setAttribute("style", "z-index: 101; position: absolute;");
 	svg.setAttribute("version", "1.1");
 	canvas.appendChild(svg);
 }
 
-function addSvgCircle(id, x, y, r, fill){
+function addSvgCircle(id, x, y, r, fill, extraStyle=null){
 	var el = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 	el.setAttribute("id",id);
 	el.setAttribute("cx",x);
 	el.setAttribute("cy",y);
 	el.setAttribute("r",r);
 	el.setAttribute("fill",fill);
+	var style = "";
+	if (extraStyle!=null) style+=extraStyle;
+	el.setAttribute("style", style);
 	svg.appendChild(el);
+	return el;
 }
 
-function addSvgLine(id, x0, y0, x1, y1, color, width){
+function addSvgLine(id, x0, y0, x1, y1, color, width, extraStyle=null){
 	var el = document.createElementNS("http://www.w3.org/2000/svg", "line");
 	el.setAttribute("id",id);
 	el.setAttribute("x1",x0);
 	el.setAttribute("y1",y0);
 	el.setAttribute("x2",x1);
 	el.setAttribute("y2",y1);
-	el.setAttribute("style","stroke: "+color+"; stroke-width: "+width);
+	var style = "stroke-width: "+width+"; stroke:"+color+";";
+	if (extraStyle!=null) style+=extraStyle;
+	el.setAttribute("style", style);
 	svg.appendChild(el);
+	return el;
 }
 
+// Draw a line from token to tilex, tiley and then disappears
+function drawLineDisappears(token, tilex, tiley){
+	var extraStyle = "animation-name: disappear; animation-duration: 4s; stroke-linecap:round; stroke-dasharray:15,5";
+	var l=addSvgLine("line_movement"+(new Date).getTime(), 
+		getPixel(token.x,board.tilew,board.offsetx+board.tilew/2),
+		getPixel(token.y,board.tileh,board.offsety+board.tileh/2),
+		getPixel(tilex,board.tilew,board.offsetx+board.tilew/2),
+		getPixel(tiley,board.tileh,board.offsety+board.tileh/2), 
+		(token.border.split(' '))[2], 2, extraStyle);
+	setTimeout(function (){svg.removeChild(l);},3500);
+}
+
+// Draw a combat icon from token to tilex, tiley and then disappears
+function drawCloseCombatDisappears(token, tilex, tiley){
+	var el = document.createElementNS("http://www.w3.org/2000/svg", "line");
+	var id = "attack"+(new Date).getTime();
+	var x1 = getPixel(token.x, board.tilew, board.offsetx+board.tilew/2);
+	var y1 = getPixel(token.y, board.tileh, board.offsety+board.tileh/2);
+	var x2 = getPixel(tilex, board.tilew, board.offsetx+board.tilew/2);
+	var y2 = getPixel(tiley, board.tileh, board.offsety+board.tileh/2);
+	var pmx = (x2+x1)/2;	// Middle point in x
+	var pmy = (y2+y1)/2;	// Middle point in y
+	var tx = (x2-x1)/2;		// Transaltion in x
+	var ty = (y2-y1)/2;		// Translation in y
+	el.setAttribute("id",id);
+	el.setAttribute("x1", x1);
+	el.setAttribute("y1", y1);
+	el.setAttribute("x2", x2);
+	el.setAttribute("y2", y2);
+	var style = "stroke-width: 15; stroke:"+token.border.split(' ')[2]+"; ";
+	style+= "animation-name: disappear; animation-duration: 4s; stroke-linecap:butt; stroke-dasharray:10,5";
+	el.setAttribute("style", style);
+	var transform = "translate("+tx+" "+ty+") rotate(90 "+pmx+" "+pmy+")";
+	el.setAttribute("transform",transform);
+	svg.appendChild(el);
+	setTimeout(function (){svg.removeChild(el);},2500);
+}
+
+// Draw a ranged combat icon from token to tilex, tiley and then disappears
+function drawRangedCombatDisappears(token, tilex, tiley){
+	var elLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+	var id = "ranged"+(new Date).getTime();
+	var x1 = getPixel(token.x, board.tilew, board.offsetx+board.tilew/2);
+	var y1 = getPixel(token.y, board.tileh, board.offsety+board.tileh/2);
+	var x2 = getPixel(tilex, board.tilew, board.offsetx+board.tilew/2);
+	var y2 = getPixel(tiley, board.tileh, board.offsety+board.tileh/2);
+	var pmx = (x2+x1)/2;	// Middle point in x
+	var pmy = (y2+y1)/2;	// Middle point in y
+	var tx = (x2-x1)/2;		// Transaltion in x
+	var ty = (y2-y1)/2;		// Translation in y
+	console.log("T:"+tx+" "+ty);
+	elLine.setAttribute("id",id);
+	elLine.setAttribute("x1", x1);
+	elLine.setAttribute("y1", y1);
+	elLine.setAttribute("x2", x2);
+	elLine.setAttribute("y2", y2);
+	var style = "stroke-width: 1; stroke:"+token.border.split(' ')[2]+"; ";
+	var animation= "animation-name: disappear; animation-duration: 4s; stroke-linecap:butt; stroke-dasharray:5,25;";
+	style+=animation;
+	elLine.setAttribute("style", style);
+	var transform = "translate("+tx+" "+ty+")"+pmx+" "+pmy+")";
+	elLine.setAttribute("transform",transform);
+	svg.appendChild(elLine);
+	var elCircle = addSvgCircle("circle",x2,y2,20,token.border.split(' ')[2], animation);
+	setTimeout(function (){svg.removeChild(elLine);},1500);
+	setTimeout(function (){svg.removeChild(elCircle);},3500);
+}
 function sendCommand(command){
 	var rq = new XMLHttpRequest();
 	rq.open("GET", "rq/send.php?m="+encodeURIComponent(command)+"&idBoard="+board.id);
