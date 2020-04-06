@@ -259,24 +259,24 @@ function drawCloseCombatDisappears(token, tilex, tiley){
 	var y2 = getPixel(tiley, board.tileh, board.offsety+board.tileh/2);
 	var pmx = (x2+x1)/2;	// Middle point in x
 	var pmy = (y2+y1)/2;	// Middle point in y
-	var tx = (x2-x1)/2;		// Transaltion in x
-	var ty = (y2-y1)/2;		// Translation in y
+	var tx = (x2-x1)/3;		// Transaltion in x
+	var ty = (y2-y1)/3;		// Translation in y
 	el.setAttribute("id",id);
-	el.setAttribute("x1", x1);
-	el.setAttribute("y1", y1);
+	el.setAttribute("x1", (pmx+x1)/2);
+	el.setAttribute("y1", (pmy+y1)/2);
 	el.setAttribute("x2", x2);
 	el.setAttribute("y2", y2);
-	var style = "stroke-width: 15; stroke:"+token.border.split(' ')[2]+"; ";
-	style+= "animation-name: disappear; animation-duration: 4s; stroke-linecap:butt; stroke-dasharray:10,5";
+	var style = "stroke-width: 12; stroke:"+token.border.split(' ')[2]+"; ";
+	style+= "animation-name: disappear; animation-duration: 2s; stroke-linecap:butt; stroke-dasharray:10,5";
 	el.setAttribute("style", style);
-	var transform = "translate("+tx+" "+ty+") rotate(90 "+pmx+" "+pmy+")";
+	var transform = "translate("+tx+" "+ty+") rotate("+(70+Math.floor(Math.random()*40)+1)+" "+pmx+" "+pmy+")";
 	el.setAttribute("transform",transform);
 	svg.appendChild(el);
-	setTimeout(function (){svg.removeChild(el);},2500);
+	setTimeout(function (){svg.removeChild(el);},1500);
 }
 
 // Draw a ranged combat icon from token to tilex, tiley and then disappears
-function drawRangedCombatDisappears(token, tilex, tiley){
+async function drawRangedCombatDisappears(token, tilex, tiley){
 	var elLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
 	var id = "ranged"+(new Date).getTime();
 	var x1 = getPixel(token.x, board.tilew, board.offsetx+board.tilew/2);
@@ -293,16 +293,17 @@ function drawRangedCombatDisappears(token, tilex, tiley){
 	elLine.setAttribute("y1", y1);
 	elLine.setAttribute("x2", x2);
 	elLine.setAttribute("y2", y2);
-	var style = "stroke-width: 1; stroke:"+token.border.split(' ')[2]+"; ";
-	var animation= "animation-name: disappear; animation-duration: 4s; stroke-linecap:butt; stroke-dasharray:5,25;";
+	var style = "stroke-width: 3; stroke:"+token.border.split(' ')[2]+"; ";
+	var animation= "animation-name: disappear; animation-duration: 2s; stroke-linecap:butt; stroke-dasharray:5,25;";
 	style+=animation;
 	elLine.setAttribute("style", style);
 	var transform = "translate("+tx+" "+ty+")"+pmx+" "+pmy+")";
 	elLine.setAttribute("transform",transform);
 	svg.appendChild(elLine);
-	var elCircle = addSvgCircle("circle",x2,y2,20,token.border.split(' ')[2], animation);
-	setTimeout(function (){svg.removeChild(elLine);},1500);
-	setTimeout(function (){svg.removeChild(elCircle);},3500);
+	setTimeout(function (){svg.removeChild(elLine);
+		var elCircle = addSvgCircle("circle",x2,y2,20,token.border.split(' ')[2], animation);
+		setTimeout(function (){svg.removeChild(elCircle);},1500);
+	},500);
 }
 function sendCommand(command){
 	var rq = new XMLHttpRequest();

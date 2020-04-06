@@ -144,6 +144,9 @@
 <audio id="aDado" controls style="display:none">
 <source src="audio/dado.mp3" type="audio/mpeg">
 </audio>
+<audio id="aAttack" controls style="display:none">
+<source src="audio/knifeSlice.mp3" type="audio/mpeg">
+</audio>
 </div>
 
 	<svg width="0" height="0">

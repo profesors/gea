@@ -204,13 +204,15 @@ function movementClick(event){
 		} else {	// There is a token in de destination
 			var d = getDistanceTiles(movement.token.x, movement.token.y, tilex, tiley);
 			if (d<=1){
-				console.log("ACCION 1");
-				sendCommand("@"+movement.token.name+" "+movement.token.guidelines[1]);
-				drawCloseCombatDisappears(movement.token, tilex, tiley);
+				if (document.getElementById("b"+movement.token.name).style.opacity!="0.3"){
+					sendCommand("@"+movement.token.name+" "+movement.token.guidelines[1]);
+					drawCloseCombatDisappears(movement.token, tilex, tiley);
+				}
 			} else {
-				console.log("ACCION 2");
-				sendCommand("@"+movement.token.name+" "+movement.token.guidelines[2]);
-				drawRangedCombatDisappears(movement.token, tilex, tiley);
+				if (document.getElementById("b"+movement.token.name).style.opacity!="0.3"){
+					sendCommand("@"+movement.token.name+" "+movement.token.guidelines[2]);
+					drawRangedCombatDisappears(movement.token, tilex, tiley);
+				}
 			}
 			movement.token.tagName.style.opacity = 0;
 			movement.token = null;
