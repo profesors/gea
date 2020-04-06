@@ -1,15 +1,17 @@
 <?php	
 	include_once('../lib.php');
 	connectDB();
-	#$_GET['m'] = "@bar #1d20+2";
+	#$_GET['m'] = "@bar p16,14 !005.png _5px+solid+lime [maxhp:56,hp:56] (1)#1d20+5,1d12+2 (2)#1d20+3,1d8+2;"
 	#$_GET['idBoard'] = 4;
 
 	$m = preg_replace('/[ ]+/', ' ', secure_param('m'));
 	$idBoard = intval(secure_param('idBoard'));
 
 	if ($m == '' && $m != NULL && $idBoard <= 0) die("ERROR: Wrong parameters");
+	#$m = trim(preg_replace('/\s+/', '', $m));
 	$arrCommands = explode(';', $m);
 	foreach($arrCommands as $kCommand => $command){
+		echo "PROCESO $command\n";
 		$command = trim($command);
 		$manual_command = '';
 	
@@ -71,13 +73,11 @@
 				$n_guideline = $arrTmp[2][$i];	# Number
 				$s_guideline = $arrTmp[3][$i];	# String
 				insert_guideline($idBoard, $name, $n_guideline, $s_guideline);
-				insert_action($idBoard, $command);
+				#insert_action($idBoard, $command);
 			}
-		}
-
+		} else 
 		# Dice command
 		if(preg_match("/#([^ ]*)/", $command, $arrTmp)){
-			echo $command."\n";
 			$strResults = '';
 			$manual_command = 'dice';
 			$arrDices = explode(',', $arrTmp[1]);
@@ -90,7 +90,6 @@
 				if (array_key_exists('4',$arrDice)){
 					$mod = $arrDice[4]=='+'?$arrDice[5]:-($arrDice[5]);
 				}
-				print_r($arrDice);
 				$result = 0;
 				for ($i=0; $i<$n;$i++){
 					$result += rand(1, $size);
