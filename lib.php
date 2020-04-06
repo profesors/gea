@@ -73,6 +73,14 @@ function insert_action($idBoard, $m){
 	write_last_actionId($idBoard, $nextActionId);
 }
 
+function insert_guideline($idBoard, $name, $n_guideline, $s_guideline){
+	global $db;
+	$query = "INSERT INTO `guidelines` (idBoard, name, number, guideline) ";
+	$query.= "VALUES ($idBoard, '$name', $n_guideline, '$s_guideline') ";
+	$query.= " ON DUPLICATE KEY UPDATE guideline='$s_guideline'";
+	run_sql($query) or die();
+}
+
 # Update token position X, Y, Z
 function update_position_token($idBoard, $name, $x, $y, $z){
 	global $db;
@@ -104,7 +112,6 @@ function move_token($idBoard, $name, $x, $y){
 	$name = ($name=='')?'NULL':$name;
 	$query = "UPDATE `tokens` SET x=$x, y=$y WHERE idBoard=$idBoard AND name='$name'";
 	run_sql($query) or die();
-
 }
 
 function insert_attr($idBoard, $name, $attr, $val){
@@ -124,6 +131,8 @@ function reset_board($idBoard){
 	$query = "DELETE FROM tokens WHERE idBoard = $idBoard;";
 	run_sql($query);
 	$query = "DELETE FROM attrs WHERE idBoard = $idBoard;";
+	run_sql($query);
+	$query = "DELETE FROM guidelines WHERE idBoard = $idBoard;";
 	run_sql($query);
 }
 

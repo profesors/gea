@@ -1,7 +1,7 @@
 <?php	
 	include_once('../lib.php');
 	connectDB();
-	#$_GET['m'] = "@g4 p13,7";
+	#$_GET['m'] = "@bar p16,14 !005.png _5px+solid+lime [maxhp:56,hp:56] (2)#1d20+2,1d12+2 (1)#1d20+2,1d8";
 	#$_GET['idBoard'] = 4;
 	$m = preg_replace('/[ ]+/', ' ', secure_param('m'));
 	$idBoard = intval(secure_param('idBoard'));
@@ -60,9 +60,21 @@
 				insert_action($idBoard, $command);
 			}
 		}
+		# Guidelines (directrices)
+		# \(((\d+)\)([^ ]*))
+		if(preg_match_all("/\(((\d+)\)([^ ]*))/", $command, $arrTmp)){
+			print_r($arrTmp);die();
+			for($i=0; $i<sizeof($arrTmp[2]); $i++){
+				$n_guideline = $arrTmp[2][$i];	# Number
+				$s_guideline = $arrTmp[3][$i];	# String
+				insert_guideline($idBoard, $name, $n_guideline, $s_guideline);
+			}
+		}
+		echo "FIN";
+		die();
+
 
 		# Dice command
-		#if(preg_match("/#(\d*)d(\d*)(([\+\-])(\d*))?/", $command, $arrTmp)){
 		if(preg_match("/#([^ ]*)/", $command, $arrTmp)){
 			$strResults = '';
 			$manual_command = 'dice';

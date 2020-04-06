@@ -66,7 +66,8 @@ function getTokens(idBoard){
 					tagDice: document.createElement("div"),
 					dice: arrOneToken[9].replace(/;/g, ' '),
 					diceActionId: arrOneToken[10],
-					attrs: arrOneToken[11]
+					attrs: arrOneToken[11],
+					guidelines: arrOneToken[12]
 				}
 				//console.log("DICE: "+token.dice);
 				// Position of the token
@@ -93,6 +94,18 @@ function getTokens(idBoard){
 				});
 				if(getAttr(token,'hp')!=null){
 					updateHp(token);
+				}
+				// Guidelines
+				if (token.guidelines.length > 0){
+				var g =token.guidelines.trim().substring(0,token.guidelines.trim().length-1);
+				var listOfGuidelines = g.split(')');
+				listOfGuidelines.forEach(function (item){
+					var arrTmp = item.trim().split('(');
+					var n = arrTmp[0].replace(',','');
+					var guideline = arrTmp[1];
+					@ AQUI ME HE QUEDADO
+					console.log("G:"+n+"  "+guideline);
+				});
 				}
 				
 				// As the token is inserted, we just need update its possition

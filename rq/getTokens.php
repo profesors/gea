@@ -2,7 +2,7 @@
 include_once('../lib.php');
 connectDB();
 $idBoard = secure_param('idBoard');
-# $idBoard = 4;
+#$idBoard = 4;
 
 # Get tokens from board
 $query = "SELECT * FROM tokens WHERE idBoard = $idBoard;";
@@ -23,6 +23,15 @@ while($row = mysqli_fetch_array($result)){
 	}
 	$sAttrs = trim($sAttrs, ',');
 	echo ' '.$sAttrs;
+	# Guidelines
+	$query = "SELECT * FROM guidelines WHERE idBoard=$idBoard AND name='".$row['name']."'";
+	$result_guidelines = run_sql($query) or die();
+	$sGuidelines = '';
+	while($row_guideline = mysqli_fetch_array($result_guidelines)){
+		$sGuidelines.=$row_guideline['number'].'('.$row_guideline['guideline'].'),';
+	}
+	$sGuidelines = trim($sGuidelines, ',');
+	echo ' '.$sGuidelines;
 	echo "\n";
 }
 
