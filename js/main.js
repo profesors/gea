@@ -264,7 +264,7 @@ window.addEventListener("resize", function() {
 	MAXY = window.innerHeight;
 	//canvas.style.width = MAXX+"px";
 	//canvas.style.height = MAXY+"px";
-	panelI.style.height = MAXY+"px";
-	output.style.height = MAXY+"px";
+	if (panelI != undefined)	panelI.style.height = MAXY+"px";
+	if (output != undefined)	output.style.height = MAXY+"px";
 });
 

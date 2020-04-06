@@ -75,7 +75,7 @@
 				insert_guideline($idBoard, $name, $n_guideline, $s_guideline);
 				#insert_action($idBoard, $command);
 			}
-		} else 
+		} 
 		# Dice command
 		if(preg_match("/#([^ ]*)/", $command, $arrTmp)){
 			$strResults = '';
