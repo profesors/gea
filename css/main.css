@@ -50,6 +50,7 @@ svg{
 
 #panelD .portrait{
 	width: 100px;
+	cursor: pointer;
 }
 
 #btnShowInput{

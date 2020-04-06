@@ -99,12 +99,12 @@ function getTokens(idBoard){
 				if (token.guidelines.length > 0){
 				var g =token.guidelines.trim().substring(0,token.guidelines.trim().length-1);
 				var listOfGuidelines = g.split(')');
+				token.guidelines = [];
 				listOfGuidelines.forEach(function (item){
 					var arrTmp = item.trim().split('(');
 					var n = arrTmp[0].replace(',','');
 					var guideline = arrTmp[1];
-					@ AQUI ME HE QUEDADO
-					console.log("G:"+n+"  "+guideline);
+					token.guidelines[n] = guideline;
 				});
 				}
 				

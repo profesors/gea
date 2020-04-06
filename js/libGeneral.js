@@ -220,7 +220,7 @@ function getSheetCharacter(name, idBoard, destDiv){
 	rq.send();
 	rq.onreadystatechange = function(e) {
 		if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
-			destDiv.innerHTML = rq.responseText;
+			destDiv.innerHTML = "<a class='close' onclick='closeInfoCharacter();' href='#'>Cerrar</a><br>"+rq.responseText;
 		}
 	}
 }

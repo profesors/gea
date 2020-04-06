@@ -4,8 +4,9 @@ document.addEventListener('DOMContentLoaded', function(){
 	/******************* PJ 1 ********************************/
 	document.querySelectorAll(".b11").forEach(function (item){
 		item.addEventListener('click', function (){
+		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
-			sendCommand("@bar #1d20+2,1d12+2");
+			sendCommand("@"+token.name+" "+token.guidelines[1]);
 		}
 		event.stopPropagation();
 		}, false);
@@ -13,16 +14,16 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 	document.querySelectorAll(".b12").forEach(function (item){
 		item.addEventListener('click', function (){
-		console.log("GO");
+		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
-			sendCommand("@bar #1d20+2,1d6+2");
+			sendCommand("@"+token.name+" "+token.guidelines[2]);
 		}
 		event.stopPropagation();
 		}, false);
 	});
 	document.querySelectorAll(".b13").forEach(function (item){
 		item.addEventListener('click', function (){
-		console.log("GO");
+		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
 			sendCommand("@bar #1d6");
 		}
@@ -31,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 	document.querySelectorAll(".b14").forEach(function (item){
 		item.addEventListener('click', function (){
+		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
 			sendCommand("@bar #1d4");
 		}
@@ -39,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 	document.querySelectorAll(".b15").forEach(function (item){
 		item.addEventListener('click', function (){
+		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
 			sendCommand("@bar #1d8");
 		}
@@ -47,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 	document.querySelectorAll(".b16").forEach(function (item){
 		item.addEventListener('click', function (){
+		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
 			sendCommand("@bar #1d10");
 		}
@@ -55,6 +59,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 	document.querySelectorAll(".b17").forEach(function (item){
 		item.addEventListener('click', function (){
+		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
 			sendCommand("@bar #1d20");
 		}
@@ -63,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 	document.querySelectorAll(".b18").forEach(function (item){
 		item.addEventListener('click', function (){
+		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
 			sendCommand("@bar #1d100");
 		}
@@ -71,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 	document.querySelectorAll(".b19a").forEach(function (item){
 		item.addEventListener('click', function (){
+		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
 			var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
 			var hpbar = document.getElementById("hpbar_"+token.name);
@@ -87,6 +94,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 	document.querySelectorAll(".b19b").forEach(function (item){
 		item.addEventListener('click', function (){
+		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
 			var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
 			var hpbar = document.getElementById("hpbar_"+token.name);
@@ -491,24 +499,20 @@ document.addEventListener('DOMContentLoaded', function(){
 		event.stopPropagation();
 		}, false);
 	});
+
+	// Show character sheet
 	document.querySelectorAll(".portrait").forEach(function (item) {
-		item.addEventListener('mouseover', function () {
-			overPortrait[0] = (new Date).getTime();
-			setTimeout(function (){
-				if (overPortrait[1]-overPortrait[0]<0){	// El ratón aún no ha salido de la imagen
-					var name = item.parentElement.id.substring(1);
-					var divInfo = document.getElementById("info_character");
-					divInfo.style.display = "block";
-					divInfo.innerHTML = name+" loading<br/>"+divInfo.innerHTML;
-					getSheetCharacter(name, board.id, divInfo);
-				}
-			}, 1000);	// Duración antes de saltar la ficha de personaje
+		item.addEventListener('click', function () {
+			var name = item.parentElement.id.substring(1);
+			var divInfo = document.getElementById("info_character");
+			divInfo.style.display = "block";
+			divInfo.innerHTML = name+" loading<br/>"+divInfo.innerHTML;
+			getSheetCharacter(name, board.id, divInfo);
 		});
-		item.addEventListener('mouseout', function (){
-			overPortrait[1] = (new Date).getTime();
-		});
-	});
-	document.getElementById("info_character").addEventListener('mouseout', function () {
-			document.getElementById("info_character").style.display = "none";
 	});
 }, false);
+
+function closeInfoCharacter(){
+	var divInfo = document.getElementById("info_character");
+	divInfo.style.display = "none";
+}

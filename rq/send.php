@@ -1,7 +1,7 @@
 <?php	
 	include_once('../lib.php');
 	connectDB();
-	#$_GET['m'] = "@bar p16,14 !005.png _5px+solid+lime [maxhp:56,hp:56] (2)#1d20+2,1d12+2 (1)#1d20+2,1d8";
+	#$_GET['m'] = "@bar #1d20+2";
 	#$_GET['idBoard'] = 4;
 	$m = preg_replace('/[ ]+/', ' ', secure_param('m'));
 	$idBoard = intval(secure_param('idBoard'));
@@ -68,14 +68,13 @@
 				$n_guideline = $arrTmp[2][$i];	# Number
 				$s_guideline = $arrTmp[3][$i];	# String
 				insert_guideline($idBoard, $name, $n_guideline, $s_guideline);
+				insert_action($idBoard, $command);
 			}
 		}
-		echo "FIN";
-		die();
-
 
 		# Dice command
 		if(preg_match("/#([^ ]*)/", $command, $arrTmp)){
+			echo $command."\n";
 			$strResults = '';
 			$manual_command = 'dice';
 			$arrDices = explode(',', $arrTmp[1]);
@@ -85,9 +84,10 @@
 				$n = $arrDice[1];
 				$size = $arrDice[2];
 				$mod = 0;
-				if (array_key_exists('4',$arrDices)){
+				if (array_key_exists('4',$arrDice)){
 					$mod = $arrDice[4]=='+'?$arrDice[5]:-($arrDice[5]);
 				}
+				print_r($arrDice);
 				$result = 0;
 				for ($i=0; $i<$n;$i++){
 					$result += rand(1, $size);
