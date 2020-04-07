@@ -167,7 +167,6 @@ function checkUpdates(){
 				const tsNow = new Date().getTime();
 				canvas.style.backgroundImage = "url('img/bg/"+board.bg+"?cache="+tsNow+"')";
 				board.bg_ts = bg_ts;
-				//console.log("UPDATE BG:"+canvas.style.backgroundImage);
 			}
 			//console.log("l:"+localLastActionId+" b:"+board.lastActionId);			
 			if (localLastActionId < board.lastActionId){	// Update tokens
@@ -203,13 +202,13 @@ function movementClick(event){
 			movement.token.tagName.style.opacity = 0;
 			movement.token = null;
 		} else {	// There is a token in de destination cell. Run guidelines
-			// If the token is enabled
-			if (document.getElementById("b"+movement.token.name)){	// It has b control panel (=portrait)
-				if (document.getElementById("b"+movement.token.name).style.opacity!="0.3"){
+			var d = getDistanceTiles(movement.token.x, movement.token.y, tilex, tiley);
+			if (isEnabled(movement.token)){
+				if (d<=1){
 					sendCommand("@"+movement.token.name+" "+movement.token.guidelines[1]+" t"+tilex+","+tiley);
-				}
-			} else {	// It is a monster
+				} else {
 					sendCommand("@"+movement.token.name+" "+movement.token.guidelines[2]+" t"+tilex+","+tiley);
+				}
 			}
 			movement.token.tagName.style.opacity = 0;
 			movement.token = null;

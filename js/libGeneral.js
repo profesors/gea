@@ -1,4 +1,5 @@
 var MAXX = 0, MAXY = 0;
+var T_PRECISION = 20;
 
 // Wait for a time
 // You can use it so: await sleep(ms);	Remember your delayed function must be 'async'
@@ -76,11 +77,6 @@ function setOpacityTagDice(name, newVal){
 			arrTokens[i].tagDice.style.opacity = 0;
 		}
 	} else {
-		var bPj= document.getElementById("b"+name);
-		if (bPj!=null){
-			//bPj.style.opacity="0.3";
-			//setTimeout(function(){bPj.style.opacity="1";}, 8000);
-		}
 		var tagDice = document.getElementById("tagDice"+name);
 		if (tagDice != undefined){
 			tagDice.style.opacity = newVal;
@@ -93,22 +89,38 @@ async function showDiceResult(name){
 	setOpacityTagDice(name, 0);
 	document.getElementById("aDado").play();
 	var dice = document.getElementById("tagDice"+name);
-	var y = board.tileh/2;
-	const oy = y, p2 = Math.PI/2;
+	var y = 2*board.tileh/3;
+	var y0 = y;
 	dice.style.top = y+"px";
-	var wait = 25;
-	for (var i=0; i<=1; i+=0.025){
-		y = oy - Math.sin(i*p2)*oy;
-		dice.style.top = y+"px";
-		setOpacityTagDice(name, i);
-		await sleep(wait);
+	var t0 = (new Date).getTime();
+	var tf = t0+2000;
+	var t = 0.0;
+	var tt = tf-t0;
+	var k = Math.PI/(tt*2);
+	var a = board.tileh/2;
+	while(t<(tf-t0)){
+		var p = Math.sin(t*k);
+		y = y0 - a*p;
+		dice.style.top=y+"px";
+		setOpacityTagDice(name, p);
+		await sleep(T_PRECISION);
+		t = (new Date).getTime()-t0;
 	}
-	await sleep(200*wait);
-	for (var i=1; i>=0; i-=0.025){
-		y = -oy * (Math.cos(i*p2));
-		dice.style.top = y+"px";
-		setOpacityTagDice(name, i);
-		await sleep(wait);
+	await sleep(2000);	// Wait for a time to show result
+	t0 = (new Date).getTime();
+	tf = t0+2000;
+	t = 0.0;
+	tt = tf-t0;
+	k = Math.PI/(tt*2);
+	a = board.tileh/2;
+	y0 = y;
+	while(t<(tf-t0)){
+		var p = Math.cos(t*k);
+		y = y0 - a*(1-p);
+		dice.style.top=y+"px";
+		setOpacityTagDice(name, p);
+		await sleep(T_PRECISION);
+		t = (new Date).getTime()-t0;
 	}
 	dice.style.opacity = 0;
 }
@@ -249,7 +261,7 @@ async function drawLineDisappears(token, tilex, tiley){
 
 // Draw a combat icon from token to tilex, tiley and then disappears
 async function drawCloseCombatDisappears(token, tilex, tiley){
-	disablePj(token, 8000);
+	disablePj(token, 6000);
 	var el = document.createElementNS("http://www.w3.org/2000/svg", "line");
 	var id = "attack"+(new Date).getTime();
 	var x1 = getPixel(token.x, board.tilew, board.offsetx+board.tilew/2);
@@ -344,9 +356,22 @@ function runGuidelines(token, tilex, tiley, bSendCommand=false){
 }
 
 async function disablePj(token, time){
+	var tf = (new Date).getTime()+time;
 	var bPj= document.getElementById("b"+token.name);
 	if (bPj!=null){
 		bPj.style.opacity="0.3";
-		setTimeout(function (){bPj.style.opacity="1";}, time);
+		var t = tf-(new Date).getTime();
+		while((tf-(new Date).getTime())>0) await sleep(T_PRECISION);
+		bPj.style.opacity="1";
 	}
+}
+
+function isEnabled(token){
+	var bRet = true;
+	if (document.getElementById("b"+token.name)){	// It has b control panel (=portrait)
+		if (document.getElementById("b"+token.name).style.opacity=="0.3"){
+			bRet = false;
+		}
+	}
+	return bRet;
 }

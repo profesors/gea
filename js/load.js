@@ -20,7 +20,7 @@ function getBoard(idBoard){
 				drawGrid: (arrResponse.shift()=='1'),
 				lastActionId: parseInt(arrResponse.shift())
 			}
-			console.log(board);
+			//console.log(board);
 			// BG
 			var canvas = document.getElementById("canvas");
 			canvas.style.backgroundImage = "url(img/bg/"+board.bg+")";
@@ -174,7 +174,7 @@ function getTokens(idBoard){
 				token.tagDice.style.top = -0.2*board.tileh+"px";
 				token.tagDice.style.width = board.tilew+"px";
 				token.tagDice.style.textShadow = "-2px 0 black, 0 2px black, 2px 0 black, 0 -2px black";
-				token.tagDice.style.fontSize = "180%";
+				token.tagDice.style.fontSize = "1.4rem";
 				token.tagDice.style.zIndex = 3;
 				token.tagDice.style.opacity = 0;
 				token.div.appendChild(token.tagDice);
