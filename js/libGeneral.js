@@ -278,7 +278,6 @@ async function drawCloseCombatDisappears(token, tilex, tiley){
 	el.setAttribute("x2", x2);
 	el.setAttribute("y2", y2);
 	var style = "stroke-width: 12; stroke:"+token.border.split(' ')[2]+"; ";
-	//style+= "animation-name: disappear; animation-duration: 2s; stroke-linecap:butt; stroke-dasharray:10,5";
 	style+= "stroke-linecap:butt; stroke-dasharray:10,5";
 	el.setAttribute("style", style);
 	var transform = "translate("+tx+" "+ty+") rotate("+(70+Math.floor(Math.random()*40)+1)+" "+pmx+" "+pmy+")";
@@ -295,7 +294,7 @@ async function drawCloseCombatDisappears(token, tilex, tiley){
 
 // Draw a ranged combat icon from token to tilex, tiley and then disappears
 async function drawRangedCombatDisappears(token, tilex, tiley){
-	disablePj(token, 8000);
+	disablePj(token, 6000);
 	var elLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
 	var id = "ranged"+(new Date).getTime();
 	var x1 = getPixel(token.x, board.tilew, board.offsetx+board.tilew/2);
@@ -309,21 +308,55 @@ async function drawRangedCombatDisappears(token, tilex, tiley){
 	elLine.setAttribute("id",id);
 	elLine.setAttribute("x1", x1);
 	elLine.setAttribute("y1", y1);
-	elLine.setAttribute("x2", x2);
-	elLine.setAttribute("y2", y2);
-	var style = "stroke-width: 3; stroke:"+token.border.split(' ')[2]+"; ";
-	var animation= "animation-name: disappear; animation-duration: 3s; stroke-linecap:butt; stroke-dasharray:5,25;";
-	style+=animation;
+	elLine.setAttribute("x2", x1);
+	elLine.setAttribute("y2", y1);
+	var style = "stroke-width: 3; stroke:"+token.border.split(' ')[2]+"; opacity: 0;";
+	style += "stroke-linecap:butt; stroke-dasharray:5,25;";
 	elLine.setAttribute("style", style);
+	// First part
 	svg.appendChild(elLine);
-	setTimeout(function (){
-		var idC = "circ"+(new Date).getTime();
-		var elCircle = addSvgCircle(idC,x2,y2,20,token.border.split(' ')[2], animation);
-		setTimeout(function (){
-			svg.removeChild(elLine);
-			svg.removeChild(elCircle);
-		},2500);
-	},500);
+	var t0 = (new Date).getTime();	// Time _0
+	var tt = 1000;					// Total Time
+	var tf = t0+tt;					// Time _final
+	var t = 0.0;					// current Time
+	const k = (Math.PI/2)/(tf-t0);	// Constant
+	var vX = x2-x1, vY = y2-y1;
+	while(t<tt){					//t*k \in {0, pi/2}
+		var p = t/tt;				// Lineal proportionality \in {0..1}
+		elLine.style.opacity = Math.sin(t*k);
+		elLine.setAttribute("x2", (x1+p*vX));
+		elLine.setAttribute("y2", (y1+p*vY));
+		await sleep(T_PRECISION);
+		t = (new Date).getTime()-t0;
+	}
+	// Second part
+	var idC = "circ"+(new Date).getTime();
+	var elCircle = addSvgCircle(idC,x2,y2,20,token.border.split(' ')[2], "opacity:1;");
+	t0 = (new Date).getTime();
+	tt = 500;
+	tf = t0 + tt;
+	t = 0.0;
+	while(t<tt){
+		var p = t/tt;
+		elCircle.style.opacity = Math.sin(t*k);
+		elCircle.setAttribute("r", 20*p);
+		await sleep(T_PRECISION);
+		t = (new Date).getTime()-t0;
+	}
+	// Third part
+	t0 = (new Date).getTime();
+	tt = 500;
+	tf = t0 + tt;
+	t = 0.0;
+	while(t<tt){
+		elCircle.style.opacity = Math.cos(t*k);
+		elCircle.style.opacity = Math.cos(t*k);
+		elCircle.setAttribute("r", 20*Math.cos(t*k));
+		await sleep(T_PRECISION);
+		t = (new Date).getTime()-t0;
+	}
+	svg.removeChild(elLine);
+	svg.removeChild(elCircle);
 }
 function sendCommand(command){
 	var rq = new XMLHttpRequest();
