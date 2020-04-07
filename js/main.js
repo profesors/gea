@@ -77,6 +77,7 @@ function inputKeyPress_allDocument(event){
 		setOpacityCoordinates(0);
 		setOpacityTagNames(0);
 		iCommands = arrCommands.length;
+		movement.token = null;
 		break;
 	case 32:	// Space
 			bShowInput = true;
@@ -166,7 +167,7 @@ function checkUpdates(){
 				const tsNow = new Date().getTime();
 				canvas.style.backgroundImage = "url('img/bg/"+board.bg+"?cache="+tsNow+"')";
 				board.bg_ts = bg_ts;
-				console.log("UPDATE BG:"+canvas.style.backgroundImage);
+				//console.log("UPDATE BG:"+canvas.style.backgroundImage);
 			}
 			//console.log("l:"+localLastActionId+" b:"+board.lastActionId);			
 			if (localLastActionId < board.lastActionId){	// Update tokens
@@ -199,17 +200,16 @@ function movementClick(event){
 		var destToken = getTokenByTile(tilex,tiley);
 		if (destToken==null){	// Destination is empty, you can move
 			sendCommand("@"+movement.token.name+" p"+tilex+","+tiley);
-			drawLineDisappears(movement.token,tilex, tiley);
 			movement.token.tagName.style.opacity = 0;
 			movement.token = null;
 		} else {	// There is a token in de destination cell. Run guidelines
 			// If the token is enabled
 			if (document.getElementById("b"+movement.token.name)){	// It has b control panel (=portrait)
 				if (document.getElementById("b"+movement.token.name).style.opacity!="0.3"){
-					runGuidelines(movement.token, tilex, tiley, true);
+					sendCommand("@"+movement.token.name+" "+movement.token.guidelines[1]+" t"+tilex+","+tiley);
 				}
 			} else {	// It is a monster
-					runGuidelines(movement.token, tilex, tiley, true);
+					sendCommand("@"+movement.token.name+" "+movement.token.guidelines[2]+" t"+tilex+","+tiley);
 			}
 			movement.token.tagName.style.opacity = 0;
 			movement.token = null;

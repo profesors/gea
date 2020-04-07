@@ -78,8 +78,8 @@ function setOpacityTagDice(name, newVal){
 	} else {
 		var bPj= document.getElementById("b"+name);
 		if (bPj!=null){
-			bPj.style.opacity="0.3";
-			setTimeout(function(){bPj.style.opacity="1";}, 8000);
+			//bPj.style.opacity="0.3";
+			//setTimeout(function(){bPj.style.opacity="1";}, 8000);
 		}
 		var tagDice = document.getElementById("tagDice"+name);
 		if (tagDice != undefined){
@@ -236,7 +236,7 @@ function addSvgLine(id, x0, y0, x1, y1, color, width, extraStyle=null){
 }
 
 // Draw a line from token to tilex, tiley and then disappears
-function drawLineDisappears(token, tilex, tiley){
+async function drawLineDisappears(token, tilex, tiley){
 	var extraStyle = "animation-name: disappear; animation-duration: 4s; stroke-linecap:round; stroke-dasharray:15,5";
 	var l=addSvgLine("line_movement"+(new Date).getTime(), 
 		getPixel(token.x,board.tilew,board.offsetx+board.tilew/2),
@@ -248,7 +248,8 @@ function drawLineDisappears(token, tilex, tiley){
 }
 
 // Draw a combat icon from token to tilex, tiley and then disappears
-function drawCloseCombatDisappears(token, tilex, tiley){
+async function drawCloseCombatDisappears(token, tilex, tiley){
+	disablePj(token, 8000);
 	var el = document.createElementNS("http://www.w3.org/2000/svg", "line");
 	var id = "attack"+(new Date).getTime();
 	var x1 = getPixel(token.x, board.tilew, board.offsetx+board.tilew/2);
@@ -265,16 +266,24 @@ function drawCloseCombatDisappears(token, tilex, tiley){
 	el.setAttribute("x2", x2);
 	el.setAttribute("y2", y2);
 	var style = "stroke-width: 12; stroke:"+token.border.split(' ')[2]+"; ";
-	style+= "animation-name: disappear; animation-duration: 2s; stroke-linecap:butt; stroke-dasharray:10,5";
+	//style+= "animation-name: disappear; animation-duration: 2s; stroke-linecap:butt; stroke-dasharray:10,5";
+	style+= "stroke-linecap:butt; stroke-dasharray:10,5";
 	el.setAttribute("style", style);
 	var transform = "translate("+tx+" "+ty+") rotate("+(70+Math.floor(Math.random()*40)+1)+" "+pmx+" "+pmy+")";
 	el.setAttribute("transform",transform);
 	svg.appendChild(el);
-	setTimeout(function (){svg.removeChild(el);},1500);
+	at = el;
+	for (var t=0; t<=Math.PI; t+=(Math.PI/100)){
+		el.style.opacity = Math.sin(t);
+		await sleep(1);
+	}
+	await sleep(1500);
+	svg.removeChild(el);
 }
 
 // Draw a ranged combat icon from token to tilex, tiley and then disappears
 async function drawRangedCombatDisappears(token, tilex, tiley){
+	disablePj(token, 8000);
 	var elLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
 	var id = "ranged"+(new Date).getTime();
 	var x1 = getPixel(token.x, board.tilew, board.offsetx+board.tilew/2);
@@ -331,5 +340,13 @@ function runGuidelines(token, tilex, tiley, bSendCommand=false){
 	if (d>1 && (2 in token.guidelines)){
 		if (bSendCommand) sendCommand("@"+token.name+" "+token.guidelines[2]+" t"+tilex+","+tiley);
 		drawRangedCombatDisappears(token, tilex, tiley);
+	}
+}
+
+async function disablePj(token, time){
+	var bPj= document.getElementById("b"+token.name);
+	if (bPj!=null){
+		bPj.style.opacity="0.3";
+		setTimeout(function (){bPj.style.opacity="1";}, time);
 	}
 }
