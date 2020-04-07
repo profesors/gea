@@ -31,8 +31,8 @@ function getTokenByTile(tilex,tiley){
 		}
 		// If the token is grater than 1x1
 		if (arrTokens[i].w >1 || arrTokens[i].h>1){
-			if (tilex>=arrTokens[i].x && tilex<=arrTokens[i].x+arrTokens[i].w && 
-					tiley>=arrTokens[i].y && tiley<=arrTokens[i].y+arrTokenks[i].h){
+			if (tilex>=arrTokens[i].x && tilex<(parseInt(arrTokens[i].x)+parseInt(arrTokens[i].w)) && 
+					tiley>=arrTokens[i].y && tiley<(parseInt(arrTokens[i].y)+parseInt(arrTokens[i].h))){
 				return arrTokens[i];
 			}
 		}
@@ -310,13 +310,13 @@ async function drawRangedCombatDisappears(token, tilex, tiley){
 	elLine.setAttribute("y1", y1);
 	elLine.setAttribute("x2", x1);
 	elLine.setAttribute("y2", y1);
-	var style = "stroke-width: 3; stroke:"+token.border.split(' ')[2]+"; opacity: 0;";
-	style += "stroke-linecap:butt; stroke-dasharray:5,25;";
+	var style = "stroke-width: 2; stroke:"+token.border.split(' ')[2]+"; opacity: 0;";
+	style += "stroke-linecap:butt; stroke-dasharray:5,30;";
 	elLine.setAttribute("style", style);
-	// First part
+	// First part: Arrow flying
 	svg.appendChild(elLine);
 	var t0 = (new Date).getTime();	// Time _0
-	var tt = 1000;					// Total Time
+	var tt = 500;					// Total Time
 	var tf = t0+tt;					// Time _final
 	var t = 0.0;					// current Time
 	const k = (Math.PI/2)/(tf-t0);	// Constant
@@ -329,7 +329,7 @@ async function drawRangedCombatDisappears(token, tilex, tiley){
 		await sleep(T_PRECISION);
 		t = (new Date).getTime()-t0;
 	}
-	// Second part
+	// Second part: Circle expands
 	var idC = "circ"+(new Date).getTime();
 	var elCircle = addSvgCircle(idC,x2,y2,20,token.border.split(' ')[2], "opacity:1;");
 	t0 = (new Date).getTime();
@@ -343,7 +343,7 @@ async function drawRangedCombatDisappears(token, tilex, tiley){
 		await sleep(T_PRECISION);
 		t = (new Date).getTime()-t0;
 	}
-	// Third part
+	// Third part: Fadeout
 	t0 = (new Date).getTime();
 	tt = 500;
 	tf = t0 + tt;
