@@ -2,9 +2,13 @@
 include('../lib.php');
 
 connectDB();
-
 $idBoard = secure_param('idBoard');
-#$idBoard = 3;
+
+# $idBoard = 4;
+
 $lastId = read_last_actionId($idBoard);
 $bg_ts = get_bg_ts($idBoard);
-echo "$lastId $bg_ts";
+echo '{';
+echo ' "id": '.$lastId.',' ;
+echo ' "bgTs": '.$bg_ts;
+echo '}';

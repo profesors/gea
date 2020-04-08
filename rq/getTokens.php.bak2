@@ -1,0 +1,51 @@
+<?php
+include_once('../lib.php');
+connectDB();
+$idBoard = secure_param('idBoard');
+$idBoard = 4;
+
+# Get tokens from board
+$query = "SELECT * FROM tokens WHERE idBoard = $idBoard LIMIT 1;";
+$result = run_sql($query) or die();
+echo '{'."\n";
+echo '"tokens":['."\n";
+while($row = mysqli_fetch_array($result)){
+	#if ($dice_result == '') $dice_result = 'null';
+	echo "\t".'{'."\n";
+	echo "\t".'"x": '.$row['x'].','."\n";
+	echo "\t".'"y": '.$row['y'].','."\n";
+	echo "\t".'"z": '.$row['z'].','."\n";
+	echo "\t".'"w": '.$row['w'].','."\n";
+	echo "\t".'"h": '.$row['h'].','."\n";
+	echo "\t".'"step": '.$row['step'].','."\n";
+	echo "\t".'"img": "'.$row['img'].'",'."\n";
+	echo "\t".'"name": "'.$row['name'].'",'."\n";
+	echo "\t".'"border": "'.$row['border'].'",'."\n";
+	echo "\t".'"diceResult": "'.$row['dice_result'].'",'."\n";
+	echo "\t".'"dice_action": "'.$row['dice_action'].'",'."\n";
+	# Attrs
+	echo "\t".'"attrs": '."{\n";
+	$query = "SELECT * FROM attrs WHERE idBoard=$idBoard AND tokenName='".$row['name']."';";
+	$result_attrs = run_sql($query) or die();
+	$sAttrs = '';
+	while($row_attr = mysqli_fetch_array($result_attrs)){
+		$sAttrs .= "\t\t".'"'.$row_attr['attr'].'" : '.$row_attr['val'].','."\n";
+	}
+	echo trim($sAttrs, ','."\n")."\n";
+	echo "\t\t}".','."\n";	# /attrs
+	# Guidelines
+	$query = "SELECT * FROM guidelines WHERE idBoard=$idBoard AND name='".$row['name']."'";
+	$result_guidelines = run_sql($query) or die();
+	$sGuidelines = '';
+	echo "\t".'"guidelines": {'."\n";
+	while($row_guideline = mysqli_fetch_array($result_guidelines)){
+		$sGuidelines .= "\t\t".'"'.$row_guideline['number'].'": "'.$row_guideline['guideline'].'",'."\n";
+	}
+	echo trim($sGuidelines, ','."\n")."\n\t\t}\n";	# /Guidelines
+	echo "\t".'}'."\n";	# /One Token
+
+	echo ']'."\n";
+	echo '}'."\n";
+	# $sGuidelines = trim($sGuidelines, ',');
+}
+

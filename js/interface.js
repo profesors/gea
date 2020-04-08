@@ -1,10 +1,9 @@
 var at;
-var overPortrait = [0,0];	// 0 Enter, 1 Exit
 document.addEventListener('DOMContentLoaded', function(){ 
 	/******************* PJ 1 ********************************/
 	document.querySelectorAll(".b11").forEach(function (item){
 		item.addEventListener('click', function (){
-		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
+		var token = getTokenByName(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
 			sendCommand("@"+token.name+" "+token.guidelines[1]);
 		}
@@ -14,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 	document.querySelectorAll(".b12").forEach(function (item){
 		item.addEventListener('click', function (){
-		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
+		var token = getTokenByName(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
 			sendCommand("@"+token.name+" "+token.guidelines[2]);
 		}
@@ -23,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 	document.querySelectorAll(".b13").forEach(function (item){
 		item.addEventListener('click', function (){
-		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
+		var token = getTokenByName(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
 			sendCommand("@bar #1d6");
 		}
@@ -32,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 	document.querySelectorAll(".b14").forEach(function (item){
 		item.addEventListener('click', function (){
-		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
+		var token = getTokenByName(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
 			sendCommand("@bar #1d4");
 		}
@@ -41,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 	document.querySelectorAll(".b15").forEach(function (item){
 		item.addEventListener('click', function (){
-		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
+		var token = getTokenByName(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
 			sendCommand("@bar #1d8");
 		}
@@ -50,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 	document.querySelectorAll(".b16").forEach(function (item){
 		item.addEventListener('click', function (){
-		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
+		var token = getTokenByName(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
 			sendCommand("@bar #1d10");
 		}
@@ -59,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 	document.querySelectorAll(".b17").forEach(function (item){
 		item.addEventListener('click', function (){
-		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
+		var token = getTokenByName(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
 			sendCommand("@bar #1d20");
 		}
@@ -68,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 	document.querySelectorAll(".b18").forEach(function (item){
 		item.addEventListener('click', function (){
-		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
+		var token = getTokenByName(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
 			sendCommand("@bar #1d100");
 		}
@@ -77,15 +76,14 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 	document.querySelectorAll(".b19a").forEach(function (item){
 		item.addEventListener('click', function (){
-		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
-			var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
+			var token = getTokenByName(item.parentElement.id.substring(1));
 			var hpbar = document.getElementById("hpbar_"+token.name);
-			var currenthp = parseInt(getAttr(token, "hp"));
-			var maxhp = parseInt(getAttr(token, "maxhp"));
+			var currenthp = token.attrs.hp;
+			var maxhp = token.attrs.maxhp;
 			currenthp++;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			setAttr(token, "hp", currenthp);
+			token.attrs.hp = currenthp;
 			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
@@ -94,15 +92,15 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 	document.querySelectorAll(".b19b").forEach(function (item){
 		item.addEventListener('click', function (){
-		var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
+		var token = getTokenByName(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
-			var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
+			var token = getTokenByName(item.parentElement.id.substring(1));
 			var hpbar = document.getElementById("hpbar_"+token.name);
-			var currenthp = parseInt(getAttr(token, "hp"));
-			var maxhp = parseInt(getAttr(token, "maxhp"));
+			var currenthp = parseInt(token.attrs.hp);
+			var maxhp = parseInt(token.attrs.maxhp);
 			currenthp--;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			setAttr(token, "hp", currenthp);
+			token.attrs.hp = currenthp;
 			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
@@ -177,13 +175,13 @@ document.addEventListener('DOMContentLoaded', function(){
 	document.querySelectorAll(".b29a").forEach(function (item){
 		item.addEventListener('click', function (){
 		if (item.parentElement.style.opacity!="0.3"){
-			var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
+			var token = getTokenByName(item.parentElement.id.substring(1));
 			var hpbar = document.getElementById("hpbar_"+token.name);
-			var currenthp = parseInt(getAttr(token, "hp"));
-			var maxhp = parseInt(getAttr(token, "maxhp"));
+			var currenthp = parseInt(token.attrs.hp);
+			var maxhp = parseInt(token.attrs.maxhp);
 			currenthp++;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			setAttr(token, "hp", currenthp);
+			token.attrs.hp = currenthp;
 			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
@@ -193,13 +191,13 @@ document.addEventListener('DOMContentLoaded', function(){
 	document.querySelectorAll(".b29b").forEach(function (item){
 		item.addEventListener('click', function (){
 		if (item.parentElement.style.opacity!="0.3"){
-			var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
+			var token = getTokenByName(item.parentElement.id.substring(1));
 			var hpbar = document.getElementById("hpbar_"+token.name);
-			var currenthp = parseInt(getAttr(token, "hp"));
-			var maxhp = parseInt(getAttr(token, "maxhp"));
+			var currenthp = parseInt(token.attrs.hp);
+			var maxhp = parseInt(token.attrs.maxhp);
 			currenthp--;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			setAttr(token, "hp", currenthp);
+			token.attrs.hp = currenthp;
 			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
@@ -274,13 +272,13 @@ document.addEventListener('DOMContentLoaded', function(){
 	document.querySelectorAll(".b39a").forEach(function (item){
 		item.addEventListener('click', function (){
 		if (item.parentElement.style.opacity!="0.3"){
-			var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
+			var token = getTokenByName(item.parentElement.id.substring(1));
 			var hpbar = document.getElementById("hpbar_"+token.name);
-			var currenthp = parseInt(getAttr(token, "hp"));
-			var maxhp = parseInt(getAttr(token, "maxhp"));
+			var currenthp = parseInt(token.attrs.hp);
+			var maxhp = parseInt(token.attrs.maxhp);
 			currenthp++;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			setAttr(token, "hp", currenthp);
+			token.attrs.hp = currenthp;
 			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
@@ -290,13 +288,13 @@ document.addEventListener('DOMContentLoaded', function(){
 	document.querySelectorAll(".b39b").forEach(function (item){
 		item.addEventListener('click', function (){
 		if (item.parentElement.style.opacity!="0.3"){
-			var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
+			var token = getTokenByName(item.parentElement.id.substring(1));
 			var hpbar = document.getElementById("hpbar_"+token.name);
-			var currenthp = parseInt(getAttr(token, "hp"));
-			var maxhp = parseInt(getAttr(token, "maxhp"));
+			var currenthp = parseInt(token.attrs.hp);
+			var maxhp = parseInt(token.attrs.maxhp);
 			currenthp--;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			setAttr(token, "hp", currenthp);
+			token.attrs.hp = currenthp;
 			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
@@ -372,13 +370,13 @@ document.addEventListener('DOMContentLoaded', function(){
 	document.querySelectorAll(".b49a").forEach(function (item){
 		item.addEventListener('click', function (){
 		if (item.parentElement.style.opacity!="0.3"){
-			var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
+			var token = getTokenByName(item.parentElement.id.substring(1));
 			var hpbar = document.getElementById("hpbar_"+token.name);
-			var currenthp = parseInt(getAttr(token, "hp"));
-			var maxhp = parseInt(getAttr(token, "maxhp"));
+			var currenthp = parseInt(token.attrs.hp);
+			var maxhp = parseInt(token.attrs.maxhp);
 			currenthp++;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			setAttr(token, "hp", currenthp);
+			token.attrs.hp = currenthp;
 			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
@@ -388,13 +386,13 @@ document.addEventListener('DOMContentLoaded', function(){
 	document.querySelectorAll(".b49b").forEach(function (item){
 		item.addEventListener('click', function (){
 		if (item.parentElement.style.opacity!="0.3"){
-			var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
+			var token = getTokenByName(item.parentElement.id.substring(1));
 			var hpbar = document.getElementById("hpbar_"+token.name);
-			var currenthp = parseInt(getAttr(token, "hp"));
-			var maxhp = parseInt(getAttr(token, "maxhp"));
+			var currenthp = parseInt(token.attrs.hp);
+			var maxhp = parseInt(token.attrs.maxhp);
 			currenthp--;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			setAttr(token, "hp", currenthp);
+			token.attrs.hp = currenthp;
 			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
@@ -470,13 +468,13 @@ document.addEventListener('DOMContentLoaded', function(){
 	document.querySelectorAll(".b59a").forEach(function (item){
 		item.addEventListener('click', function (){
 		if (item.parentElement.style.opacity!="0.3"){
-			var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
+			var token = getTokenByName(item.parentElement.id.substring(1));
 			var hpbar = document.getElementById("hpbar_"+token.name);
-			var currenthp = parseInt(getAttr(token, "hp"));
-			var maxhp = parseInt(getAttr(token, "maxhp"));
+			var currenthp = parseInt(token.attrs.hp);
+			var maxhp = parseInt(token.attrs.maxhp);
 			currenthp++;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			setAttr(token, "hp", currenthp);
+			token.attrs.hp = currenthp;
 			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
@@ -486,13 +484,13 @@ document.addEventListener('DOMContentLoaded', function(){
 	document.querySelectorAll(".b59b").forEach(function (item){
 		item.addEventListener('click', function (){
 		if (item.parentElement.style.opacity!="0.3"){
-			var token = getTokenFromArrTokens(item.parentElement.id.substring(1));
+			var token = getTokenByName(item.parentElement.id.substring(1));
 			var hpbar = document.getElementById("hpbar_"+token.name);
-			var currenthp = parseInt(getAttr(token, "hp"));
-			var maxhp = parseInt(getAttr(token, "maxhp"));
+			var currenthp = parseInt(token.attrs.hp);
+			var maxhp = parseInt(token.attrs.maxhp);
 			currenthp--;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			setAttr(token, "hp", currenthp);
+			token.attrs.hp = currenthp;
 			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}

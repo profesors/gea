@@ -3,6 +3,7 @@ var arrTokens = [];						// Tokens in the board
 var arrCommands = [], iCommands = 0;	// Commands sended. Array and index to ArrowUp and ArrowDown recover
 var timerUpdates;						// Timer to check each second for updates from the server
 var arrActions = [], localLastActionId=0, arrRq = [];	// All actions of the game {ts, action}
+var remoteLastAction;
 var board;	// Info about the board {name, tilew, tileh, ntilesw, ntilesh, bg, drawGridi, lastActionId}
 var touch = {
 	ts: 0,
@@ -61,7 +62,7 @@ function inputKeyPress_inputBox(event){
 		}
 	}
 	setOpacityCoordinates(opacity);
-	setOpacityTagNames(opacity);
+	setOpacityDivNames(opacity);
 	event.stopPropagation();
 }
 
@@ -75,7 +76,7 @@ function inputKeyPress_allDocument(event){
 		input.value = "";
 		input.style.display = document.getElementById("input_hidden").style.display;
 		setOpacityCoordinates(0);
-		setOpacityTagNames(0);
+		setOpacityDivNames(0);
 		iCommands = arrCommands.length;
 		movement.token = null;
 		break;
@@ -108,7 +109,7 @@ function inputKeyPress_allDocument(event){
 		}
 		break
 	case 78:	// n	Muestra los nombres
-		setOpacityTagNames(1-getOpacityTagNames());
+		setOpacityDivNames(1-getOpacityDivNames());
 		break;
 	case 190:	// :
 		bShowInput = true;
@@ -129,7 +130,7 @@ function eventTouch(event){
 		//alert((Date.now() - touch.ts)+"     "+(touch.ts-touch.ts2));
 		var opacity = getOpacityCoordinates();
 		setOpacityCoordinates(1-opacity);
-		setOpacityTagNames(1-opacity);
+		setOpacityDivNames(1-opacity);
 	} else {
 		//alert(Date.now()+"         "+touch.ts+"        "+touch.ts2);
 	}
@@ -144,7 +145,7 @@ function showInputBox(){
 
 }
 
-// La función más importante. El LOOP del juego
+// Most important function. The LOOP
 function checkUpdates(){
 	// Save current scroll
 	const scrollTop = window.pageYOffset;
@@ -158,26 +159,21 @@ function checkUpdates(){
 	rq.send();
 	rq.onreadystatechange = function () {
 		if (rq.readyState == XMLHttpRequest.DONE && rq.status == 200){
-			var arrLastAction = rq.responseText.split(" ");
-			// lastActionId is the last action recorded in the server
-			board.lastActionId = parseInt(arrLastAction[0]);	
-			var bg_ts = parseInt(arrLastAction[1]);
-			if (board.bg_ts < bg_ts){
-				// Update BG
-				const tsNow = new Date().getTime();
+			var s = rq.responseText;
+			remoteLastAction = JSON.parse(s);
+			/*
+			if (board.lastAction.bgTs < currentLastAction.bgTs){	// Update BG
+				const tsNow = (new Date()).getTime();
 				canvas.style.backgroundImage = "url('img/bg/"+board.bg+"?cache="+tsNow+"')";
-				board.bg_ts = bg_ts;
-			}
-			//console.log("l:"+localLastActionId+" b:"+board.lastActionId);			
-			if (localLastActionId < board.lastActionId){	// Update tokens
+				board.lastAction.bgTs = currentLastAction.bgTs;
+			}*/
+			if (board.lastActionId < remoteLastAction.id){	// Update tokens
 				getTokens(board.id);
-				//localLastActionId = board.lastActionId;
 				if (panelI.style.display == 'block')	updateActionsPanel(board.id);
 			}
-			// Remove all tokens and update all of them
-			if (localLastActionId > board.lastActionId){	
+			if (board.lastActionId > remoteLastAction.id){	// Remove all tokens and update all of them
 				removeAllLoadedTokens();	
-				localLastActionId = 0;
+				board.lastActionId = 0;
 			}
 		}
 	}
@@ -186,31 +182,31 @@ function checkUpdates(){
 // *********** Movement Clic *********************
 
 function movementClick(event){
-	const x = (isNaN(event.clientX)?event.touches[0].screenX:event.clientX) + window.pageXOffset;	// En el tablero
+	const x = (isNaN(event.clientX)?event.touches[0].screenX:event.clientX) + window.pageXOffset;
 	const y = (isNaN(event.clientY)?event.touches[0].screenY:event.clientY) + window.pageYOffset;
 	const tilex = Math.floor((x-board.offsetx)/board.tilew)+1;
 	const tiley = Math.floor((y-board.offsety)/board.tileh)+1;
 	if (movement.token == null){	// Select token (first click)
 		movement.token = getTokenByTile(tilex, tiley);
 		if (movement.token!=null) {
-			movement.token.tagName.style.opacity = 1;
+			movement.token.divName.style.opacity = 1;
 		}
 	} else {	// Second click
 		var destToken = getTokenByTile(tilex,tiley);
 		if (destToken==null){	// Destination is empty, you can move
 			sendCommand("@"+movement.token.name+" p"+tilex+","+tiley);
-			movement.token.tagName.style.opacity = 0;
+			movement.token.divName.style.opacity = 0;
 			movement.token = null;
 		} else {	// There is a token in de destination cell. Run guidelines
 			var d = getDistanceTiles(movement.token.x, movement.token.y, tilex, tiley);
 			if (isEnabled(movement.token)){
 				if (d<=1){
-					sendCommand("@"+movement.token.name+" "+movement.token.guidelines[1]+" t"+tilex+","+tiley);
+					sendCommand(encodeURI("@"+movement.token.name+" "+movement.token.guidelines[1]+" t"+tilex+","+tiley));
 				} else {
-					sendCommand("@"+movement.token.name+" "+movement.token.guidelines[2]+" t"+tilex+","+tiley);
+					sendCommand(encodeURI("@"+movement.token.name+" "+movement.token.guidelines[2]+" t"+tilex+","+tiley));
 				}
 			}
-			movement.token.tagName.style.opacity = 0;
+			movement.token.divName.style.opacity = 0;
 			movement.token = null;
 		}
 	}
@@ -231,7 +227,14 @@ function hasQuiet() {
   return cold;
 }
 
-window.addEventListener("load", function() {
+window.addEventListener("resize", function() {
+	MAXX = window.innerWidth;
+	MAXY = window.innerHeight;
+	if (panelI != undefined)	panelI.style.height = MAXY+"px";
+	if (output != undefined)	output.style.height = MAXY+"px";
+});
+
+window.addEventListener("DOMContentLoaded", function() {
 	MAXX = window.innerWidth;
 	MAXY = window.innerHeight;
 	canvas = document.getElementById("canvas");
@@ -242,28 +245,21 @@ window.addEventListener("load", function() {
 	input.addEventListener("keyup", function (event) {inputKeyPress_inputBox(event);});
 	document.addEventListener("keydown", function (event) {inputKeyPress_allDocument(event);});
 	document.addEventListener("click", function (event) {movementClick(event);});
-	//document.addEventListener("mousedown", function(event) {mouseDown(event)});
-	//document.addEventListener("mouseup", function(event) {mouseUp(event)});
-	//document.addEventListener("mousemove", function (event) {mouseMove(event)});
-	
 	document.addEventListener("touchstart", function (event) {eventTouch(event)});	// Show coordinates
-	//document.addEventListener("touchstart", function (event) {movementClick(event)},hasQuiet() ? {passive: false} : false);
-
-	//document.addEventListener("touchmove", function (event) {touchMove(event)},hasQuiet() ? {passive: false} : false);
-	//document.addEventListener("touchend", function (event) {touchUp(event)},hasQuiet() ? {passive: false} : false);
 
 	input.focus();
 	input.value = "";
+	main();
+});
+
+async function main(){
 	getBoard(4);	/* Number of board */
+	while(board==undefined)	{
+		await sleep(T_PRECISION);
+	}
+	drawCellCoordinates();
+	if (remoteLastAction != undefined){
+		board.lastActionId = remoteLastAction.id;
+	}
 	timerUpdates = setInterval(checkUpdates,1000);
-});
-
-window.addEventListener("resize", function() {
-	MAXX = window.innerWidth;
-	MAXY = window.innerHeight;
-	//canvas.style.width = MAXX+"px";
-	//canvas.style.height = MAXY+"px";
-	if (panelI != undefined)	panelI.style.height = MAXY+"px";
-	if (output != undefined)	output.style.height = MAXY+"px";
-});
-
+}

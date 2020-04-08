@@ -12,8 +12,7 @@ function getPixel(nTile, sizeOfTile, offset){
 	return (nTile-1)*sizeOfTile+offset; 
 }
 
-// @TODO cambiar nombre a getTokenByName
-function getTokenFromArrTokens(name){
+function getTokenByName(name){
 	var token = null;
 	for (var i=0; i<arrTokens.length; i++){
 		if (arrTokens[i].name == name){
@@ -59,36 +58,36 @@ function getOpacityCoordinates(){
 	return arrCoordinates[0].style.opacity;
 }
 
-// Change tag names of ALL tokens
-function setOpacityTagNames(newVal){
+// Change div names of ALL tokens
+function setOpacityDivNames(newVal){
 	for (var i=0; i<arrTokens.length; i++){
-		arrTokens[i].tagName.style.opacity = newVal;
+		arrTokens[i].divName.style.opacity = newVal;
 	}
 }
 
-function getOpacityTagNames(){
-	return arrTokens[0].tagName.style.opacity;
+function getOpacityDivNames(){
+	return arrTokens[0].divName.style.opacity;
 }
 
-// Change just ONE tag Dice, if name=='' hide all
-function setOpacityTagDice(name, newVal){
+// Change just ONE div Dice, if name=='' hide all
+function setOpacityDivDice(name, newVal){
 	if (name == ''){
 		for (var i=0; i<arrTokens.length; i++){
-			arrTokens[i].tagDice.style.opacity = 0;
+			arrTokens[i].divDice.style.opacity = 0;
 		}
 	} else {
-		var tagDice = document.getElementById("tagDice"+name);
-		if (tagDice != undefined){
-			tagDice.style.opacity = newVal;
+		var divDice = document.getElementById("divDice_"+name);
+		if (divDice != undefined){
+			divDice.style.opacity = newVal;
 		}
 	}
 }
 
 // It shows the result of the dice fadeIn and then fadoOut
 async function showDiceResult(name){
-	setOpacityTagDice(name, 0);
+	setOpacityDivDice(name, 0);
 	document.getElementById("aDado").play();
-	var dice = document.getElementById("tagDice"+name);
+	var dice = document.getElementById("divDice_"+name);
 	var y = 2*board.tileh/3;
 	var y0 = y;
 	dice.style.top = y+"px";
@@ -102,7 +101,7 @@ async function showDiceResult(name){
 		var p = Math.sin(t*k);
 		y = y0 - a*p;
 		dice.style.top=y+"px";
-		setOpacityTagDice(name, p);
+		setOpacityDivDice(name, p);
 		await sleep(T_PRECISION);
 		t = (new Date).getTime()-t0;
 	}
@@ -118,7 +117,7 @@ async function showDiceResult(name){
 		var p = Math.cos(t*k);
 		y = y0 - a*(1-p);
 		dice.style.top=y+"px";
-		setOpacityTagDice(name, p);
+		setOpacityDivDice(name, p);
 		await sleep(T_PRECISION);
 		t = (new Date).getTime()-t0;
 	}
@@ -129,7 +128,7 @@ async function moveToken(token, toX, toY){
 	// From (ox, oy) to (ox+dx, oy+dy)
 	if (token.x != toX || token.y != toY){
 		//setOpacityCoordinates(0);
-		//setOpacityTagNames(0);
+		//setOpacityDivNames(0);
 		const ox = getPixel(token.x, board.tilew, board.offsetx);
 		const oy = getPixel(token.y, board.tileh, board.offsety);
 		const dx = getPixel(toX, board.tilew, board.offsetx)-ox;
@@ -151,46 +150,21 @@ async function moveToken(token, toX, toY){
 }
 
 async function updateHp(token){
-	var maxhp, currenthp;
-	token.attrs.forEach(function (item){
-		if (item[0]=="maxhp"){
-			maxhp = item[1];
-		}
-		if (item[0]=="hp"){
-			currenthp = item[1];
-		}
-	});
-	var p = parseFloat(currenthp)/maxhp*100;	// Porcentaje
-	var hpbar = document.getElementById("hpbar_"+token.name)
-	if (hpbar != null) {	// Some tokens does not have hp bar
-		var hpnum = document.getElementById("hpnum_"+token.name)
-		hpbar.setAttribute("y",101-p);
-		hpbar.setAttribute("height",p-1);
-		// Number tag with HP
-		var npy = 101-p+5;	// Posición Y del número de puntos de golpe
-		if (npy<20) npy=20;
-		if (npy>100) npy=100;
-		hpnum.setAttribute("y",npy);
-		hpnum.innerHTML = currenthp;
-	}
-}
-
-function setAttr(token, attr, val){
-	for(var i=0; i<token.attrs.length; i++){
-		if (token.attrs[i][0]==attr) {
-			token.attrs[i][1]=val;
-			return;
+	if (Number.isInteger(parseInt(token.attrs.hp)) && Number.isInteger(parseInt(token.attrs.maxhp))){
+		var p = parseFloat(token.attrs.hp)/token.attrs.maxhp*100;	// Porcentaje
+		var hpbar = document.getElementById("hpbar_"+token.name)
+		if (hpbar != null) {	// Some tokens does not have hp bar
+			var hpnum = document.getElementById("hpnum_"+token.name)
+			hpbar.setAttribute("y",101-p);
+			hpbar.setAttribute("height",p-1);
+			// Number div with HP
+			var npy = 101-p+5;	// Posición Y del número de puntos de golpe
+			if (npy<20) npy=20;
+			if (npy>100) npy=100;
+			hpnum.setAttribute("y",npy);
+			hpnum.innerHTML = token.attrs.hp;
 		}
 	}
-}
-
-function getAttr(token, attr){
-	for(var i=0; i<token.attrs.length; i++){
-		if (token.attrs[i][0]==attr){
-			return token.attrs[i][1];
-		}
-	}
-	return null;
 }
 
 function updateActionsPanel(idBoard){
@@ -277,13 +251,12 @@ async function drawCloseCombatDisappears(token, tilex, tiley){
 	el.setAttribute("y1", (pmy+y1)/2);
 	el.setAttribute("x2", x2);
 	el.setAttribute("y2", y2);
-	var style = "stroke-width: 12; stroke:"+token.border.split(' ')[2]+"; ";
-	style+= "stroke-linecap:butt; stroke-dasharray:10,5";
+	var style = "stroke-width: 12; stroke:"+token.img.style.border.split(' ')[2]+"; ";
+	style+= "stroke-linecap:butt; stroke-dasharray:10,5; opacity:1;";
 	el.setAttribute("style", style);
 	var transform = "translate("+tx+" "+ty+") rotate("+(70+Math.floor(Math.random()*40)+1)+" "+pmx+" "+pmy+")";
 	el.setAttribute("transform",transform);
 	svg.appendChild(el);
-	at = el;
 	for (var t=0; t<=Math.PI; t+=(Math.PI/100)){
 		el.style.opacity = Math.sin(t);
 		await sleep(1);
@@ -310,7 +283,7 @@ async function drawRangedCombatDisappears(token, tilex, tiley){
 	elLine.setAttribute("y1", y1);
 	elLine.setAttribute("x2", x1);
 	elLine.setAttribute("y2", y1);
-	var style = "stroke-width: 2; stroke:"+token.border.split(' ')[2]+"; opacity: 0;";
+	var style = "stroke-width: 2; stroke:"+token.img.style.border.split(' ')[2]+"; opacity: 0;";
 	style += "stroke-linecap:butt; stroke-dasharray:5,30;";
 	elLine.setAttribute("style", style);
 	// First part: Arrow flying
@@ -331,7 +304,7 @@ async function drawRangedCombatDisappears(token, tilex, tiley){
 	}
 	// Second part: Circle expands
 	var idC = "circ"+(new Date).getTime();
-	var elCircle = addSvgCircle(idC,x2,y2,20,token.border.split(' ')[2], "opacity:1;");
+	var elCircle = addSvgCircle(idC,x2,y2,20,token.img.style.border.split(' ')[2], "opacity:1;");
 	t0 = (new Date).getTime();
 	tt = 500;
 	tf = t0 + tt;
@@ -407,4 +380,30 @@ function isEnabled(token){
 		}
 	}
 	return bRet;
+}
+
+function removeAllLoadedTokens(){
+	while (arrTokens.length > 0){
+		var token = arrTokens.shift();
+		var divToken = document.getElementById("token_"+token.name);
+		canvas.removeChild(divToken);
+	}
+}
+
+function drawCellCoordinates(){
+	for (var y=1; y<=board.ntilesh; y++){
+		for (var x=1; x<=board.ntilesw; x++){
+			var txt = document.createElement("div");	
+			txt.innerHTML = x+","+y;
+			txt.style.left = getPixel(x, board.tilew, board.offsetx)+"px";
+			txt.style.top = getPixel(y, board.tileh, board.offsety)+"px";
+			txt.style.position = "absolute";
+			txt.style.color = "#aaaaaa";//"white";
+			txt.style.zIndex = 10;
+			txt.style.textShadow = "1px 1px black";
+			txt.style.opacity = "0";
+			txt.setAttribute("class", "coordinates");
+			canvas.appendChild(txt);
+		}
+	}
 }

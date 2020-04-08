@@ -73,11 +73,11 @@ function insert_action($idBoard, $m){
 	write_last_actionId($idBoard, $nextActionId);
 }
 
-function insert_guideline($idBoard, $name, $n_guideline, $s_guideline){
+function insert_guideline($idBoard, $tokenName, $guideName, $guideline){
 	global $db;
-	$query = "INSERT INTO `guidelines` (idBoard, name, number, guideline) ";
-	$query.= "VALUES ($idBoard, '$name', $n_guideline, '$s_guideline') ";
-	$query.= " ON DUPLICATE KEY UPDATE guideline='$s_guideline'";
+	$query = "INSERT INTO `guidelines` (idBoard, tokenName, guideName, guideline) ";
+	$query.= "VALUES ($idBoard, '$tokenName', $guideName, '$guideline') ";
+	$query.= " ON DUPLICATE KEY UPDATE guideline='$guideline'";
 	run_sql($query) or die();
 }
 
