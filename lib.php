@@ -79,6 +79,9 @@ function insert_guideline($idBoard, $tokenName, $guideName, $guideline){
 	$query.= "VALUES ($idBoard, '$tokenName', $guideName, '$guideline') ";
 	$query.= " ON DUPLICATE KEY UPDATE guideline='$guideline'";
 	run_sql($query) or die();
+	$nextActionId = intval(read_last_actionId($idBoard))+1;
+	$query = "UPDATE tokens SET actionId=$nextActionId WHERE idBoard=$idBoard AND name='$name'";
+	run_sql($query) or die();
 }
 
 # Update token position X, Y, Z
@@ -94,9 +97,10 @@ function update_position_token($idBoard, $name, $x, $y, $z){
 function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border){
 	global $db;
 	$name = ($name=='')?'NULL':$name;
-	$query = "INSERT INTO `tokens` (`idBoard`, `name`, `x`, `y`, `z`, `w`, `h`, `step`, `img`, `border`, `dice_result`) ";
+	$actionId = read_last_actionId($idBoard)+1;
+	$query = "INSERT INTO `tokens` (`idBoard`,`name`,`x`,`y`,`z`,`w`,`h`,`step`,`img`,`border`, `actionId`, `dice_result`) ";
 	$query.= " VALUES ('$idBoard', '$name', $x, $y, $z, $w, $h, 1, ";
-	$query.= "'$img_src', '$border', NULL) ";
+	$query.= "'$img_src', '$border',$actionId, NULL) ";
 	$query.= " ON DUPLICATE KEY UPDATE x=$x, y=$y";
 	if ($img_src != ''){
 		$query.= ", img='$img_src'";
@@ -110,7 +114,8 @@ function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border){
 function move_token($idBoard, $name, $x, $y){
 	global $db;
 	$name = ($name=='')?'NULL':$name;
-	$query = "UPDATE `tokens` SET x=$x, y=$y WHERE idBoard=$idBoard AND name='$name'";
+	$actionId = read_last_actionId($idBoard)+1;
+	$query = "UPDATE `tokens` SET x=$x, y=$y, actionId=$actionId WHERE idBoard=$idBoard AND name='$name'";
 	run_sql($query) or die();
 }
 
@@ -119,6 +124,9 @@ function insert_attr($idBoard, $name, $attr, $val){
 	$query = "INSERT INTO attrs (idBoard, tokenName, attr, val) ";
 	$query.= "VALUES ($idBoard,'$name','$attr',$val) ";
 	$query.= " ON DUPLICATE KEY UPDATE val='$val'";
+	run_sql($query) or die();
+	$actionId = read_last_actionId($idBoard)+1;
+	$query = "UPDATE tokens SET actionId=$actionId WHERE idBoard=$idBoard AND name='$name'";
 	run_sql($query) or die();
 }
 
@@ -145,6 +153,9 @@ function set_dice($idBoard, $name, $value, $tiles){
 	$nextActionId = $row['lastActionId']+1;	# current last action + 1 because it will be increased
 	$dice_action = trim("$nextActionId,$tiles",',');
 	$query = "UPDATE tokens SET dice_result = '$value', dice_action = '$dice_action' WHERE idBoard = $idBoard AND name = '$name';";
+	run_sql($query) or die();
+	$nextActionId = intval(read_last_actionId($idBoard))+1;
+	$query = "UPDATE tokens SET actionId=$nextActionId WHERE idBoard=$idBoard AND name='$name'";
 	run_sql($query) or die();
 }
 

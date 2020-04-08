@@ -1,6 +1,9 @@
 # Asalto a la caravana (4)
 
 @bar p16,14 !005.png _5px+solid+lime [maxhp:56,hp:56] (1)#1d20+5,1d12+2 (2)#1d20+3,1d8+2;
+@o6 p14,14 !orc.jpg _5px+solid+red [maxhp:6,hp:6] (1)#1d20,1d6+2;
+
+@bar p16,14 !005.png _5px+solid+lime [maxhp:56,hp:56] (1)#1d20+5,1d12+2 (2)#1d20+3,1d8+2;
 @exp p14,14 !006.png _5px+solid+lime [maxhp:40,hp:40] (1)#1d20+4,1d8+2 (2)#1d20,1d8+2; 
 @elf p15,16 !007.png _5px+solid+lime [maxhp:24,hp:24] (1)#1d20+5,1d8+2 (2)#1d20+6,1d8+1;
 @cle p15,17 !011.png _5px+solid+lime [maxhp:28,hp:28] (1)#1d20+3,1d8+1 (2)#1d20+2,1d8; 

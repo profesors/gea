@@ -84,7 +84,6 @@ document.addEventListener('DOMContentLoaded', function(){
 			currenthp++;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
 			token.attrs.hp = currenthp;
-			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
 		event.stopPropagation();
@@ -101,7 +100,6 @@ document.addEventListener('DOMContentLoaded', function(){
 			currenthp--;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
 			token.attrs.hp = currenthp;
-			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
 		event.stopPropagation();

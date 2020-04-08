@@ -14,9 +14,9 @@ $result = run_sql($query) or die();
 if ($result->num_rows > 0){	// If this action exists in DB
 	$row = mysqli_fetch_array($result);
 	#echo $row['idAction']."\n".$row['ts']."\n".$row['action']."\n";
-	echo "{";
-	echo '"idAction": "'.$row['idAction'].'",';
-	echo '"ts": "'.$row['ts'].'",';
-	echo '"action": "'.$row['action'].'"';
-	echo '}';
+	$ret = new stdClass();
+	$ret->idAction = $row['idAction'];
+	$ret->ts = $row['ts'];
+	$ret->action = $row['action'];
+	echo json_encode($ret);
 } 

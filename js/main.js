@@ -168,7 +168,7 @@ function checkUpdates(){
 				board.lastAction.bgTs = currentLastAction.bgTs;
 			}*/
 			if (board.lastActionId < remoteLastAction.id){	// Update tokens
-				getTokens(board.id);
+				getTokens(board.id, board.lastActionId);
 				if (panelI.style.display == 'block')	updateActionsPanel(board.id);
 			}
 			if (board.lastActionId > remoteLastAction.id){	// Remove all tokens and update all of them

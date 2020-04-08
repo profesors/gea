@@ -154,6 +154,8 @@ async function updateHp(token){
 		var p = parseFloat(token.attrs.hp)/token.attrs.maxhp*100;	// Porcentaje
 		var hpbar = document.getElementById("hpbar_"+token.name)
 		if (hpbar != null) {	// Some tokens does not have hp bar
+			//console.log("DENTRO "+token.name+" "+token.attrs.hp+" "+(new Date).getTime());
+			//console.log(token.name+" "+token.attrs.hp);
 			var hpnum = document.getElementById("hpnum_"+token.name)
 			hpbar.setAttribute("y",101-p);
 			hpbar.setAttribute("height",p-1);

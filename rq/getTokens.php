@@ -2,10 +2,11 @@
 include_once('../lib.php');
 connectDB();
 $idBoard = secure_param('idBoard');
+$fromActionId = secure_param('fromActionId');
 #$idBoard = 4;
 
 # Get tokens from board
-$query = "SELECT * FROM tokens WHERE idBoard = $idBoard;";
+$query = "SELECT * FROM tokens WHERE idBoard = $idBoard AND actionId>$fromActionId;";
 $result = run_sql($query) or die();
 $arr = Array();
 while($row = mysqli_fetch_array($result)){
@@ -19,6 +20,7 @@ while($row = mysqli_fetch_array($result)){
 	$r->imgSrc = $row['img'];
 	$r->name = $row['name'];
 	$r->border = $row['border'];
+	$r-> $row['actionId'];
 	$r->diceResult = trim($row['dice_result']);
 	$r->diceAction = $row['dice_action'];
 	# Attrs
@@ -37,5 +39,6 @@ while($row = mysqli_fetch_array($result)){
 	}
 	array_push($arr, $r);
 }
-echo json_encode($arr);
+echo json_encode($arr, JSON_NUMERIC_CHECK);
+//echo json_encode($arr);
 
