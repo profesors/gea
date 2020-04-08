@@ -49,14 +49,14 @@ async function getTokens(idBoard, fromActionId=null){
 				token.div.style.position = "absolute";
 				token.div.style.left = px.toString()+"px";
 				token.div.style.top = py.toString()+"px";
-				token.div.style.width = board.tilew*token.w;
-				token.div.style.height = board.tileh*token.h;
+				token.div.style.width = (board.tilew*upToken.w)+"px";
+				token.div.style.height = (board.tileh*upToken.h)+"px";
 				token.div.style.textAlign = "center";
 
 				// IMG of the token	NEW
 				token.img = document.createElement("img");
 				token.img.src = "img/tokens/"+upToken.imgSrc;
-				token.img.style.position = "relative";
+				token.img.style.position = "absolute";
 				token.img.style.left = 0;
 				token.img.style.top = 0;
 				token.img.style.zIndex = 1;
@@ -64,8 +64,8 @@ async function getTokens(idBoard, fromActionId=null){
 				token.img.style.border = upToken.border.replace(/\+/g," ");
 				var reBorderWidth = RegExp(/^(\d)+/);
 				var borderWidth = reBorderWidth.exec(token.img.style.border.split(' ')[0])[0];
-				token.img.style.width = (board.tilew-2*borderWidth)+"px";
-				token.img.style.height = (board.tileh-2*borderWidth)+"px";
+				token.img.style.width = ((board.tilew*upToken.w)-(2*borderWidth))+"px";
+				token.img.style.height = ((board.tileh*upToken.h)-(2*borderWidth))+"px";
 				token.div.appendChild(token.img);
 
 				// Div with the NAME NEW
