@@ -1,7 +1,7 @@
 # Test (4)
 @bar p16,14 !005.png _5px+solid+lime [maxhp:56,hp:56] (1)#1d20+5,1d12+2 (2)#1d20+3,1d8+2;
 @o6 p14,14 !orc.jpg _5px+solid+red [maxhp:6,hp:6] (1)#1d20,1d6+2;
-@w1 p15,15,2,2 !worgrider.png _10px+solid+red; 
+@w2 p12,15,2,2 !worgrider.png _10px+solid+red (1)#1d20+5,1d10+1; 
 
 # Asalto a la caravana (4)
 

@@ -41,19 +41,10 @@ function getTokenByTile(tilex,tiley){
 	return null;
 }
 
-// Rounded to floor
 function getDistanceTiles(tilex1, tiley1, tilex2, tiley2){
-	return Math.floor(Math.sqrt(((tilex2-tilex1)**2+(tiley2-tiley1)**2)));
+	return Math.sqrt(((tilex2-tilex1)**2+(tiley2-tiley1)**2));
 }
 
-// Change opacity of ALL coordinates
-function setOpacityCoordinates(newVal){
-	var arrCoordinates = document.getElementsByClassName("coordinates");
-	for (var i=0; i<arrCoordinates.length; i++){
-		arrCoordinates[i].style.opacity = newVal;
-		//arrCoordinates[i].style.opacity = 0;
-	}
-}
 
 function getOpacityCoordinates(){
 	var arrCoordinates = document.getElementsByClassName("coordinates");
@@ -90,9 +81,11 @@ async function showDiceResult(name){
 	setOpacityDivDice(name, 0);
 	document.getElementById("aDado").play();
 	var dice = document.getElementById("divDice_"+name);
+	dice.innerHTML = getTokenByName(name).diceResult;
 	var y = 2*board.tileh/3;
 	var y0 = y;
 	dice.style.top = y+"px";
+	dice.style.color = "white";
 	var t0 = (new Date).getTime();
 	var tf = t0+2000;
 	var t = 0.0;
@@ -129,6 +122,7 @@ async function showDiceResult(name){
 async function moveToken(token, toX, toY){
 	// From (ox, oy) to (ox+dx, oy+dy)
 	if (token.x != toX || token.y != toY){
+		token.divDice.style.opacity=0;
 		//setOpacityCoordinates(0);
 		//setOpacityDivNames(0);
 		const ox = getPixel(token.x, board.tilew, board.offsetx);
@@ -261,11 +255,21 @@ async function drawCloseCombatDisappears(token, tilex, tiley){
 	var transform = "translate("+tx+" "+ty+") rotate("+(70+Math.floor(Math.random()*40)+1)+" "+pmx+" "+pmy+")";
 	el.setAttribute("transform",transform);
 	svg.appendChild(el);
-	for (var t=0; t<=Math.PI; t+=(Math.PI/100)){
-		el.style.opacity = Math.sin(t);
-		await sleep(1);
+
+	var damage = parseInt(token.diceResult.split(' ')[1]);
+	var token2 = getTokenByTile(tilex, tiley);
+	addDamageToken(token2, damage, true);
+	var t0 = (new Date).getTime();
+	var tf = t0+1000;
+	var tt = tf-t0;
+	var t = 0.0;
+	const k = Math.PI/(2*tt);
+	while (t<tt){
+		el.style.opacity = Math.sin(t*k);
+		token2.divDice.style.opacity = Math.sin(t*k);
+		await sleep(100);
+		t = (new Date).getTime()-t0;
 	}
-	await sleep(1500);
 	svg.removeChild(el);
 }
 
@@ -292,6 +296,7 @@ async function drawRangedCombatDisappears(token, tilex, tiley){
 	elLine.setAttribute("style", style);
 	// First part: Arrow flying
 	svg.appendChild(elLine);
+
 	var t0 = (new Date).getTime();	// Time _0
 	var tt = 500;					// Total Time
 	var tf = t0+tt;					// Time _final
@@ -321,6 +326,9 @@ async function drawRangedCombatDisappears(token, tilex, tiley){
 		t = (new Date).getTime()-t0;
 	}
 	// Third part: Fadeout
+	var damage = parseInt(token.diceResult.split(' ')[1]);
+	var token2 = getTokenByTile(tilex, tiley);
+	addDamageToken(token2, damage, true);
 	t0 = (new Date).getTime();
 	tt = 500;
 	tf = t0 + tt;
@@ -353,13 +361,14 @@ function getSheetCharacter(name, idBoard, destDiv){
 }
 
 function runGuidelines(token, tilex, tiley, bSendCommand=false){
+	var token2 = getTokenByTile(tilex, tiley);
+	var d = Math.floor(getDistanceTiles(token.x, token.y, tilex, tiley));
 	// Acording to de distance, use one guideline or other
-	var d = getDistanceTiles(token.x, token.y, tilex, tiley);
-	if (d<=1 && (1 in token.guidelines)){
+	if (d<=token.w && (1 in token.guidelines)){
 		if (bSendCommand) sendCommand("@"+token.name+" "+token.guidelines[1]+" t"+tilex+","+tiley);
 		drawCloseCombatDisappears(token, tilex, tiley);
 	}
-	if (d>1 && (2 in token.guidelines)){
+	if (d>token.w && (2 in token.guidelines)){
 		if (bSendCommand) sendCommand("@"+token.name+" "+token.guidelines[2]+" t"+tilex+","+tiley);
 		drawRangedCombatDisappears(token, tilex, tiley);
 	}
@@ -429,5 +438,49 @@ async function tokenRemove(name){
 			arrTokens.splice(i, 1);
 			return;
 		}
+	}
+}
+
+// Change opacity of ALL coordinates
+function setOpacityCoordinates(newVal){
+       var arrCoordinates = document.getElementsByClassName("coordinates");
+       for (var i=0; i<arrCoordinates.length; i++){
+               arrCoordinates[i].style.opacity = newVal;
+       }
+}
+
+function distanceFromTokenToToken(token1, token2){
+	var dMin = Number.MAX_SAFE_INTEGER;
+	var x1,y1,x2,y2;
+	for (var a=0; a<token1.w; a++){
+		for (var b=0; b<token1.h; b++){
+			for (var c=0; c<token2.w; c++){
+				for (var d=0; d<token2.h; d++){
+					var dTmp = getDistanceTiles(token1.x+a, token1.y+b, token2.x+c, token2.y+d);
+					if (dTmp<dMin) {
+						dMin=dTmp;
+						x1=token1.x+a;
+						y1=token1.y+b;
+						x2=token2.x+c;
+						y2=token2.y+d;
+					}
+				}
+			}
+		}
+	}
+	return {distance:dMin, p1:{x:x1, y:y1}, p2:{x:x2, y:y2}};
+}
+
+function addDamageToken(token, damage, bVisible){
+	token.attrs.hp -= damage;
+	updateHp(token);
+	sendCommand("@"+token.name+" [hp:"+token.attrs.hp+"]");
+	
+	var hpbar = document.getElementById("hpbar_"+token.name)
+	if (bVisible) {	// Some tokens does not have hp bar
+		token.divDice.style.top = (board.tileh/2)+"px";
+		token.divDice.style.color = "red";
+		token.divDice.style.opacity=1;
+		token.divDice.innerHTML = -token.attrs.maxhp+token.attrs.hp;
 	}
 }

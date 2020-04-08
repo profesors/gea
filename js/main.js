@@ -194,24 +194,24 @@ function movementClick(event){
 	if (movement.token == null){	// Select token (first click)
 		movement.token = getTokenByTile(tilex, tiley);
 		if (movement.token!=null) {
-			movement.token.divName.style.opacity = 1;
+			opacity = movement.token.divName.style.opacity;
+			movement.token.divName.style.color = "white";
 		}
 	} else {	// Second click
+		movement.token.divName.style.color = "yellow";
 		var destToken = getTokenByTile(tilex,tiley);
 		if (destToken==null){	// Destination is empty, you can move
 			sendCommand("@"+movement.token.name+" p"+tilex+","+tiley);
-			movement.token.divName.style.opacity = 0;
 			movement.token = null;
 		} else {	// There is a token in de destination cell. Run guidelines
-			var d = getDistanceTiles(movement.token.x, movement.token.y, tilex, tiley);
-			if (isEnabled(movement.token)){
-				if (d<=1){
-					sendCommand(encodeURI("@"+movement.token.name+" "+movement.token.guidelines[1]+" t"+tilex+","+tiley));
+			if (destToken.name != movement.token.name && isEnabled(movement.token)){
+				var d = distanceFromTokenToToken(movement.token, getTokenByTile(tilex, tiley));
+				if (Math.floor(d.distance)<=movement.token.w){
+					sendCommand(encodeURI("@"+movement.token.name+" "+movement.token.guidelines[1]+" t"+d.p2.x+","+d.p2.y));
 				} else {
-					sendCommand(encodeURI("@"+movement.token.name+" "+movement.token.guidelines[2]+" t"+tilex+","+tiley));
+					sendCommand(encodeURI("@"+movement.token.name+" "+movement.token.guidelines[2]+" t"+d.p2.x+","+d.p2.y));
 				}
 			}
-			movement.token.divName.style.opacity = 0;
 			movement.token = null;
 		}
 	}

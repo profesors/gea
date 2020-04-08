@@ -75,7 +75,7 @@ async function getTokens(idBoard, fromActionId=null){
 				token.divName.style.color = "yellow";
 				token.divName.style.position = "absolute";
 				token.divName.style.fontWeight = "bold";
-				token.divName.style.top = 0.5*board.tileh*token.h+"px";
+				token.divName.style.top = 0.75*board.tileh*token.h+"px";
 				token.divName.style.width = board.tilew*token.w+"px";
 				token.divName.style.textShadow = "2px 2px black";
 				token.divName.style.zIndex = 2;
@@ -85,7 +85,6 @@ async function getTokens(idBoard, fromActionId=null){
 				// Div with DICE results NEW
 				token.divDice = document.createElement("div");
 				token.divDice.id = "divDice_"+upToken.name;
-				token.divDice.innerHTML = "";
 				token.divDice.style.color = "white";
 				token.divDice.style.position = "absolute";
 				token.divDice.style.fontWeight = "bold";
@@ -101,10 +100,10 @@ async function getTokens(idBoard, fromActionId=null){
 				canvas.appendChild(token.div);
 			}	// if NEW token
 
-			token.attrs = upToken.attrs;
+			token.attrs.maxhp = upToken.attrs.maxhp;
 			updateHp(token);
 			moveToken(token, upToken.x, upToken.y);
-			token.divDice.innerHTML = upToken.diceResult;
+			//token.divDice.innerHTML = upToken.diceResult;
 
 			// First element is diceActionId, nexts are coordinates
 			token.diceAction = upToken.diceAction;
