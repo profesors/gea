@@ -24,10 +24,15 @@ var movement = {
 function inputKeyPress_inputBox(event){
 	//console.log(event.keyCode);
 	switch (event.keyCode){
-	case 13:
+	case 13:	// Enter
 		sendCommand(input.value);
 		arrCommands.push(input.value);
 		iCommands = arrCommands.length;	// Index of commands for historial
+		// If sent command to remove token
+		if (reRemoveToken.test(input.value))	{
+			var arrInput = reTokenName.exec(input.value);
+			tokenRemove(arrInput[1]);
+		}
 		input.value="";	// Empty the input
 		setOpacityCoordinates(0);
 		input.style.display = document.getElementById("input_hidden").style.display;

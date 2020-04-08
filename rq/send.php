@@ -1,7 +1,7 @@
 <?php	
 	include_once('../lib.php');
 	connectDB();
-	#$_GET['m'] = "@bar p16,14 !005.png _5px+solid+lime [maxhp:56,hp:56] (1)#1d20+5,1d12+2 (2)#1d20+3,1d8+2;";
+	#$_GET['m'] = "@w1";
 	#$_GET['idBoard'] = 4;
 
 	# Multiple spaces into just one
@@ -68,7 +68,6 @@
 			insert_action($idBoard, "@$name [$attr]");
 		}
 		# Guidelines (directrices)
-		# \(((\d+)\)([^ ]*))
 		if(preg_match_all("/\(((\d+)\)([^ ]*))/", $command, $arrTmp)){
 			for($i=0; $i<sizeof($arrTmp[2]); $i++){
 				$nameGuideline = $arrTmp[2][$i];	# Number
@@ -103,6 +102,13 @@
 			insert_action($idBoard, "@$name $sDescription");
 		}
 		
+		# Remove token
+		if (preg_match("/\sx(\d)*/", $command, $arrTmp)){
+			echo "Remove Token $name from $command";
+			remove_token($idBoard, $name);
+
+		}
+
 		# Other command		
 		if(preg_match("/:reset/", $command, $arrTmp)){
 			//for($i=1;$i<=7;$i++){

@@ -176,5 +176,19 @@ function get_bg_ts($idBoard){
 	return $bg_ts;
 }
 
+function remove_token($idBoard, $name){
+	global $db;
+	#$query = "DELETE FROM actions WHERE idBoard = $idBoard AND name='$name';";
+	#run_sql($query) or die();
+	$nextActionId = intval(read_last_actionId($idBoard))+1;
+	$query = "UPDATE boards SET lastActionId = $nextActionId;";
+	run_sql($query) or die();
+	$query = "DELETE FROM tokens WHERE idBoard = $idBoard AND name='$name';";
+	run_sql($query);
+	$query = "DELETE FROM attrs WHERE idBoard = $idBoard AND tokenName='$name';";
+	run_sql($query);
+	$query = "DELETE FROM guidelines WHERE idBoard = $idBoard AND tokenName='$name';";
+	run_sql($query);
+}
 
 ?>

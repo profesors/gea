@@ -1,5 +1,7 @@
 var MAXX = 0, MAXY = 0;
 var T_PRECISION = 20;
+var reRemoveToken = RegExp(/\sx/);
+var reTokenName = RegExp(/@([^ ]*)/);
 
 // Wait for a time
 // You can use it so: await sleep(ms);	Remember your delayed function must be 'async'
@@ -406,6 +408,26 @@ function drawCellCoordinates(){
 			txt.style.opacity = "0";
 			txt.setAttribute("class", "coordinates");
 			canvas.appendChild(txt);
+		}
+	}
+}
+
+async function tokenRemove(name){
+	for (var i=0; i<arrTokens.length; i++){
+		if (arrTokens[i].name == name){
+			var t0 = (new Date).getTime();
+			var tf = t0+2000;
+			var tt = tf-t0;
+			var t=0.0;
+			const k = Math.PI/(2*tt);
+			while (t<tt){
+				arrTokens[i].div.style.opacity = Math.cos(t*k);
+				await sleep(T_PRECISION);
+				t = (new Date).getTime()-t0;
+			}
+			canvas.removeChild(arrTokens[i].div);
+			arrTokens.splice(i, 1);
+			return;
 		}
 	}
 }
