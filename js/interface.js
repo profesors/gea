@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		item.addEventListener('click', function (){
 		var token = getTokenByName(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
-			sendCommand("@bar #1d6");
+			sendCommand("@bar #1d4");
 		}
 		event.stopPropagation();
 		}, false);
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		item.addEventListener('click', function (){
 		var token = getTokenByName(item.parentElement.id.substring(1));
 		if (item.parentElement.style.opacity!="0.3"){
-			sendCommand("@bar #1d4");
+			sendCommand("@bar #1d6");
 		}
 		event.stopPropagation();
 		}, false);
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	document.querySelectorAll(".b23").forEach(function (item){
 		item.addEventListener('click', function (){
 		if (item.parentElement.style.opacity!="0.3"){
-			sendCommand("@exp #1d20");
+			sendCommand("@exp #1d4");
 		}
 		event.stopPropagation();
 		}, false);
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	document.querySelectorAll(".b24").forEach(function (item){
 		item.addEventListener('click', function (){
 		if (item.parentElement.style.opacity!="0.3"){
-			sendCommand("@exp #1d100");
+			sendCommand("@exp #1d6");
 		}
 		event.stopPropagation();
 		}, false);
@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	document.querySelectorAll(".b33").forEach(function (item){
 		item.addEventListener('click', function (){
 		if (item.parentElement.style.opacity!="0.3"){
-			sendCommand("@elf #1d20");
+			sendCommand("@elf #1d4");
 		}
 		event.stopPropagation();
 		}, false);
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	document.querySelectorAll(".b34").forEach(function (item){
 		item.addEventListener('click', function (){
 		if (item.parentElement.style.opacity!="0.3"){
-			sendCommand("@elf #1d100");
+			sendCommand("@elf #1d6");
 		}
 		event.stopPropagation();
 		}, false);
@@ -320,7 +320,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	document.querySelectorAll(".b43").forEach(function (item){
 		item.addEventListener('click', function (){
 		if (item.parentElement.style.opacity!="0.3"){
-			sendCommand("@cle #1d20");
+			sendCommand("@cle #1d4");
 		}
 		event.stopPropagation();
 		}, false);
@@ -328,7 +328,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	document.querySelectorAll(".b44").forEach(function (item){
 		item.addEventListener('click', function (){
 		if (item.parentElement.style.opacity!="0.3"){
-			sendCommand("@cle #1d100");
+			sendCommand("@cle #1d6");
 		}
 		event.stopPropagation();
 		}, false);
@@ -418,7 +418,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	document.querySelectorAll(".b53").forEach(function (item){
 		item.addEventListener('click', function (){
 		if (item.parentElement.style.opacity!="0.3"){
-			sendCommand("@lad #1d20");
+			sendCommand("@lad #1d4");
 		}
 		event.stopPropagation();
 		}, false);
@@ -426,7 +426,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	document.querySelectorAll(".b54").forEach(function (item){
 		item.addEventListener('click', function (){
 		if (item.parentElement.style.opacity!="0.3"){
-			sendCommand("@lad #1d100");
+			sendCommand("@lad #1d6");
 		}
 		event.stopPropagation();
 		}, false);
