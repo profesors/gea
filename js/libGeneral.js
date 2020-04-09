@@ -79,7 +79,7 @@ function setOpacityDivDice(name, newVal){
 // It shows the result of the dice fadeIn and then fadoOut
 async function showDiceResult(name){
 	setOpacityDivDice(name, 0);
-	//document.getElementById("aDado").play();
+	document.getElementById("aDado").play();
 	var dice = document.getElementById("divDice_"+name);
 	dice.innerHTML = getTokenByName(name).diceResult;
 	var y = 2*board.tileh/3;

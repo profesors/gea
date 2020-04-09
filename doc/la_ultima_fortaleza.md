@@ -11,18 +11,18 @@
 @elf p15,16 !007.png _5px+solid+lime [maxhp:24,hp:24,ac:18] (1)#1d20+5,1d8+2 (2)#1d20+6,1d8+1;
 @cle p15,17 !011.png _5px+solid+lime [maxhp:28,hp:28,ac:18] (1)#1d20+3,1d8+1 (2)#1d20+2,1d8; 
 @lad p18,15 !010.png _5px+solid+lime [maxhp:20,hp:20,ac:16] (1)#1d20+2,1d8 (2)#1d20+2,1d6;
-@g1 p1,16 !goblin.jpg _5px+solid+red [maxhp:5,hp:1,ac:3] (1)#1d20,1d6 (2)#1d20,1d4; 
-@g2 p2,17 !goblin.jpg _5px+solid+red [maxhp:5,hp:1,ac:3] (1)#1d20,1d6 (2)#1d20,1d4; 
-@g3 p2,18 !goblin.jpg _5px+solid+red [maxhp:5,hp:1,ac:3] (1)#1d20,1d6 (2)#1d20,1d4; 
-@g4 p12,7 !goblin.jpg _5px+solid+red [maxhp:5,hp:1,ac:3] (1)#1d20,1d6 (2)#1d20,1d4; 
-@g5 p13,3 !goblin.jpg _5px+solid+red [maxhp:5,hp:1,ac:3] (1)#1d20,1d6 (2)#1d20,1d4; 
-@g6 p10,2 !goblin.jpg _5px+solid+red [maxhp:5,hp:1,ac:3] (1)#1d20,1d6 (2)#1d20,1d4; 
-@o1 p13,1 !orc.jpg _5px+dashed+red [maxhp:10,hp:10,ac:16] (1)#1d20,1d8+4; 
-@o2 p12,2 !orc.jpg _5px+solid+red [maxhp:6,hp:6,ac:14] (1)#1d20,1d6+2; 
-@o3 p17,4 !orc.jpg _5px+solid+red [maxhp:6,hp:6,ac:14] (1)#1d20,1d6+2; 
-@o4 p10,1 !orc.jpg _5px+solid+red [maxhp:6,hp:6,ac:14] (1)#1d20,1d6+2; 
-@o5 p1,15 !orc.jpg _5px+solid+red [maxhp:6,hp:6,ac:14] (1)#1d20,1d6+2; 
-@o6 p3,17 !orc.jpg _5px+solid+red [maxhp:6,hp:6,ac:14] (1)#1d20,1d6+2;
+@g1 p1,16 !goblin.jpg _5px+solid+red [maxhp:7,hp:7,ac:15] (1)#1d20+4,1d6+2 (2)#1d20+4,1d6+2; 
+@g2 p2,17 !goblin.jpg _5px+solid+red [maxhp:7,hp:7,ac:15] (1)#1d20+4,1d6+2 (2)#1d20+4,1d6+2; 
+@g3 p2,18 !goblin.jpg _5px+solid+red [maxhp:7,hp:7,ac:15] (1)#1d20+4,1d6+2 (2)#1d20+4,1d6+2; 
+@g4 p12,7 !goblin.jpg _5px+solid+red [maxhp:7,hp:7,ac:15] (1)#1d20+4,1d6+2 (2)#1d20+4,1d6+2; 
+@g5 p13,3 !goblin.jpg _5px+solid+red [maxhp:7,hp:7,ac:15] (1)#1d20+4,1d6+2 (2)#1d20+4,1d6+2; 
+@g6 p10,2 !goblin.jpg _5px+solid+red [maxhp:7,hp:7,ac:15] (1)#1d20+4,1d6+2 (2)#1d20+4,1d6+2; 
+@o1 p13,1 !orc.jpg _5px+dashed+red [maxhp:93,hp:93,ac:16] (1)#1d20+6,2d10+4; 
+@o2 p12,2 !orc.jpg _5px+solid+red [maxhp:15,hp:15,ac:13] (1)#1d20+5,1d12+3; 
+@o3 p17,4 !orc.jpg _5px+solid+red [maxhp:15,hp:15,ac:13] (1)#1d20+5,1d12+3; 
+@o4 p10,1 !orc.jpg _5px+solid+red [maxhp:15,hp:15,ac:13] (1)#1d20+5,1d12+3; 
+@o5 p1,15 !orc.jpg _5px+solid+red [maxhp:15,hp:15,ac:13] (1)#1d20+5,1d12+3; 
+@o6 p3,17 !orc.jpg _5px+solid+red [maxhp:15,hp:15,ac:13] (1)#1d20+5,1d12+3;
 
 # Asalto en mitad de la noche (2)
 @bar p12,11 !005.png _5px+solid+lime [maxhp:56,hp:56]; 

@@ -1,5 +1,5 @@
 <?php
-include_once('../lib.php');
+include_once('sqlLib.php');
 connectDB();
 $idBoard = secure_param('idBoard');
 # $idBoard = 4;
@@ -8,21 +8,6 @@ $idBoard = secure_param('idBoard');
 $query = "SELECT * FROM boards WHERE id = $idBoard LIMIT 1;";
 $result = run_sql($query) or die();
 $row = mysqli_fetch_array($result);
-/*
-echo '{';
-echo '"id": '.$row['id'].',';
-echo '"name": "'.$row['name'].'",';
-echo '"tilew": '.$row['tilew'].',';
-echo '"tileh": '.$row['tileh'].',';
-echo '"ntilesw": '.$row['ntilesw'].',';
-echo '"ntilesh": '.$row['ntilesh'].',';
-echo '"offsetx": '.$row['offsetx'].',';
-echo '"offsety": '.$row['offsety'].',';
-echo '"bg": "'.$row['bg'].'",';
-echo '"drawGrid": '.$row['drawGrid'].',';
-echo '"lastActionId": '.$row['lastActionId'];
-echo '}';
-*/
 $ret = new stdClass();
 $ret->id = $row['id'];
 $ret->name = $row['name'];

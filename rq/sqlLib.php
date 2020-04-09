@@ -1,19 +1,24 @@
 <?php
 
-# 1.1
+# 1.2
 $db = null;
-const DIR_BASE = '/home/samuel/Web/Gea';
-const DIR_BG = DIR_BASE.'/img/bg';
 
 function connectDB(){
 	global $db;
 	// Host, user, passwd, db_name
-	$db = mysqli_connect("localhost", "gea", "gea", "gea");
-	//$db = mysqli_connect("db5000148109.hosting-data.io:3306", "dbu120009", "S4!4m4nc4", "dbs143332");
+	if (!array_key_exists('REMOTE_ADDR', $_SERVER)){
+		$db = mysqli_connect("localhost", "gea", "gea", "gea");
+	} else 
+		if ($_SERVER['REMOTE_ADDR']=='127.0.0.1'){
+			$db = mysqli_connect("localhost", "gea", "gea", "gea");
+		} else {
+			$db = mysqli_connect("db5000148109.hosting-data.io:3306", "dbu120009", "S4!4m4nc4", "dbs143332");
+		}
+	
 	if (!$db){
 		echo "ERROR: Cannot connect to DB\n";
 		die();
-	}
+	} 
 }
 
 function secure_param($name){
@@ -69,7 +74,7 @@ function insert_action($idBoard, $m){
 	$query = "INSERT INTO `actions` (`idUser`, `idBoard`, `idAction`, `ts`, `action`) VALUES ('1', '$idBoard',";
 	$query.= " $nextActionId, CURRENT_TIMESTAMP, '".utf8_decode(mysqli_real_escape_string($db, $m))."');";
 	run_sql($query) or die();
-	write_last_actionId($idBoard, $nextActionId);
+	#write_last_actionId($idBoard, $nextActionId);
 }
 
 function insert_guideline($idBoard, $tokenName, $guideName, $guideline){
@@ -78,28 +83,31 @@ function insert_guideline($idBoard, $tokenName, $guideName, $guideline){
 	$query.= "VALUES ($idBoard, '$tokenName', $guideName, '$guideline') ";
 	$query.= " ON DUPLICATE KEY UPDATE guideline='$guideline'";
 	run_sql($query) or die();
+	increase_last_actionId($idBoard, 1);
+	/*
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
 	$query = "UPDATE tokens SET actionId=$nextActionId WHERE idBoard=$idBoard AND name='$name'";
-	run_sql($query) or die();
+	run_sql($query) or die();*/
 }
 
 # Update token position X, Y, Z
+/*
 function update_position_token($idBoard, $name, $x, $y, $z){
 	global $db;
 	$query = "UPDATE tokens SET x=$x, y=$y, z=1 WHERE idBoard = $idBoard AND name = '$name';";
 	$result = mysqli_query($db, $query);
 	run_sql($query) or die();
-}
+}*/
 
 # Insert token in database, if there is not $img_src or $border ignore it
 # If the token id is duplicate, just update it
 function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border){
 	global $db;
 	$name = ($name=='')?'NULL':$name;
-	$actionId = read_last_actionId($idBoard)+1;
+	$nextActionId = intval(read_last_actionId($idBoard))+1;
 	$query = "INSERT INTO `tokens` (`idBoard`,`name`,`x`,`y`,`z`,`w`,`h`,`step`,`img`,`border`, `actionId`, `dice_result`) ";
 	$query.= " VALUES ('$idBoard', '$name', $x, $y, $z, $w, $h, 1, ";
-	$query.= "'$img_src', '$border',$actionId, NULL) ";
+	$query.= "'$img_src', '$border',$nextActionId, NULL) ";
 	$query.= " ON DUPLICATE KEY UPDATE x=$x, y=$y";
 	if ($img_src != ''){
 		$query.= ", img='$img_src'";
@@ -108,14 +116,16 @@ function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border){
 		$query.= ", border='$border'";
 	}
 	run_sql($query) or die();
+	increase_last_actionId($idBoard, 1);
 }
 
 function move_token($idBoard, $name, $x, $y){
 	global $db;
 	$name = ($name=='')?'NULL':$name;
-	$actionId = read_last_actionId($idBoard)+1;
-	$query = "UPDATE `tokens` SET x=$x, y=$y, actionId=$actionId WHERE idBoard=$idBoard AND name='$name'";
+	$nextActionId = intval(read_last_actionId($idBoard))+1;
+	$query = "UPDATE `tokens` SET x=$x, y=$y, actionId=$nextActionId WHERE idBoard=$idBoard AND name='$name'";
 	run_sql($query) or die();
+	increase_last_actionId($idBoard, 1);
 }
 
 function set_attr($idBoard, $name, $attr, $val){
@@ -124,10 +134,10 @@ function set_attr($idBoard, $name, $attr, $val){
 	$query.= "VALUES ($idBoard,'$name','$attr',$val) ";
 	$query.= " ON DUPLICATE KEY UPDATE val='$val'";
 	run_sql($query) or die();
-
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
 	$query = "UPDATE tokens SET actionId=$nextActionId WHERE idBoard=$idBoard AND name='$name'";
 	run_sql($query) or die();
+	increase_last_actionId($idBoard, 1);
 }
 
 function reset_board($idBoard){
@@ -150,12 +160,13 @@ function set_dice($idBoard, $name, $value, $tiles){
 	$query = "SELECT lastActionId FROM boards WHERE id = $idBoard LIMIT 1;";
 	$result = run_sql($query) or die();
 	$row = mysqli_fetch_array($result);
-	$nextActionId = $row['lastActionId']+1;	# current last action + 1 because it will be increased
+	$nextActionId = intval(read_last_actionId($idBoard))+1;
 	$dice_action_targets = trim($tiles,',');
 	$query = "UPDATE tokens SET dice_result = '$value', dice_actionId=$nextActionId, ";
 	$query.= "dice_action_targets = '$dice_action_targets', actionId=$nextActionId  ";
     $query.= " WHERE idBoard = $idBoard AND name = '$name';";
 	run_sql($query) or die();
+	increase_last_actionId($idBoard, 1);
 }
 
 
@@ -171,7 +182,7 @@ function get_bg_filename($idBoard){
 function get_bg_ts($idBoard){
 	global $db;
 	$bg_file_name = get_bg_filename($idBoard);
-	$bg_ts = filemtime(DIR_BG.'/'.$bg_file_name);
+	$bg_ts = filemtime('../img/bg/'.$bg_file_name);
 	return $bg_ts;
 }
 

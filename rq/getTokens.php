@@ -1,5 +1,5 @@
 <?php
-include_once('../lib.php');
+include_once('sqlLib.php');
 connectDB();
 $idBoard = secure_param('idBoard');
 $fromActionId = secure_param('fromActionId');

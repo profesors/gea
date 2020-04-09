@@ -1,7 +1,7 @@
 <?php	
 	include_once('sqlLib.php');
 	connectDB();
-	#$_GET['m'] = "@bar p16,14 !005.png _5px+solid+lime [maxhp:56,hp:56,ac:2] (1)#1d20+5,1d12+2 (2)#1d20+3,1d8+2;";
+	#$_GET['m'] = "@bar #1d20,1d10-2 to1";
 	#$_GET['idBoard'] = 4;
 
 	# Multiple spaces into just one
@@ -79,33 +79,43 @@
 		# Dice command
 		if(preg_match("/\s#([^ ]*)/", $command, $arrTmp)){
 			$dice = roll_dice($arrTmp[1]);
-			set_dice($idBoard, $name, $dice[0]['result'].' '.$dice[1]['result'], $tiles);
 			$sDescription = $dice[0]['n'].'d'.$dice[0]['size'];
 			$sDescription.= $dice[0]['mod']!=0?$dice[0]['mod']:'';
 			$sDescription.= '=<span class="red">'.$dice[0]['result'].'</span> ';
-			$sDescription.= $dice[1]['n'].'d'.$dice[1]['size'];
-			$sDescription.= $dice[1]['mod']!=0?$dice[1]['mod']:'';
-			$sDescription.= '=<span class="red">'.$dice[1]['result'].'</span>';
-			insert_action($idBoard, "@$name $sDescription");
-		}
-		# Target
-		if (preg_match("/\st([^ ]+)/", $command, $arrTmp)){
-			$token1 = get_token($idBoard, $name);
-			$token2 = get_token($idBoard, $arrTmp[1]);
-			#$token1['guidelines'] = get_guidelines($idBoard, $token1['name']);
-			#$arrDices = roll_dice($token1['guidelines']);
-			$token1['attrs'] = get_attrs($idBoard, $token1['name']);
-			$token2['attrs'] = get_attrs($idBoard, $token2['name']);
-			$arr_dice_result = explode(' ', trim($token1['dice_result']));
-			$at = $arr_dice_result[0];
-			$damage = $arr_dice_result[1];
-			$ac = $token2['attrs']['ac'];
-			if ($at >= $ac){
-				$token2['attrs']['hp']-=$damage;
-				set_attr($idBoard, $token2['name'], 'hp', $token2['attrs']['hp']);
+			if (array_key_exists('1', $dice)){
+				$sDescription.= $dice[1]['n'].'d'.$dice[1]['size'];
+				$sDescription.= $dice[1]['mod']!=0?$dice[1]['mod']:'';
+				$sDescription.= '=<span class="red">'.$dice[1]['result'].'</span>';
 			}
+			# Fight against Target
+			if (preg_match("/\st([^ ]+)/", $command, $arrTmp)){
+				$token1 = get_token($idBoard, $name);
+				$token2 = get_token($idBoard, $arrTmp[1]);
+				$token1['attrs'] = get_attrs($idBoard, $token1['name']);
+				$token2['attrs'] = get_attrs($idBoard, $token2['name']);
+				$at = $dice[0]['result'];	# Result of first 1d20
+				if (($at-$dice[0]['mod'])==20) {
+					for($i=0; $i<$dice['1']['n']; $i++){
+						$dice[1]['result'] += rand(1, $dice[1]['size']);
+					}
+					$dice[0]['desc'] = str_replace('</', '&#33;</', $dice[0]['desc']);
+					$dice[1]['desc'] = str_replace('</', '&#33;</', $dice[1]['desc']);
+				}
+				$damage = $dice[1]['result'];
+				$ac = $token2['attrs']['ac'];
+				if ($at >= $ac){
+					$token2['attrs']['hp']-=$damage;
+					set_attr($idBoard, $token2['name'], 'hp', $token2['attrs']['hp']);
+				}
+			}
+			$sDesc = '';
+			for ($i=0; $i<sizeof($dice);$i++){
+				$sDesc.= ' '.trim($dice[$i]['desc']);
+			}
+			set_dice($idBoard, $name, $dice[0]['result'].' '.$dice[1]['result'], $tiles);
+			insert_action($idBoard, "@$name ".trim($sDesc));
 		}
-		
+	
 		# Remove token
 		if (preg_match("/\sx(\d)*/", $command, $arrTmp)){
 			echo "Remove Token $name from $command";
@@ -122,26 +132,30 @@
 	
 	}
 
-function roll_dice($strDices){
+function roll_dice($strDices,$extraMod=0, $bCrit=false){
 	$strResults = '';
 	$arrDices = explode(',', $strDices);
 	$sDescription = '';
 	$arrRet = Array();
 	foreach($arrDices as $oneDice){
 		preg_match("/(\d*)d(\d*)(([\+\-])(\d*))?/", $oneDice, $arrDice);
-		$n = $arrDice[1];
+		$n = $bCrit?2*$arrDice[1]:$arrDice[1];
 		$size = $arrDice[2];
 		$mod = 0;
 		if (array_key_exists('4',$arrDice)){
 			$mod = $arrDice[4]=='+'?$arrDice[5]:-($arrDice[5]);
 		}
+		$mod+=$extraMod;
 		$result = 0;
 		for ($i=0; $i<$n;$i++){
 			$result += rand(1, $size);
 		}
 		$result += $mod;
 		$strResults .= ' '.$result;
-		$sDescription.= $n."d$size".($mod!="0"?$mod:"")."=<span class='red'>$result</span> ";
+		$sMod = '';
+		if ($mod>0) $sMod = '+'.$mod;
+		if ($mod<0) $sMod = $mod;
+		$sDescription= $n."d$size$sMod=<span class='red'>$result</span> ";
 		$r = Array('n'=>$n, 'size'=>$size, 'mod'=>$mod, 'result'=>$result, 'desc'=>$sDescription);
 		array_push($arrRet, $r);
 	}

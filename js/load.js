@@ -102,6 +102,10 @@ async function getTokens(idBoard, fromActionId=null){
 				arrTokens.push(token);
 				canvas.appendChild(token.div);
 				updateHp(token);
+				var bPj= document.getElementById("b"+token.name);
+				if (bPj!=null){
+					bPj.style.opacity=1;
+				}
 			}	// if NEW token
 
 			// Caso 1: El token está sano
@@ -129,7 +133,15 @@ async function getTokens(idBoard, fromActionId=null){
 			if (token.attrs.hp >= 0 && upToken.attrs.hp<0){
 				//console.log("Caso 2: "+token.name+" HP:"+token.attrs.hp+" -> "+upToken.attrs.hp);
 				token.attrs = upToken.attrs;
+				updateHp(token);
 				removeToken(token.name);
+			}
+			// Case 3
+			if (token.attrs.hp<0){
+				var bPj= document.getElementById("b"+token.name);
+				if (bPj!=null){
+					bPj.style.opacity="0.3";
+				}
 			}
 		}	// for
 		if (remoteLastAction != undefined){
