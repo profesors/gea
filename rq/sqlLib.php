@@ -39,7 +39,6 @@ function getTime(){
 	return $sRet;
 }
 
-# Write down last action id in a raw file
 function write_last_actionId($idBoard, $actionId){
 	global $db;
 	$query = "UPDATE boards SET lastActionId=$actionId WHERE id=$idBoard;";
@@ -54,10 +53,10 @@ function increase_last_actionId($idBoard, $ammount){
 function read_last_actionId($idBoard){
 	global $db;
 	$query = "SELECT lastActionId FROM boards WHERE id=$idBoard LIMIT 1;";
-	$lastId = 0;
 	$result = mysqli_query($db, $query) or die();
+	$lastId=0;
 	if ($result->num_rows > 0){
-		$arr = mysqli_fetch_array($result);
+		$arr = mysqli_fetch_array($result, MYSQLI_ASSOC);
 		$lastId = $arr['lastActionId'];
 	}
 	return $lastId;
@@ -119,7 +118,7 @@ function move_token($idBoard, $name, $x, $y){
 	run_sql($query) or die();
 }
 
-function insert_attr($idBoard, $name, $attr, $val){
+function set_attr($idBoard, $name, $attr, $val){
 	global $db;
 	$query = "INSERT INTO attrs (idBoard, tokenName, attr, val) ";
 	$query.= "VALUES ($idBoard,'$name','$attr',$val) ";
@@ -152,11 +151,10 @@ function set_dice($idBoard, $name, $value, $tiles){
 	$result = run_sql($query) or die();
 	$row = mysqli_fetch_array($result);
 	$nextActionId = $row['lastActionId']+1;	# current last action + 1 because it will be increased
-	$dice_action = trim($tiles,',');
-	$query = "UPDATE tokens SET dice_result = '$value', dice_action = '$dice_action' WHERE idBoard = $idBoard AND name = '$name';";
-	run_sql($query) or die();
-	$nextActionId = intval(read_last_actionId($idBoard))+1;
-	$query = "UPDATE tokens SET actionId=$nextActionId WHERE idBoard=$idBoard AND name='$name'";
+	$dice_action_targets = trim($tiles,',');
+	$query = "UPDATE tokens SET dice_result = '$value', dice_actionId=$nextActionId, ";
+	$query.= "dice_action_targets = '$dice_action_targets', actionId=$nextActionId  ";
+    $query.= " WHERE idBoard = $idBoard AND name = '$name';";
 	run_sql($query) or die();
 }
 
@@ -192,4 +190,36 @@ function remove_token($idBoard, $name){
 	 */
 }
 
+function get_token($idBoard, $name){
+	global $db;
+	$query = "SELECT * FROM tokens WHERE idBoard=$idBoard AND name='$name' LIMIT 1";
+	run_sql($query) or die();
+	$result = mysqli_query($db, $query);
+	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+	return $row;
+}
+
+function get_attrs($idBoard, $name){
+	global $db;
+	$query = "SELECT attr,val FROM attrs WHERE idBoard=$idBoard AND tokenName='$name'";
+	run_sql($query) or die();
+	$result = mysqli_query($db, $query);
+	$arrAttrs = Array();
+	while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
+		$arrAttrs[$row['attr']] = $row['val'];
+	}
+	return $arrAttrs;
+}
+
+function get_guidelines($idBoard, $name){
+	global $db;
+	$query = "SELECT guideName,guideline FROM guidelines WHERE idBoard=$idBoard AND tokenName='$name'";
+	run_sql($query) or die();
+	$result = mysqli_query($db, $query);
+	$arrGuidelines = Array();
+	while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
+		$arrGuidelines[$row['guideName']] = $row['guideline'];
+	}
+	return $arrGuidelines;
+}
 ?>

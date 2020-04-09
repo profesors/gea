@@ -3,10 +3,13 @@ include_once('../lib.php');
 connectDB();
 $idBoard = secure_param('idBoard');
 $fromActionId = secure_param('fromActionId');
+
+#$fromActionId=10;
 #$idBoard = 4;
 
 # Get tokens from board
 $query = "SELECT * FROM tokens WHERE idBoard = $idBoard AND actionId>$fromActionId;";
+#echo "**$query**";
 $result = run_sql($query) or die();
 $arr = Array();
 while($row = mysqli_fetch_array($result)){
@@ -20,9 +23,10 @@ while($row = mysqli_fetch_array($result)){
 	$r->imgSrc = $row['img'];
 	$r->name = $row['name'];
 	$r->border = $row['border'];
-	$r-> $row['actionId'];
+	$r->actionId = $row['actionId'];
 	$r->diceResult = trim($row['dice_result']);
-	$r->diceAction = $row['dice_action'];
+	$r->diceActionId = $row['dice_actionId'];
+	$r->diceActionTargets= $row['dice_action_targets'];
 	# Attrs
 	$query = "SELECT * FROM attrs WHERE idBoard=$idBoard AND tokenName='".$row['name']."';";
 	$result_attrs = run_sql($query) or die();

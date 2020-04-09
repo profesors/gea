@@ -31,7 +31,7 @@ function inputKeyPress_inputBox(event){
 		// If sent command to remove token
 		if (reRemoveToken.test(input.value))	{
 			var arrInput = reTokenName.exec(input.value);
-			tokenRemove(arrInput[1]);
+			removeToken(arrInput[1]);
 		}
 		input.value="";	// Empty the input
 		setOpacityCoordinates(0);
@@ -105,7 +105,6 @@ function inputKeyPress_allDocument(event){
 		break;
 	case 72:	// h
 		const panel = document.getElementById("panelI");
-		console.log(panel.style.display);
 		if (panel.style.display != 'block'){
 			panel.style.display = 'block';
 			updateActionsPanel(board.id);
@@ -172,6 +171,7 @@ function checkUpdates(){
 				canvas.style.backgroundImage = "url('img/bg/"+board.bg+"?cache="+tsNow+"')";
 				board.lastAction.bgTs = currentLastAction.bgTs;
 			}*/
+
 			if (board.lastActionId < remoteLastAction.id){	// Update tokens
 				getTokens(board.id, board.lastActionId);
 				if (panelI.style.display == 'block')	updateActionsPanel(board.id);
@@ -206,10 +206,11 @@ function movementClick(event){
 		} else {	// There is a token in de destination cell. Run guidelines
 			if (destToken.name != movement.token.name && isEnabled(movement.token)){
 				var d = distanceFromTokenToToken(movement.token, getTokenByTile(tilex, tiley));
+				var target = getTokenByTile(d.p2.x, d.p2.y);
 				if (Math.floor(d.distance)<=movement.token.w){
-					sendCommand(encodeURI("@"+movement.token.name+" "+movement.token.guidelines[1]+" t"+d.p2.x+","+d.p2.y));
+					sendCommand(encodeURI("@"+movement.token.name+" "+movement.token.guidelines[1]+" t"+target.name));
 				} else {
-					sendCommand(encodeURI("@"+movement.token.name+" "+movement.token.guidelines[2]+" t"+d.p2.x+","+d.p2.y));
+					sendCommand(encodeURI("@"+movement.token.name+" "+movement.token.guidelines[2]+" t"+target.name));
 				}
 			}
 			movement.token = null;

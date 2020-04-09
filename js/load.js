@@ -25,16 +25,19 @@ function getBoard(idBoard){
 
 async function getTokens(idBoard, fromActionId=null){
 	const rq = new XMLHttpRequest();
-	rq.open("GET", "rq/getTokens.php?idBoard="+idBoard+"&fromActionId="+(fromActionId==null?0:fromActionId-1));
+	rq.open("GET", "rq/getTokens.php?idBoard="+idBoard+"&fromActionId="+(fromActionId==null?0:fromActionId));
 	rq.send();
 	rq.onreadystatechange = function(e) {
 	if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
 		var s = rq.responseText;
 		//console.log(s);
 		var arrUpdatedTokens = JSON.parse(s);
+		//console.log("--- Llegan "+arrUpdatedTokens.length+" nuevos tokens");
+		//console.log(arrUpdatedTokens);
 		// Create arr tokens
 		for(var i=0; i<arrUpdatedTokens.length; i++){
 			var upToken = arrUpdatedTokens[i];	// Updated token
+			//console.log("Nuevo token:"+upToken);
 			var token = getTokenByName(arrUpdatedTokens[i].name);
 			if (token==null){	// Es un nuevo token
 				token = upToken;
@@ -98,30 +101,35 @@ async function getTokens(idBoard, fromActionId=null){
 
 				arrTokens.push(token);
 				canvas.appendChild(token.div);
+				updateHp(token);
 			}	// if NEW token
 
-			token.attrs.maxhp = upToken.attrs.maxhp;
-			updateHp(token);
-			moveToken(token, upToken.x, upToken.y);
-			//token.divDice.innerHTML = upToken.diceResult;
-
-			// First element is diceActionId, nexts are coordinates
-			token.diceAction = upToken.diceAction;
-			token.diceResult = upToken.diceResult;
-			var diceActionId, arrDiceAction;
-			if (Number.isInteger(token.diceAction)){
-				diceActionId = token.diceAction;
-			} else {
-				arrDiceAction = token.diceAction.split(',');
-				diceActionId = arrDiceAction[0];
-			}
-			if (board.lastActionId < diceActionId){	
-				// This token has pending actions to show
-				showDiceResult(token.name);
-				if (arrDiceAction != null && 1 in arrDiceAction && 2 in arrDiceAction){
-					// INFO: tilex is arrDiceAction[1], tiley is arrDiceAction[2]
-					runGuidelines(token, arrDiceAction[1], arrDiceAction[2], false);
+			// Caso 1: El token está sano
+			if (token.attrs.hp>=0 && upToken.attrs.hp>=0){
+				//console.log("Caso 1: "+token.name+" HP:"+token.attrs.hp+" -> "+upToken.attrs.hp);
+				if (token.attrs.hp > upToken.attrs.hp){	// Lose HP
+					showDamage(token, token.attrs.hp-upToken.attrs.hp);
+					token.attrs.hp = upToken.attrs.hp;
+					updateHp(token);
 				}
+				moveToken(token, upToken.x, upToken.y);
+
+				// This token has pending actions to show
+				if (token.diceActionId < upToken.diceActionId){	
+					token.diceActionId = upToken.diceActionId;
+					token.diceResult = upToken.diceResult;
+					showDiceResult(token.name);
+					var token2 = getTokenByName(upToken.diceActionTargets);
+					if (token2 != null){	// A roll dice without target has not token2
+						runAnimationAttack(token, token2);
+					}
+				}
+			} else
+			// Case 2: Token is death in this action
+			if (token.attrs.hp >= 0 && upToken.attrs.hp<0){
+				//console.log("Caso 2: "+token.name+" HP:"+token.attrs.hp+" -> "+upToken.attrs.hp);
+				token.attrs = upToken.attrs;
+				removeToken(token.name);
 			}
 		}	// for
 		if (remoteLastAction != undefined){

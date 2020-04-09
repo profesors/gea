@@ -79,7 +79,7 @@ function setOpacityDivDice(name, newVal){
 // It shows the result of the dice fadeIn and then fadoOut
 async function showDiceResult(name){
 	setOpacityDivDice(name, 0);
-	document.getElementById("aDado").play();
+	//document.getElementById("aDado").play();
 	var dice = document.getElementById("divDice_"+name);
 	dice.innerHTML = getTokenByName(name).diceResult;
 	var y = 2*board.tileh/3;
@@ -125,21 +125,50 @@ async function moveToken(token, toX, toY){
 		token.divDice.style.opacity=0;
 		//setOpacityCoordinates(0);
 		//setOpacityDivNames(0);
-		const ox = getPixel(token.x, board.tilew, board.offsetx);
-		const oy = getPixel(token.y, board.tileh, board.offsety);
+		var ox = getPixel(token.x, board.tilew, board.offsetx);
+		var oy = getPixel(token.y, board.tileh, board.offsety);
 		const dx = getPixel(toX, board.tilew, board.offsetx)-ox;
 		const dy = getPixel(toY, board.tileh, board.offsety)-oy;
 		const oz = token.z;
 		token.div.style.zIndex = 10;
 		const pi2 = Math.PI/2;
-		for (var i=0; i<=pi2; i+=0.01){
-			token.div.style.left = (ox+Math.sin(i)*dx)+"px";
-			token.div.style.top = (oy+Math.sin(i)*dy)+"px";
-			token.div.style.transform = "scale("+(0.5*Math.sin(2*i)+1)+")";
-			await sleep(1);
+		var t0 = (new Date).getTime();
+		var tf = t0+500;
+		var tt = tf-t0;
+		var t = 0.0;
+		const k = Math.PI/(2*tt);
+		const dx2 = dx/2;
+		const dy2 = dy/2;
+		while(t<tt){
+			//token.div.style.left = (ox+dx2*Math.sin(t*k))+"px";
+			//token.div.style.top = (oy+dy2*Math.sin(t*k))+"px";
+			var p = t/tt;
+			token.div.style.left = (ox+dx2*p)+"px";
+			token.div.style.top = (oy+dy2*p)+"px";
+			token.div.style.transform = "scale("+(0.5*Math.sin(t*k)+1)+")";
+			await sleep(T_PRECISION);
+			t = (new Date).getTime() - t0;
+		}
+		t0 = (new Date).getTime();
+		tf = t0+500;
+		tt = tf-t0;
+		t = 0.0;
+		ox += dx2;
+		oy += dy2;
+		while(t<tt){
+			//token.div.style.left = (ox+dx2+dx2*Math.sin(t*k))+"px";
+			//token.div.style.top = (oy+dy2+dy2*Math.sin(t*k))+"px";
+			var p = t/tt;
+			token.div.style.left = (ox+dx2*p)+"px";
+			token.div.style.top = (oy+dy2*p)+"px";
+			token.div.style.transform = "scale("+(0.5*Math.cos(t*k)+1)+")";
+			await sleep(T_PRECISION);
+			t = (new Date).getTime() - t0;
 		}
 		token.x = toX;
 		token.y = toY;
+		token.div.style.left = (ox+dx2)+"px";
+		token.div.style.top = (oy+dy2)+"px";
 		token.div.style.zIndex = 1;
 		token.div.style.transform = "scale(1)";
 	}
@@ -219,20 +248,8 @@ function addSvgLine(id, x0, y0, x1, y1, color, width, extraStyle=null){
 	return el;
 }
 
-// Draw a line from token to tilex, tiley and then disappears
-async function drawLineDisappears(token, tilex, tiley){
-	var extraStyle = "animation-name: disappear; animation-duration: 4s; stroke-linecap:round; stroke-dasharray:15,5";
-	var l=addSvgLine("line_movement"+(new Date).getTime(), 
-		getPixel(token.x,board.tilew,board.offsetx+board.tilew/2),
-		getPixel(token.y,board.tileh,board.offsety+board.tileh/2),
-		getPixel(tilex,board.tilew,board.offsetx+board.tilew/2),
-		getPixel(tiley,board.tileh,board.offsety+board.tileh/2), 
-		(token.border.split(' '))[2], 2, extraStyle);
-	setTimeout(function (){svg.removeChild(l);},3500);
-}
-
 // Draw a combat icon from token to tilex, tiley and then disappears
-async function drawCloseCombatDisappears(token, tilex, tiley){
+async function drawCloseCombat(token, tilex, tiley){
 	disablePj(token, 6000);
 	var el = document.createElementNS("http://www.w3.org/2000/svg", "line");
 	var id = "attack"+(new Date).getTime();
@@ -256,9 +273,7 @@ async function drawCloseCombatDisappears(token, tilex, tiley){
 	el.setAttribute("transform",transform);
 	svg.appendChild(el);
 
-	var damage = parseInt(token.diceResult.split(' ')[1]);
-	var token2 = getTokenByTile(tilex, tiley);
-	addDamageToken(token2, damage, true);
+	var tokenTarget = getTokenByTile(tilex, tiley);
 	var t0 = (new Date).getTime();
 	var tf = t0+1000;
 	var tt = tf-t0;
@@ -266,7 +281,7 @@ async function drawCloseCombatDisappears(token, tilex, tiley){
 	const k = Math.PI/(2*tt);
 	while (t<tt){
 		el.style.opacity = Math.sin(t*k);
-		token2.divDice.style.opacity = Math.sin(t*k);
+		tokenTarget.divDice.style.opacity = Math.sin(t*k);
 		await sleep(100);
 		t = (new Date).getTime()-t0;
 	}
@@ -274,7 +289,7 @@ async function drawCloseCombatDisappears(token, tilex, tiley){
 }
 
 // Draw a ranged combat icon from token to tilex, tiley and then disappears
-async function drawRangedCombatDisappears(token, tilex, tiley){
+async function drawRangedCombat(token, tilex, tiley){
 	disablePj(token, 6000);
 	var elLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
 	var id = "ranged"+(new Date).getTime();
@@ -326,9 +341,7 @@ async function drawRangedCombatDisappears(token, tilex, tiley){
 		t = (new Date).getTime()-t0;
 	}
 	// Third part: Fadeout
-	var damage = parseInt(token.diceResult.split(' ')[1]);
-	var token2 = getTokenByTile(tilex, tiley);
-	addDamageToken(token2, damage, true);
+	var tokenTarget = getTokenByTile(tilex, tiley);
 	t0 = (new Date).getTime();
 	tt = 500;
 	tf = t0 + tt;
@@ -342,7 +355,9 @@ async function drawRangedCombatDisappears(token, tilex, tiley){
 	}
 	svg.removeChild(elLine);
 	svg.removeChild(elCircle);
+	
 }
+
 function sendCommand(command){
 	var rq = new XMLHttpRequest();
 	rq.open("GET", "rq/send.php?m="+encodeURIComponent(command)+"&idBoard="+board.id);
@@ -360,17 +375,14 @@ function getSheetCharacter(name, idBoard, destDiv){
 	}
 }
 
-function runGuidelines(token, tilex, tiley, bSendCommand=false){
-	var token2 = getTokenByTile(tilex, tiley);
-	var d = Math.floor(getDistanceTiles(token.x, token.y, tilex, tiley));
+function runAnimationAttack(token1, token2){
+	var d = distanceFromTokenToToken(token1, token2);
 	// Acording to de distance, use one guideline or other
-	if (d<=token.w && (1 in token.guidelines)){
-		if (bSendCommand) sendCommand("@"+token.name+" "+token.guidelines[1]+" t"+tilex+","+tiley);
-		drawCloseCombatDisappears(token, tilex, tiley);
+	if (Math.floor(d.distance)<=token1.w){
+		drawCloseCombat(token1, d.p2.x, d.p2.y);
 	}
-	if (d>token.w && (2 in token.guidelines)){
-		if (bSendCommand) sendCommand("@"+token.name+" "+token.guidelines[2]+" t"+tilex+","+tiley);
-		drawRangedCombatDisappears(token, tilex, tiley);
+	if (Math.floor(d.distance)>token1.w){
+		drawRangedCombat(token1, d.p2.x, d.p2.y);
 	}
 }
 
@@ -421,24 +433,22 @@ function drawCellCoordinates(){
 	}
 }
 
-async function tokenRemove(name){
-	for (var i=0; i<arrTokens.length; i++){
-		if (arrTokens[i].name == name){
-			var t0 = (new Date).getTime();
-			var tf = t0+2000;
-			var tt = tf-t0;
-			var t=0.0;
-			const k = Math.PI/(2*tt);
-			while (t<tt){
-				arrTokens[i].div.style.opacity = Math.cos(t*k);
-				await sleep(T_PRECISION);
-				t = (new Date).getTime()-t0;
-			}
-			canvas.removeChild(arrTokens[i].div);
-			arrTokens.splice(i, 1);
-			return;
-		}
+async function removeToken(name){
+	await sleep(1000);
+	var token = getTokenByName(name);
+	var t0 = (new Date).getTime();
+	var tf = t0+2000;
+	var tt = tf-t0;
+	var t=0.0;
+	const k = Math.PI/(2*tt);
+	while (t<tt){
+		token.div.style.opacity = Math.cos(t*k);
+		await sleep(T_PRECISION);
+		t = (new Date).getTime()-t0;
 	}
+	sendCommand("@"+name+" p"+(board.ntilesw+1)+","+(board.ntilesh+1));
+	token.div.style.left = (board.ntilesw*board.tilew)+"px";
+	token.div.style.top = (board.ntilesh*board.tilesh)+"px";
 }
 
 // Change opacity of ALL coordinates
@@ -471,16 +481,32 @@ function distanceFromTokenToToken(token1, token2){
 	return {distance:dMin, p1:{x:x1, y:y1}, p2:{x:x2, y:y2}};
 }
 
-function addDamageToken(token, damage, bVisible){
-	token.attrs.hp -= damage;
-	updateHp(token);
-	sendCommand("@"+token.name+" [hp:"+token.attrs.hp+"]");
-	
+async function showDamage(token, damage){
+	token.divDice.style.opacity = 0;
+	token.divDice.innerHTML = "";
+	await sleep(1000);
+	token.divDice.style.opacity=1;
+	token.divDice.innerHTML = -damage;
+	token.divDice.style.top = (board.tileh/2)+"px";
+	token.divDice.style.color = "red";
 	var hpbar = document.getElementById("hpbar_"+token.name)
-	if (bVisible) {	// Some tokens does not have hp bar
-		token.divDice.style.top = (board.tileh/2)+"px";
-		token.divDice.style.color = "red";
-		token.divDice.style.opacity=1;
-		token.divDice.innerHTML = -token.attrs.maxhp+token.attrs.hp;
+	if (hpbar != null){
+		token.divDice.innerHTML = -damage;
+	} else {
+		token.divDice.innerHTML = -damage;//(-token2.attrs.maxhp+token2.attrs.hp);
 	}
+	setTimeout(function (){
+		token.divDice.style.opacity=0;
+	},2000);
 }
+/*
+function showDamage(token){
+	token.divDice.style.top = (board.tileh/2)+"px";
+	token.divDice.style.color = "red";
+	token.divDice.style.opacity=1;
+	if (hpbar != null){
+		token.divDice.innerHTML = (-token.attrs.maxhp+token.attrs.hp);
+	} else {
+		token.divDice.innerHTML = (-token.attrs.maxhp+token.attrs.hp);
+	}
+}*/
