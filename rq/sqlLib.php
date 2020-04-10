@@ -77,17 +77,17 @@ function insert_action($idBoard, $m){
 	#write_last_actionId($idBoard, $nextActionId);
 }
 
-function insert_guideline($idBoard, $tokenName, $guideName, $guideline){
+function set_guideline($idBoard, $tokenName, $guideName, $guideline){
 	global $db;
 	$query = "INSERT INTO `guidelines` (idBoard, tokenName, guideName, guideline) ";
 	$query.= "VALUES ($idBoard, '$tokenName', $guideName, '$guideline') ";
 	$query.= " ON DUPLICATE KEY UPDATE guideline='$guideline'";
 	run_sql($query) or die();
-	increase_last_actionId($idBoard, 1);
-	/*
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
-	$query = "UPDATE tokens SET actionId=$nextActionId WHERE idBoard=$idBoard AND name='$name'";
-	run_sql($query) or die();*/
+	$query = "UPDATE tokens SET actionId=$nextActionId WHERE idBoard=$idBoard";
+    $query.= " AND name='$tokenName'";
+	run_sql($query) or die();
+	increase_last_actionId($idBoard, 1);
 }
 
 # Update token position X, Y, Z

@@ -191,6 +191,8 @@ function movementClick(event){
 	const y = (isNaN(event.clientY)?event.touches[0].screenY:event.clientY) + window.pageYOffset;
 	const tilex = Math.floor((x-board.offsetx)/board.tilew)+1;
 	const tiley = Math.floor((y-board.offsety)/board.tileh)+1;
+	var divInfoCharacter = document.getElementById("info_character");
+	if (divInfoCharacter.style.display != "block"){
 	if (movement.token == null){	// Select token (first click)
 		movement.token = getTokenByTile(tilex, tiley);
 		if (movement.token!=null) {
@@ -218,6 +220,7 @@ function movementClick(event){
 		movement.token.divName.style.opacity = movement.opacityDivName;
 		movement.token = null;
 	}
+	}	// close: if (divInfoCharacter.display != block)
 }
 
 function hasQuiet() {
@@ -261,7 +264,7 @@ window.addEventListener("DOMContentLoaded", function() {
 });
 
 async function main(){
-	getBoard(4);	/* Number of board */
+	getBoard(8);	/* Number of board */
 	while(board==undefined)	{
 		await sleep(T_PRECISION);
 	}

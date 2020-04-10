@@ -80,7 +80,9 @@ function setOpacityDivDice(name, newVal){
 async function showDiceResult(name){
 	setOpacityDivDice(name, 0);
 	try{
-		document.getElementById("aDado").play();
+		//navigator.mediaDevices.getUserMedia({audio:true, video:false}).then(function() {
+			document.getElementById("aDado").play();
+		//});
 	} catch(e){
 		console.log("Sonido de lanzamiento de dados. Audio no habilitado");
 	}

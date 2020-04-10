@@ -509,6 +509,7 @@ document.addEventListener('DOMContentLoaded', function(){
 }, false);
 
 function closeInfoCharacter(){
+	event.stopPropagation();
 	var divInfo = document.getElementById("info_character");
 	divInfo.style.display = "none";
 }

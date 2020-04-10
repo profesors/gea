@@ -116,6 +116,7 @@ async function getTokens(idBoard, fromActionId=null){
 					token.attrs.hp = upToken.attrs.hp;
 					updateHp(token);
 				}
+				token.guidelines = upToken.guidelines;
 				moveToken(token, upToken.x, upToken.y);
 
 				// This token has pending actions to show
@@ -138,6 +139,7 @@ async function getTokens(idBoard, fromActionId=null){
 			}
 			// Case 3
 			if (token.attrs.hp<0){
+				token.attrs = upToken.attrs;
 				var bPj= document.getElementById("b"+token.name);
 				if (bPj!=null){
 					bPj.style.opacity="0.3";

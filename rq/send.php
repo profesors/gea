@@ -72,7 +72,7 @@
 			for($i=0; $i<sizeof($arrTmp[2]); $i++){
 				$nameGuideline = $arrTmp[2][$i];	# Number
 				$guideline = $arrTmp[3][$i];	# String
-				insert_guideline($idBoard, $name, $nameGuideline, $guideline);
+				set_guideline($idBoard, $name, $nameGuideline, $guideline);
 				insert_action($idBoard, "@$name ($nameGuideline)$guideline");
 			}
 		} 
