@@ -146,6 +146,7 @@ async function getTokens(idBoard, fromActionId=null){
 				}
 			}
 		}	// for
+
 		if (remoteLastAction != undefined){
 			board.lastActionId = remoteLastAction.id;
 		}

@@ -264,6 +264,8 @@ window.addEventListener("DOMContentLoaded", function() {
 });
 
 async function main(){
+	//document.getElementById("body").mozRequestFullScreen();
+
 	getBoard(8);	/* Number of board */
 	while(board==undefined)	{
 		await sleep(T_PRECISION);
@@ -273,4 +275,26 @@ async function main(){
 		board.lastActionId = remoteLastAction.id;
 	}
 	timerUpdates = setInterval(checkUpdates,1000);
+
+	// Go Full screen
+    document.getElementById("canvas").addEventListener("click", function(e){
+		if (!canvas.fullScreen){
+			getFullscreen(document.documentElement);
+			canvas.fullScreen = true;
+		}
+    },false);
+
+}
+
+
+function getFullscreen(element){
+  if(element.requestFullscreen) {
+	  element.requestFullscreen();
+	} else if(element.mozRequestFullScreen) {
+	  element.mozRequestFullScreen();
+	} else if(element.webkitRequestFullscreen) {
+	  element.webkitRequestFullscreen();
+	} else if(element.msRequestFullscreen) {
+	  element.msRequestFullscreen();
+	}
 }
