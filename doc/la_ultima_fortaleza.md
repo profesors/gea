@@ -4,10 +4,10 @@
 @o6 p14,14 !orc.jpg _5px+solid+red [maxhp:1,hp:1,ac:2] (1)#1d20,1d6+2;
 @w1 p12,15,2,2 !worgrider.png _10px+solid+red [maxhp:50,hp:50,ac:2] (1)#1d20+5,1d10+1; 
 
-@im1 p !007.png _5px+dotted+lime [maxhp:24,hp:24,ac:18] (1)#1d20+5,1d8+2 (2)#1d20+6,1d8+1;
-@im2 p !007.png _5px+dotted+lime [maxhp:24,hp:24,ac:18] (1)#1d20+5,1d8+2 (2)#1d20+6,1d8+1;
-@im3 p !007.png _5px+dotted+lime [maxhp:24,hp:24,ac:18] (1)#1d20+5,1d8+2 (2)#1d20+6,1d8+1;
-@im4 p !007.png _5px+dotted+lime [maxhp:24,hp:24,ac:18] (1)#1d20+5,1d8+2 (2)#1d20+6,1d8+1;
+@im1 p2,57 !007.png _5px+dotted+lime [maxhp:1,hp:1,ac:10] (1)#1d20+5,1d8+2 (2)#1d20+6,1d8+1;
+@im2 p3,57 !007.png _5px+dotted+lime [maxhp:1,hp:1,ac:10] (1)#1d20+5,1d8+2 (2)#1d20+6,1d8+1;
+@im3 p4,57 !007.png _5px+dotted+lime [maxhp:1,hp:1,ac:10] (1)#1d20+5,1d8+2 (2)#1d20+6,1d8+1;
+@im4 p5,57 !007.png _5px+dotted+lime [maxhp:1,hp:1,ac:10] (1)#1d20+5,1d8+2 (2)#1d20+6,1d8+1;
 
 
 # Asalto a la caravana (4)
@@ -110,6 +110,8 @@
 @g7 p17,15 !goblin.jpg _5px+solid+red [maxhp:8,hp:5,ac:13] (1)#1d20+1,1d6 (2)#1d20,1d6;
 
 @gig p20,20,3,3 !giganteColinas.png _10px+solid+red [maxhp:50,hp:50,ac:15] (1)#1d20+11,4d6;
+
+@gig p13,8,3,3 !giganteColinas.png _10px+solid+red [maxhp:50,hp:50,ac:15] (1)#1d20+11,4d6;
 
 # Red Dragon
 
