@@ -20,6 +20,14 @@ function connectDB(){
 	} 
 }
 
+function reset_db(){
+	global $db;
+	$query = "TRUNCATE tokens;";
+	run_sql($query) or die();
+	$query = "TRUNCATE boards;";
+	run_sql($query) or die();
+}
+
 function secure_param($name){
 	return (array_key_exists($name, $_GET))?$_GET[$name]:NULL;
 }
@@ -76,11 +84,11 @@ function insert_action($idBoard, $m){
 	#write_last_actionId($idBoard, $nextActionId);
 }
 
-function set_guideline($idBoard, $tokenName, $guideNumber, $guideName, $guideAction){
+function set_guideline($idBoard, $tokenName, $guideline){
 	global $db;
 	$query = "INSERT INTO `guidelines` (idBoard, tokenName, guideNumber, guideName, guideAction) ";
-	$query.= "VALUES ($idBoard, '$tokenName', $guideNumber, '$guideName', '$guideAction') ";
-	$query.= " ON DUPLICATE KEY UPDATE guideAction='$guideAction'";
+	$query.= "VALUES ($idBoard, '$tokenName', $guideline->number, '$guideline->name', '$guideline->action') ";
+	$query.= " ON DUPLICATE KEY UPDATE guideAction='$guideline->action'";
 	run_sql($query) or die();
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
 	$query = "UPDATE tokens SET actionId=$nextActionId WHERE idBoard=$idBoard";
@@ -203,8 +211,8 @@ function remove_token($idBoard, $name){
 function get_token($idBoard, $name){
 	global $db;
 	$query = "SELECT * FROM tokens WHERE idBoard=$idBoard AND name='$name' LIMIT 1";
-	run_sql($query) or die();
-	$result = mysqli_query($db, $query);
+	$result = run_sql($query) or die();
+	#$result = mysqli_query($db, $query);
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	return $row;
 }
@@ -212,8 +220,8 @@ function get_token($idBoard, $name){
 function get_attrs($idBoard, $name){
 	global $db;
 	$query = "SELECT attr,val FROM attrs WHERE idBoard=$idBoard AND tokenName='$name'";
-	run_sql($query) or die();
-	$result = mysqli_query($db, $query);
+	$result = run_sql($query) or die();
+	#$result = mysqli_query($db, $query);
 	$arrAttrs = Array();
 	while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
 		$arrAttrs[$row['attr']] = $row['val'];
@@ -224,8 +232,8 @@ function get_attrs($idBoard, $name){
 function get_guidelines($idBoard, $name){
 	global $db;
 	$query = "SELECT guideNumber, name FROM guidelines WHERE idBoard=$idBoard AND tokenName='$name'";
-	run_sql($query) or die();
-	$result = mysqli_query($db, $query);
+	$result = run_sql($query) or die();
+	#$result = mysqli_query($db, $query);
 	$arrGuidelines = Array();
 	while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
 		$arrGuidelines[$row['guideNumber']] = $row['name'];
@@ -236,8 +244,17 @@ function get_guidelines($idBoard, $name){
 function get_guideline($idBoard, $tokenName, $guideNumber){
 	global $db;
 	$query = "SELECT * FROM guidelines WHERE idBoard=$idBoard AND tokenName='$tokenName' AND guideNumber=$guideNumber LIMIT 1";
-	run_sql($query) or die();
-	$result = mysqli_query($db, $query);
+	$result = run_sql($query) or die();
+	#$result = mysqli_query($db, $query);
 	return mysqli_fetch_array($result, MYSQLI_ASSOC);
+}
+
+function insert_board($board){
+	global $db;
+	$query = 'INSERT INTO boards (id, name, tilew, tileh, ntilesw, ntilesh, offsetx, offsety, bg, drawGrid, lastActionId)';
+	$query.= " VALUES (null, '$board->name', $board->tilew, $board->tileh, $board->ntilesw, $board->ntilesh, ";
+	$query.= " $board->offsetx, $board->offsety, '$board->bg', $board->drawGrid, 0) ";
+	$result = run_sql($query) or die();
+	return mysqli_insert_id($db);
 }
 ?>

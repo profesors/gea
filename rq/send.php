@@ -71,10 +71,12 @@
 		# Guidelines (directrices)
 		if(preg_match_all("/\(((\d+)\)([^,]*)([^ ]*))/", $command, $arrTmp)){
 			for($i=0; $i<sizeof($arrTmp[2]); $i++){
-				$guideNumber = $arrTmp[2][$i];	# Number
-				$guideName = $arrTmp[3][$i];	# @TODO Testear esto, especialmente $arrTmp[3][$i]
-				$guideline = $arrTmp[4][$i];	# String
-				set_guideline($idBoard, $name, $guideNumber, $guideName, $guideAction);
+				$g = new stdClass();
+				$g->number = $arrTmp[2][$i];	# Number
+				$g->name = $arrTmp[3][$i];	# @TODO Testear esto, especialmente $arrTmp[3][$i]
+				$g->action = $arrTmp[4][$i];	# String
+
+				set_guideline($idBoard, $name, $g);
 				insert_action($idBoard, "@$name ($guideNumber)$guideAction");
 			}
 		} 

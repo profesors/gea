@@ -1,0 +1,23 @@
+{
+	"img": "goblin.jpg",
+	"border": "5px+solid+red",
+	"w": 1,
+	"h": 1,
+	"attrs":{
+		"maxhp": 8,
+		"hp":8,
+		"ac":10
+	},
+	"guidelines":[
+		{
+		"number":1,
+		"name":"Lanza, 1d6",
+		"action": "flmde_attack r1 a1d20+1 d1d6"
+		},
+		{
+		"number":2,
+		"name":"Arco corto 5/10/15 1d20+1, 1d6",
+		"action": "flmde_rangedAttack r5,10,15 a1d20+1 d1d6"
+		}
+	]
+}

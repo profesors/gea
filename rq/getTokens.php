@@ -45,5 +45,4 @@ while($row = mysqli_fetch_array($result)){
 	array_push($arr, $r);
 }
 echo json_encode($arr, JSON_NUMERIC_CHECK);
-//echo json_encode($arr);
 

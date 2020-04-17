@@ -1,0 +1,23 @@
+{
+	"w": 1,
+	"h": 1,
+	"img": "005.png",
+	"border": "5px+solid+lime",
+	"attrs":{
+		"maxhp": 56,
+		"hp":56,
+		"ac":2
+	},
+	"guidelines":[
+		{
+		"number":1,
+		"name":"Hacha 2 manos, 1d12",
+		"action": "flmde_attack r1 a1d20+5 d1d12+2"
+		},
+		{
+		"number":2,
+		"name":"Hacha arrojadiza Alcance 1/2/3 1d20+3, 1d8+2",
+		"action": "flmde_rangedAttack r1,2,3 a1d20+3 d1d8+2"
+		}
+	]
+}

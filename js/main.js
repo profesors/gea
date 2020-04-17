@@ -266,7 +266,7 @@ window.addEventListener("DOMContentLoaded", function() {
 async function main(){
 	//document.getElementById("body").mozRequestFullScreen();
 
-	getBoard(4);	/* Number of board */
+	getBoard(1);	/* Number of board */
 	while(board==undefined)	{
 		await sleep(T_PRECISION);
 	}
