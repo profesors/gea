@@ -274,7 +274,7 @@ async function main(){
 	if (remoteLastAction != undefined){
 		board.lastActionId = remoteLastAction.id;
 	}
-	timerUpdates = setInterval(checkUpdates,1000);
+	timerUpdates = setInterval(checkUpdates,2000);
 
 	// Go Full screen
     document.getElementById("canvas").addEventListener("click", function(e){

@@ -96,7 +96,7 @@ function set_guideline($idBoard, $tokenName, $guideline){
 	global $db;
 	if (!property_exists($guideline, 'n')) $guideline->n = -1;
 	if (!property_exists($guideline, 'maxn')) $guideline->maxn = -1;
-	$query = "INSERT INTO `guidelines` (idBoard, tokenName, guideNumber, guideName, guideAction, n, maxn) ";
+	$query = "INSERT INTO `guidelines` (idBoard, tokenName, guideNumber, name, guideAction, n, maxn) ";
 	$query.= "VALUES ($idBoard, '$tokenName', $guideline->number, '$guideline->name', '$guideline->action', ";
 	$query.= " $guideline->n, $guideline->maxn) ";
 	$query.= " ON DUPLICATE KEY UPDATE guideAction='$guideline->action'";
@@ -185,6 +185,7 @@ function set_dice($idBoard, $name, $value, $targets=''){
 	$result = run_sql($query) or die();
 	$row = mysqli_fetch_array($result);
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
+	error_log("NEXT $nextActionId\n");
 	$dice_action_targets = trim($targets,',');
 	$query = "UPDATE tokens SET dice_result = '$value', dice_actionId=$nextActionId, ";
 	$query.= "dice_action_targets = '$dice_action_targets', actionId=$nextActionId  ";
@@ -229,7 +230,6 @@ function get_token($idBoard, $name){
 	global $db;
 	$query = "SELECT * FROM tokens WHERE idBoard=$idBoard AND name='$name' LIMIT 1";
 	$result = run_sql($query) or die();
-	#$result = mysqli_query($db, $query);
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	return $row;
 }
@@ -238,7 +238,6 @@ function get_attrs($idBoard, $name){
 	global $db;
 	$query = "SELECT attr,val FROM attrs WHERE idBoard=$idBoard AND tokenName='$name'";
 	$result = run_sql($query) or die();
-	#$result = mysqli_query($db, $query);
 	$arrAttrs = Array();
 	while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
 		$arrAttrs[$row['attr']] = $row['val'];
@@ -248,12 +247,13 @@ function get_attrs($idBoard, $name){
 
 function get_guidelines($idBoard, $name){
 	global $db;
-	$query = "SELECT guideNumber, name FROM guidelines WHERE idBoard=$idBoard AND tokenName='$name'";
+	$query = "SELECT guideNumber, name, n, maxn FROM guidelines WHERE idBoard=$idBoard AND tokenName='$name'";
 	$result = run_sql($query) or die();
 	#$result = mysqli_query($db, $query);
 	$arrGuidelines = Array();
 	while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
-		$arrGuidelines[$row['guideNumber']] = $row['name'];
+		$arrGuidelines[$row['guideNumber']] = Array('name'=>$row['name'],
+			'n'=>$row['n'], 'maxn'=>$row['maxn']);
 	}
 	return $arrGuidelines;
 }

@@ -65,7 +65,7 @@ function lmde_rangedAttack($idBoard, $tokenName1, $tokenName2, $guideNumber){
 	$action_string;
 	$guideline_n = guideline_get_n($idBoard, $token1['name'], 2);
 	if ($guideline_n!=0){	# >0 proyectiles; or -1 for infinite
-		if ($arrDist['d']>1 && $arrDist['d'] <= $guidelineAction['range'][2]){
+		if ($arrDist['d']>1 && floor($arrDist['d']) <= $guidelineAction['range'][2]){
 			$at = $dice[0]['result'];	# Just to test if it is a critic
 			$critic = false;
 			if (($at-$dice[0]['mod'])==20) {	# If it is a natural 20
@@ -98,11 +98,12 @@ function lmde_rangedAttack($idBoard, $tokenName1, $tokenName2, $guideNumber){
 			}
 			$action_string.= ' '.($guideline_n-1).' remmain';
 			if ($guideline_n>0)		guideline_remove_counter($idBoard, $token1['name'], 2);
+			set_dice($idBoard, $token1['name'], $dice[0]['result'].' '.$dice[1]['result'], $token2['name']);
 		} else {
 			$action_string = $token1['name'].' attacks to '.$token2['name'];
 			$action_string.= ' but target is out of range';
+			set_dice($idBoard, $token1['name'], 'Out of range', $token2['name']);
 		}
-		set_dice($idBoard, $token1['name'], $dice[0]['result'].' '.$dice[1]['result'], $token2['name']);
 	} else {	# No ammo
 		$action_string = 'No ammo';
 		set_dice($idBoard, $token1['name'], 'No ammo', $token2['name']);

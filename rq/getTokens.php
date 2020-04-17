@@ -40,7 +40,7 @@ while($row = mysqli_fetch_array($result)){
 	$r->guidelines = Array();
 	$guideline = new stdClass();
 	while($row_guideline = mysqli_fetch_array($result_guidelines)){
-		$r->guidelines[$row_guideline['guideNumber']] = $row_guideline['guideName'];
+		$r->guidelines[$row_guideline['guideNumber']] = $row_guideline['name'];
 	}
 	array_push($arr, $r);
 }

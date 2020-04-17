@@ -16,7 +16,7 @@
 		},
 		{
 		"number":2,
-		"name":"Hacha arrojadiza Alcance 1/2/3 1d20+3, 1d8+2",
+		"name":"Hacha arrojadiza Alcance 1/2/3 1d8+2",
 		"action": "flmde_rangedAttack r1,2,3 a1d20+3 d1d8+2",
 		"maxn": 5,
 		"n": 5
