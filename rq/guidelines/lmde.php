@@ -11,10 +11,11 @@ function lmde_attack($idBoard, $tokenName1, $tokenName2, $guideNumber){
 	$g['attack'] = getGuideActionByCode('a', $g['guideAction']);	# Range
 	$g['damage'] = getGuideActionByCode('d', $g['guideAction']);	# Range
 	$dice = roll_dice($g['attack'].','.$g['damage']);
+	print_r($dice);
 	$arrDist = distanceTokens($token1, $token2);
-	print_r($arrDist);
 	if (floor($arrDist['d'])<=1){
 		$at = $dice[0]['result'];	# Result of first 1d20
+		echo "AT: $at\n";
 		if (($at-$dice[0]['mod'])==20) {
 			for($i=0; $i<$dice['1']['n']; $i++){
 				$dice[1]['result'] += rand(1, $dice[1]['size']);
@@ -24,12 +25,13 @@ function lmde_attack($idBoard, $tokenName1, $tokenName2, $guideNumber){
 		}
 		$damage = $dice[1]['result'];
 		$ac = $token2['attrs']['ac'];
+		echo "AC:$ac\n";
 		if ($at >= $ac){
 			$token2['attrs']['hp']-=$damage;
 			set_attr($idBoard, $token2['name'], 'hp', $token2['attrs']['hp']);
 		}
 		set_dice($idBoard, $token1['name'], $dice[0]['result'].' '.$dice[1]['result'], $token2['name']);
-		insert_action($idBoard, '@'.$token1['name'].' '.'Dado');
+		//insert_action($idBoard, '@'.$token1['name'].' '.'Dado');
 	}
 }
 

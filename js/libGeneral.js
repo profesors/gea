@@ -287,8 +287,7 @@ async function drawCloseCombat(token, tilex, tiley){
 	const k = Math.PI/(2*tt);
 	while (t<tt){
 		el.style.opacity = Math.sin(t*k);
-		tokenTarget.divDice.style.opacity = Math.sin(t*k);
-		await sleep(100);
+		await sleep(T_PRECISION);
 		t = (new Date).getTime()-t0;
 	}
 	svg.removeChild(el);
@@ -494,13 +493,13 @@ function distanceFromTokenToToken(token1, token2){
 }
 
 async function showDamage(token, damage){
-	token.divDice.style.opacity = 0;
-	token.divDice.innerHTML = "";
+	token.divIndicator.style.opacity = 0;
+	token.divIndicator.innerHTML = "";
 	await sleep(1000);
-	token.divDice.style.opacity=1;
-	token.divDice.innerHTML = -damage;
-	token.divDice.style.top = (board.tileh/2)+"px";
-	token.divDice.style.color = "red";
+	token.divIndicator.style.opacity=1;
+	token.divIndicator.innerHTML = -damage;
+	token.divIndicator.style.top = (board.tileh/2)+"px";
+	token.divIndicator.style.color = "red";
 	var hpbar = document.getElementById("hpbar_"+token.name)
 	if (hpbar != null){
 		token.divDice.innerHTML = -damage;
@@ -508,17 +507,6 @@ async function showDamage(token, damage){
 		token.divDice.innerHTML = -damage;//(-token2.attrs.maxhp+token2.attrs.hp);
 	}
 	setTimeout(function (){
-		token.divDice.style.opacity=0;
+		token.divIndicator.style.opacity=0;
 	},2000);
 }
-/*
-function showDamage(token){
-	token.divDice.style.top = (board.tileh/2)+"px";
-	token.divDice.style.color = "red";
-	token.divDice.style.opacity=1;
-	if (hpbar != null){
-		token.divDice.innerHTML = (-token.attrs.maxhp+token.attrs.hp);
-	} else {
-		token.divDice.innerHTML = (-token.attrs.maxhp+token.attrs.hp);
-	}
-}*/

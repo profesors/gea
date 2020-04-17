@@ -5,4 +5,4 @@
 		guideline: fattack r1 a1d20+5 d1d12+2	(Function Range1, Attack 1d20+5, Damage1d12+2)
 		sendCommand: gNumberOfGuideline
 1.02	Cargador de tokens en la base de datos
-
+1.03	Escenario de la caravana completo

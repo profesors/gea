@@ -85,7 +85,7 @@ async function getTokens(idBoard, fromActionId=null){
 				token.divName.style.opacity = 0;
 				token.div.appendChild(token.divName);
 
-				// Div with DICE results NEW
+				// Div with DICE results NEW token
 				token.divDice = document.createElement("div");
 				token.divDice.id = "divDice_"+upToken.name;
 				token.divDice.style.color = "white";
@@ -98,6 +98,20 @@ async function getTokens(idBoard, fromActionId=null){
 				token.divDice.style.zIndex = 3;
 				token.divDice.style.opacity = 0;
 				token.div.appendChild(token.divDice);
+
+				// Div with Indicator results token
+				token.divIndicator = document.createElement("div");
+				token.divIndicator.id = "divIndicator_"+upToken.name;
+				token.divIndicator.style.color = "white";
+				token.divIndicator.style.position = "absolute";
+				token.divIndicator.style.fontWeight = "bold";
+				token.divIndicator.style.top = -0.2*board.tileh+"px";
+				token.divIndicator.style.width = board.tilew+"px";
+				token.divIndicator.style.textShadow = "-2px 0 black, 0 2px black, 2px 0 black, 0 -2px black";
+				token.divIndicator.style.fontSize = "1.4rem";
+				token.divIndicator.style.zIndex = 3;
+				token.divIndicator.style.opacity = 0;
+				token.div.appendChild(token.divIndicator);
 
 				arrTokens.push(token);
 				canvas.appendChild(token.div);
@@ -115,7 +129,7 @@ async function getTokens(idBoard, fromActionId=null){
 					showDamage(token, token.attrs.hp-upToken.attrs.hp);
 					token.attrs.hp = upToken.attrs.hp;
 					updateHp(token);
-				}
+				} 
 				token.guidelines = upToken.guidelines;
 				moveToken(token, upToken.x, upToken.y);
 
