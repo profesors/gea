@@ -43,11 +43,11 @@
 		# INSERCIÓN COMPLETA DE TOKEN
 		if ($name!=null && $x!=null && $y!=null && $img_src!=null && $border!=null){
 			insert_token($idBoard, $name, $x, $y, 1, $w, $h, $img_src, $border);
-			insert_action($idBoard, "@$name p$x,$y,$w,$h !img_src _$border");
+			#insert_action($idBoard, "@$name p$x,$y,$w,$h !img_src _$border");
 		} else if ($name!=null && $x!=null && $y!=null){
 			# MOVIMIENTO DE TOKEN
 			move_token($idBoard, $name, $x, $y);
-			insert_action($idBoard, "@$name p$x,$y");
+			insert_action($idBoard, "@$name moves to $x,$y");
 		}
 
 		# tiles
@@ -66,7 +66,7 @@
 			foreach($arr_attr as $k => $v){
 				set_attr($idBoard, $name, $k, $v);
 			}
-			insert_action($idBoard, "@$name [$attr]");
+			#insert_action($idBoard, "@$name [$attr]");
 		}
 		# Guidelines (directrices)
 		if(preg_match_all("/\(((\d+)\)([^,]*)([^ ]*))/", $command, $arrTmp)){
@@ -77,7 +77,7 @@
 				$g->action = $arrTmp[4][$i];	# String
 
 				set_guideline($idBoard, $name, $g);
-				insert_action($idBoard, "@$name ($guideNumber)$guideAction");
+				#insert_action($idBoard, "@$name ($guideNumber)$guideAction");
 			}
 		} 
 		# Dice command

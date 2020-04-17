@@ -139,7 +139,8 @@ async function getTokens(idBoard, fromActionId=null){
 					token.diceResult = upToken.diceResult;
 					showDiceResult(token.name);
 					var token2 = getTokenByName(upToken.diceActionTargets);
-					if (token2 != null){	// A roll dice without target has not token2
+					var returnedData = parseInt((token.diceResult.split(' '))[0]);
+					if (token2 != null && Number.isInteger(returnedData)){	// A roll dice without target has not token2
 						runAnimationAttack(token, token2);
 					}
 				}

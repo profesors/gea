@@ -17,7 +17,9 @@
 		{
 		"number":2,
 		"name":"Arco corto 5/10/15 1d20+1, 1d6",
-		"action": "flmde_rangedAttack r5,10,15 a1d20+1 d1d6"
+		"action": "flmde_rangedAttack r5,10,15 a1d20+1 d1d6",
+		"n": 10,
+		"maxn": 10
 		}
 	]
 }

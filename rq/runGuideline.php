@@ -4,7 +4,7 @@ include_once('libControllers.php');
 include_once('guidelines/lmde.php');
 
 connectDB();
-#$_GET['m'] = "@g1 g1 tbar";
+#$_GET['m'] = "@bar g2 tg3";
 #$_GET['idBoard'] = 1;
 # select * from attrs where idBoard = 4 AND tokenName in ('bar', 'gw1')
 

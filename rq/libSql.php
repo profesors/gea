@@ -22,9 +22,15 @@ function connectDB(){
 
 function reset_db(){
 	global $db;
-	$query = "TRUNCATE tokens;";
+	$query = "TRUNCATE actions;";
+	run_sql($query) or die();
+	$query = "TRUNCATE attrs;";
 	run_sql($query) or die();
 	$query = "TRUNCATE boards;";
+	run_sql($query) or die();
+	$query = "TRUNCATE guidelines;";
+	run_sql($query) or die();
+	$query = "TRUNCATE tokens;";
 	run_sql($query) or die();
 }
 
@@ -77,17 +83,22 @@ function read_last_actionId($idBoard){
 # Inser action in the DB table
 function insert_action($idBoard, $m){
 	global $db;
-	$nextActionId = intval(read_last_actionId($idBoard))+1;
-	$query = "INSERT INTO `actions` (`idUser`, `idBoard`, `idAction`, `ts`, `action`) VALUES ('1', '$idBoard',";
-	$query.= " $nextActionId, CURRENT_TIMESTAMP, '".utf8_decode(mysqli_real_escape_string($db, $m))."');";
+	$query = "SELECT MAX(number) FROM actions WHERE idBoard=$idBoard AND idUser=1 LIMIT 1";
+	$result = run_sql($query) or die();
+	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+	$next = intval($row['MAX(number)'])+1;
+	$query = "INSERT INTO `actions` (`idUser`, `idBoard`, `number`, `ts`, `action`) VALUES ('1', '$idBoard',";
+	$query.= " $next, CURRENT_TIMESTAMP, '".utf8_decode(mysqli_real_escape_string($db, $m))."');";
 	run_sql($query) or die();
-	#write_last_actionId($idBoard, $nextActionId);
 }
 
 function set_guideline($idBoard, $tokenName, $guideline){
 	global $db;
-	$query = "INSERT INTO `guidelines` (idBoard, tokenName, guideNumber, guideName, guideAction) ";
-	$query.= "VALUES ($idBoard, '$tokenName', $guideline->number, '$guideline->name', '$guideline->action') ";
+	if (!property_exists($guideline, 'n')) $guideline->n = -1;
+	if (!property_exists($guideline, 'maxn')) $guideline->maxn = -1;
+	$query = "INSERT INTO `guidelines` (idBoard, tokenName, guideNumber, guideName, guideAction, n, maxn) ";
+	$query.= "VALUES ($idBoard, '$tokenName', $guideline->number, '$guideline->name', '$guideline->action', ";
+	$query.= " $guideline->n, $guideline->maxn) ";
 	$query.= " ON DUPLICATE KEY UPDATE guideAction='$guideline->action'";
 	run_sql($query) or die();
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
@@ -97,14 +108,20 @@ function set_guideline($idBoard, $tokenName, $guideline){
 	increase_last_actionId($idBoard, 1);
 }
 
-# Update token position X, Y, Z
-/*
-function update_position_token($idBoard, $name, $x, $y, $z){
+function guideline_remove_counter($idBoard, $tokenName, $guideNumber){
 	global $db;
-	$query = "UPDATE tokens SET x=$x, y=$y, z=1 WHERE idBoard = $idBoard AND name = '$name';";
-	$result = mysqli_query($db, $query);
+	$query = "UPDATE guidelines SET n=n-1 WHERE idBoard=$idBoard AND tokenName='$tokenName' AND guideNumber=$guideNumber";
 	run_sql($query) or die();
-}*/
+	increase_last_actionId($idBoard, 1);
+}
+
+function guideline_get_n($idBoard, $tokenName, $guideNumber){
+	global $db;
+	$query = "SELECT n FROM guidelines WHERE idBoard=$idBoard AND tokenName='$tokenName' AND guideNumber=$guideNumber";
+	$result = run_sql($query) or die();
+	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+	return $row['n'];
+}
 
 # Insert token in database, if there is not $img_src or $border ignore it
 # If the token id is duplicate, just update it
@@ -245,7 +262,6 @@ function get_guideline($idBoard, $tokenName, $guideNumber){
 	global $db;
 	$query = "SELECT * FROM guidelines WHERE idBoard=$idBoard AND tokenName='$tokenName' AND guideNumber=$guideNumber LIMIT 1";
 	$result = run_sql($query) or die();
-	#$result = mysqli_query($db, $query);
 	return mysqli_fetch_array($result, MYSQLI_ASSOC);
 }
 

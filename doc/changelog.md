@@ -6,3 +6,4 @@
 		sendCommand: gNumberOfGuideline
 1.02	Cargador de tokens en la base de datos
 1.03	Escenario de la caravana completo
+1.04	Las armas de distancia pierden efectividad con la distancia

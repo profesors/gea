@@ -61,6 +61,7 @@ svg{
 #stdOutput{
 	overflow-x: scroll;
 	background-color: white;
+	height: 5rem;
 }
 
 #stdOutput time{
