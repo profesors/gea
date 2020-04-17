@@ -1,6 +1,5 @@
 <?php
 
-# 1.2
 $db = null;
 
 function connectDB(){
@@ -77,11 +76,11 @@ function insert_action($idBoard, $m){
 	#write_last_actionId($idBoard, $nextActionId);
 }
 
-function set_guideline($idBoard, $tokenName, $guideName, $guideline){
+function set_guideline($idBoard, $tokenName, $guideNumber, $guideName, $guideAction){
 	global $db;
-	$query = "INSERT INTO `guidelines` (idBoard, tokenName, guideName, guideline) ";
-	$query.= "VALUES ($idBoard, '$tokenName', $guideName, '$guideline') ";
-	$query.= " ON DUPLICATE KEY UPDATE guideline='$guideline'";
+	$query = "INSERT INTO `guidelines` (idBoard, tokenName, guideNumber, guideName, guideAction) ";
+	$query.= "VALUES ($idBoard, '$tokenName', $guideNumber, '$guideName', '$guideAction') ";
+	$query.= " ON DUPLICATE KEY UPDATE guideAction='$guideAction'";
 	run_sql($query) or die();
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
 	$query = "UPDATE tokens SET actionId=$nextActionId WHERE idBoard=$idBoard";
@@ -155,13 +154,13 @@ function reset_board($idBoard){
 }
 
 # Updates the dice column of a token
-function set_dice($idBoard, $name, $value, $tiles){
+function set_dice($idBoard, $name, $value, $targets=''){
 	global $db;
 	$query = "SELECT lastActionId FROM boards WHERE id = $idBoard LIMIT 1;";
 	$result = run_sql($query) or die();
 	$row = mysqli_fetch_array($result);
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
-	$dice_action_targets = trim($tiles,',');
+	$dice_action_targets = trim($targets,',');
 	$query = "UPDATE tokens SET dice_result = '$value', dice_actionId=$nextActionId, ";
 	$query.= "dice_action_targets = '$dice_action_targets', actionId=$nextActionId  ";
     $query.= " WHERE idBoard = $idBoard AND name = '$name';";
@@ -224,13 +223,21 @@ function get_attrs($idBoard, $name){
 
 function get_guidelines($idBoard, $name){
 	global $db;
-	$query = "SELECT guideName,guideline FROM guidelines WHERE idBoard=$idBoard AND tokenName='$name'";
+	$query = "SELECT guideNumber, name FROM guidelines WHERE idBoard=$idBoard AND tokenName='$name'";
 	run_sql($query) or die();
 	$result = mysqli_query($db, $query);
 	$arrGuidelines = Array();
 	while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
-		$arrGuidelines[$row['guideName']] = $row['guideline'];
+		$arrGuidelines[$row['guideNumber']] = $row['name'];
 	}
 	return $arrGuidelines;
+}
+
+function get_guideline($idBoard, $tokenName, $guideNumber){
+	global $db;
+	$query = "SELECT * FROM guidelines WHERE idBoard=$idBoard AND tokenName='$tokenName' AND guideNumber=$guideNumber LIMIT 1";
+	run_sql($query) or die();
+	$result = mysqli_query($db, $query);
+	return mysqli_fetch_array($result, MYSQLI_ASSOC);
 }
 ?>

@@ -210,9 +210,9 @@ function movementClick(event){
 				var d = distanceFromTokenToToken(movement.token, getTokenByTile(tilex, tiley));
 				var target = getTokenByTile(d.p2.x, d.p2.y);
 				if (Math.floor(d.distance)<=movement.token.w){
-					sendCommand(encodeURI("@"+movement.token.name+" "+movement.token.guidelines[1]+" t"+target.name));
+					runGuideline(encodeURI("@"+movement.token.name+" g1 t"+target.name));
 				} else {
-					sendCommand(encodeURI("@"+movement.token.name+" "+movement.token.guidelines[2]+" t"+target.name));
+					runGuideline(encodeURI("@"+movement.token.name+" g2 t"+target.name));
 				}
 			}
 		}
@@ -266,7 +266,7 @@ window.addEventListener("DOMContentLoaded", function() {
 async function main(){
 	//document.getElementById("body").mozRequestFullScreen();
 
-	getBoard(8);	/* Number of board */
+	getBoard(4);	/* Number of board */
 	while(board==undefined)	{
 		await sleep(T_PRECISION);
 	}

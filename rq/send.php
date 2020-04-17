@@ -1,5 +1,6 @@
 <?php	
-	include_once('sqlLib.php');
+	include_once('libSql.php');
+	include_once('libControllers.php');
 	connectDB();
 	#$_GET['m'] = "@bar #1d20,1d10-2 to1";
 	#$_GET['idBoard'] = 4;
@@ -68,12 +69,13 @@
 			insert_action($idBoard, "@$name [$attr]");
 		}
 		# Guidelines (directrices)
-		if(preg_match_all("/\(((\d+)\)([^ ]*))/", $command, $arrTmp)){
+		if(preg_match_all("/\(((\d+)\)([^,]*)([^ ]*))/", $command, $arrTmp)){
 			for($i=0; $i<sizeof($arrTmp[2]); $i++){
-				$nameGuideline = $arrTmp[2][$i];	# Number
-				$guideline = $arrTmp[3][$i];	# String
-				set_guideline($idBoard, $name, $nameGuideline, $guideline);
-				insert_action($idBoard, "@$name ($nameGuideline)$guideline");
+				$guideNumber = $arrTmp[2][$i];	# Number
+				$guideName = $arrTmp[3][$i];	# @TODO Testear esto, especialmente $arrTmp[3][$i]
+				$guideline = $arrTmp[4][$i];	# String
+				set_guideline($idBoard, $name, $guideNumber, $guideName, $guideAction);
+				insert_action($idBoard, "@$name ($guideNumber)$guideAction");
 			}
 		} 
 		# Dice command
@@ -87,32 +89,13 @@
 				$sDescription.= $dice[1]['mod']!=0?$dice[1]['mod']:'';
 				$sDescription.= '=<span class="red">'.$dice[1]['result'].'</span>';
 			}
-			# Fight against Target
-			if (preg_match("/\st([^ ]+)/", $command, $arrTmp)){
-				$token1 = get_token($idBoard, $name);
-				$token2 = get_token($idBoard, $arrTmp[1]);
-				$token1['attrs'] = get_attrs($idBoard, $token1['name']);
-				$token2['attrs'] = get_attrs($idBoard, $token2['name']);
-				$at = $dice[0]['result'];	# Result of first 1d20
-				if (($at-$dice[0]['mod'])==20) {
-					for($i=0; $i<$dice['1']['n']; $i++){
-						$dice[1]['result'] += rand(1, $dice[1]['size']);
-					}
-					$dice[0]['desc'] = str_replace('</', '&#33;</', $dice[0]['desc']);
-					$dice[1]['desc'] = str_replace('</', '&#33;</', $dice[1]['desc']);
-				}
-				$damage = $dice[1]['result'];
-				$ac = $token2['attrs']['ac'];
-				if ($at >= $ac){
-					$token2['attrs']['hp']-=$damage;
-					set_attr($idBoard, $token2['name'], 'hp', $token2['attrs']['hp']);
-				}
-			}
 			$sDesc = '';
+			$diceResult = '';
 			for ($i=0; $i<sizeof($dice);$i++){
 				$sDesc.= ' '.trim($dice[$i]['desc']);
+				$diceResult .= $dice[$i]['result'];
 			}
-			set_dice($idBoard, $name, $dice[0]['result'].' '.$dice[1]['result'], $tiles);
+			set_dice($idBoard, $name, $diceResult);
 			insert_action($idBoard, "@$name ".trim($sDesc));
 		}
 	
@@ -132,6 +115,7 @@
 	
 	}
 
+/*
 function roll_dice($strDices,$extraMod=0, $bCrit=false){
 	$strResults = '';
 	$arrDices = explode(',', $strDices);
@@ -161,3 +145,4 @@ function roll_dice($strDices,$extraMod=0, $bCrit=false){
 	}
 	return $arrRet;
 }
+ */

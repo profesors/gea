@@ -370,6 +370,12 @@ function sendCommand(command){
 	rq.send();
 }
 
+function runGuideline(guideline){
+	var rq = new XMLHttpRequest();
+	rq.open("GET", "rq/runGuideline.php?m="+encodeURIComponent(guideline)+"&idBoard="+board.id);
+	rq.send();
+}
+
 function getSheetCharacter(name, idBoard, destDiv){
 	var rq = new XMLHttpRequest();
 	rq.open("GET", "rq/getSheet.php?idBoard="+board.id+"&name="+name);

@@ -1,5 +1,5 @@
 <?php
-include_once('sqlLib.php');
+include_once('libSql.php');
 connectDB();
 $idBoard = secure_param('idBoard');
 $fromActionId = secure_param('fromActionId');
@@ -38,8 +38,9 @@ while($row = mysqli_fetch_array($result)){
 	$query = "SELECT * FROM guidelines WHERE idBoard=$idBoard AND tokenName='".$row['name']."'";
 	$result_guidelines = run_sql($query) or die();
 	$r->guidelines = Array();
+	$guideline = new stdClass();
 	while($row_guideline = mysqli_fetch_array($result_guidelines)){
-		$r->guidelines[$row_guideline['guideName']] = $row_guideline['guideline'];
+		$r->guidelines[$row_guideline['guideNumber']] = $row_guideline['guideName'];
 	}
 	array_push($arr, $r);
 }

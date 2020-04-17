@@ -1,4 +1,5 @@
 <?php
+/*
 include_once('sqlLib.php');
 
 connectDB();
@@ -14,4 +15,4 @@ if ($result->num_rows > 0){	// If this action exists in DB
 	echo $row['dice_result']."\n";
 } else {
 	echo $idAction."\n"."!NO_EXISTS\n";
-}
+}*/

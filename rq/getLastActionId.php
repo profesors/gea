@@ -1,5 +1,5 @@
 <?php
-include_once('sqlLib.php');
+include_once('libSql.php');
 
 connectDB();
 $idBoard = secure_param('idBoard');
