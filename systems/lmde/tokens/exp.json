@@ -26,8 +26,8 @@
 		"number":2,
 		"name":"Arco largo, 1d8+2",
 		"action": "flmde_rangedAttack r8,15,23 a1d20+2 d1d8+2",
-		"maxn": 5,
-		"n": 5
+		"maxn": 20,
+		"n": 20
 		}
 	]
 }

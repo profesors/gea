@@ -1,10 +1,10 @@
 <?php	
 include_once('libSql.php');
 include_once('libControllers.php');
-include_once('guidelines/lmde.php');
+include_once('../systems/lmde/guidelines.php');
 
 connectDB();
-#$_GET['m'] = "@bar g2 tg3";
+#$_GET['m'] = "@exp g2 tg4";
 #$_GET['idBoard'] = 1;
 # select * from attrs where idBoard = 4 AND tokenName in ('bar', 'gw1')
 
@@ -40,7 +40,7 @@ if ($token_name != '' && $guide_number != 0) {
 }
 $f = getGuideActionFunction($guideline['guideAction']);
 if (!is_null($f)){
-	call_user_func($f, $idBoard, $token_name, $target, $guide_number);
+	call_user_func($f, $idBoard, $token_name, $target, $guideline);
 } else {
 	error_log("No guideline");
 }

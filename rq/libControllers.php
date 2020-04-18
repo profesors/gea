@@ -56,6 +56,7 @@ function distanceTiles($x1, $y1, $x2, $y2){
 	return sqrt(pow($x2-$x1,2)+pow($y2-$y1,2));
 }
 
+# Distance between tokens (arr token)
 function distanceTokens($token1, $token2){
 	$min_d = PHP_INT_MAX;
 	$x1 = $y1 = $x2 = $y2 = -1;
@@ -76,6 +77,13 @@ function distanceTokens($token1, $token2){
 		}
 	}
 	return Array('d'=>$min_d, 'x1'=>$x1, 'y1'=>$y1, 'x2'=>$x2, 'y2'=>$y2);
+}
+
+# Get token and attrs
+function get_token_and_attrs($idBoard, $tokenName){
+	$token = get_token($idBoard, $tokenName);
+	$token['attrs'] = get_attrs($idBoard, $token['name']);
+	return $token;
 }
 
 ?>

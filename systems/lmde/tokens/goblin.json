@@ -5,7 +5,7 @@
 	"h": 1,
 	"attrs":{
 		"maxhp": 8,
-		"hp":8,
+		"hp":800,
 		"ac":10
 	},
 	"guidelines":[

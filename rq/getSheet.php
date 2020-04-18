@@ -17,7 +17,7 @@ $full_pc = file_get_contents("../systems/lmde/tokens/$name.json");
 $full_pc = json_decode($full_pc);
 
 $sheet = file_get_contents("../systems/lmde/sheet.html");
-preg_match_all("/&([tagf]):([^&]*)&/", $sheet, $arrExp);
+preg_match_all("/%([tagf]):([^%]*)%/", $sheet, $arrExp);
 #print_r($full_pc);die();
 #print_r($token);die();
 #print_r($arrExp);die();

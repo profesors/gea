@@ -1,11 +1,14 @@
 # Changelog Gea
 
+## Ideas
+- Iniciativa automática: Reordena la lista de retratos que hay a la derecha
+- Contador de acciones, se resetea cuando todos hayan realizado todas
+- Modos de combate: carga, defensiva...
+
+## Versiones
+
+1.07	Simplificar _guidelines_ de _lmde_
 1.06	Fichas de personaje mejoradas
-
-		Iniciativa automática: Reordena la lista de retratos que hay a la derecha
-		Contador de acciones, se resetea cuando todos hayan realizado todas
-		Modos de combate: carga, defensiva...
-
 1.05	Las fichas muestran los datos dinámicos
 		Las fichas tienen campos dinámicos: _t:name_ representa el Nombre del token, mientras que
 		_a:hp_ representa el Atributo hp, por otra parte _g:name:1_ representa el nombre del
