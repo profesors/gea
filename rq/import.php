@@ -4,11 +4,11 @@ connectDB();
 
 reset_db();
 # Import tokens to database
-$board = json_decode(file_get_contents('../boards/caravana.json'));
+$board = json_decode(file_get_contents('../systems/lmde/boards/caravana.json'));
 $idBoard = insert_board($board);
 foreach($board->tokens as $token_in_board){
 	# $t is the $token
-	$t = json_decode(file_get_contents('../tokens/'.$token_in_board->file.'.json'));
+	$t = json_decode(file_get_contents('../systems/lmde/tokens/'.$token_in_board->file.'.json'));
 	$t->x = $token_in_board->x;
 	$t->y = $token_in_board->y;
 	$t->name = $token_in_board->name;

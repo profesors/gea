@@ -17,6 +17,12 @@
 			"y": 14
 		},
 		{
+			"file": "exp",
+			"name": "exp",
+			"x": 14,
+			"y": 14
+		},
+		{
 			"file": "goblin",
 			"name": "g1",
 			"x": 9,

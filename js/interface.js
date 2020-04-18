@@ -501,7 +501,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		item.addEventListener('click', function () {
 			var name = item.parentElement.id.substring(1);
 			var divInfo = document.getElementById("info_character");
-			divInfo.style.display = "block";
+			divInfo.style.display = "grid";
 			divInfo.innerHTML = name+" loading<br/>"+divInfo.innerHTML;
 			getSheetCharacter(name, board.id, divInfo);
 		});

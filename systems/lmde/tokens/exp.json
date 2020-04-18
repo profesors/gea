@@ -1,0 +1,33 @@
+{
+	"pc_name": "Machete Connor",
+	"short_description": "Un veterano cazador de trasgos",
+	"w": 1,
+	"h": 1,
+	"img": "006.png",
+	"border": "5px+solid+lime",
+	"attrs":{
+		"maxhp": 40,
+		"hp":40,
+		"ac":15,
+		"str":16,
+		"dex":14,
+		"con":16,
+		"int":10,
+		"wis":9,
+		"car":9
+	},
+	"guidelines":[
+		{
+		"number":1,
+		"name":"Espada larga 1d8+2",
+		"action": "flmde_attack r1 a1d8+2 d1d12+2"
+		},
+		{
+		"number":2,
+		"name":"Arco largo, 1d8+2",
+		"action": "flmde_rangedAttack r8,15,23 a1d20+2 d1d8+2",
+		"maxn": 5,
+		"n": 5
+		}
+	]
+}

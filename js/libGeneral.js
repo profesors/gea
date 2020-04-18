@@ -381,7 +381,8 @@ function getSheetCharacter(name, idBoard, destDiv){
 	rq.send();
 	rq.onreadystatechange = function(e) {
 		if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
-			destDiv.innerHTML = "<a class='close' onclick='closeInfoCharacter();'>Cerrar</a><br>"+rq.responseText;
+			//destDiv.innerHTML = "<a class='close' onclick='closeInfoCharacter();'>Cerrar</a><br>"+rq.responseText;
+			destDiv.innerHTML = rq.responseText;
 		}
 	}
 }

@@ -1,4 +1,6 @@
 {
+	"pc_name": "Gronan el Fuerte",
+	"short_description": "Un joven bárbaro bravucón que porta un enorme espadón",
 	"w": 1,
 	"h": 1,
 	"img": "005.png",
@@ -6,12 +8,18 @@
 	"attrs":{
 		"maxhp": 56,
 		"hp":56,
-		"ac":16
+		"ac":16,
+		"str":17,
+		"dex":13,
+		"con":16,
+		"int":8,
+		"wis":8,
+		"car":9
 	},
 	"guidelines":[
 		{
 		"number":1,
-		"name":"Hacha 2 manos, 1d12",
+		"name":"Hacha 2 manos, 1d12+2",
 		"action": "flmde_attack r1 a1d20+5 d1d12+2"
 		},
 		{

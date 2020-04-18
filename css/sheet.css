@@ -1,34 +1,81 @@
+#info_character{
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom:0;
+	z-index: 20;
+	background-color: rgba(255,255,255,0.8);
+	display: none;
+	padding: 2rem;
+}
+
 #info_character .close{
 	cursor: pointer;
-	float: right;
 	margin: 1rem;
+	float: right;
+	color: blue;
+	font-size: 1.5rem;
 }
 
-.sheet{
+#info_character p{
+	margin: 1rem 0;
+}
+
+.sheet1{
+	grid-column: 1;
+}
+
+
+
+.sheet2{
+	grid-column: 2;
 	padding: 1rem;
+	margin-right: 128px;
 }
 
-.sheet h1{
+#info_character h1{
 	font-weight: bold;
 	font-size: 2rem;
 	padding: 0 0 0rem 0;
 }
 
-.sheet h2{
-	margin: 1rem 0 0 0;
+#info_character h2{
 	font-weight: bold;
 	font-size: 1.2rem;
 	border-bottom: 1px solid black;
 }
 
-.sheet strong{
+#info_character strong{
 	font-weight: bold;
 }
 
-.sheet p{
+#info_character p{
 	padding: 0rem 0;
 }
 
-.sheet table{
+#info_character table{
 	padding: 0rem 0;
+}
+
+#info_character table td{
+	padding: 0.25rem 0.25rem;
+}
+
+#info_character .car1{
+
+}
+#info_character .car2{
+}
+
+#info_character .section{
+	width: 100%;
+	display: block;
+	clear: both;
+	margin: 1.5rem 0;
+}
+
+#info_character .half{
+	display: inline-block;
+	width: 49%;
 }
