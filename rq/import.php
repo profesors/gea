@@ -12,7 +12,7 @@ foreach($board->tokens as $token_in_board){
 	$t->x = $token_in_board->x;
 	$t->y = $token_in_board->y;
 	$t->name = $token_in_board->name;
-	insert_token($idBoard, $t->name, $t->x, $t->y, 1, $t->w, $t->h, $t->img, $t->border);
+	insert_token($idBoard, $t->name, $t->x, $t->y, 1, $t->w, $t->h, $t->img, $t->border, $token_in_board->file);
 	foreach($t->attrs as $k => $v){
 		set_attr($idBoard, $t->name, $k, $v);
 	}

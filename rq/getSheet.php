@@ -13,12 +13,12 @@ $token = get_token($idBoard, $name);
 $token['attrs'] = get_attrs($idBoard, $name);
 $token['guidelines'] = get_guidelines($idBoard, $name);
 
-$full_pc = file_get_contents("../systems/lmde/tokens/$name.json");
-$full_pc = json_decode($full_pc);
+$token_json = file_get_contents("../systems/lmde/tokens/$name.json");
+$token_json = json_decode($token_json);
 
 $sheet = file_get_contents("../systems/lmde/sheet.html");
 preg_match_all("/%([tagf]):([^%]*)%/", $sheet, $arrExp);
-#print_r($full_pc);die();
+#print_r($token_json);die();
 #print_r($token);die();
 #print_r($arrExp);die();
 for($i=0; $i<sizeof($arrExp[0]); $i++){
@@ -38,7 +38,7 @@ for($i=0; $i<sizeof($arrExp[0]); $i++){
 			break;
 		case 'f':
 			$field = $arrExp[2][$i];
-			$with = $full_pc->$field;
+			$with = $token_json->$field;
 			break;
 	}
 	$sheet = str_replace($replace, $with, $sheet);

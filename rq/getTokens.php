@@ -22,6 +22,7 @@ while($row = mysqli_fetch_array($result)){
 	$r->step = $row['step'];
 	$r->imgSrc = $row['img'];
 	$r->name = $row['name'];
+	$r->file = $row['file'];
 	$r->border = $row['border'];
 	$r->actionId = $row['actionId'];
 	$r->diceResult = trim($row['dice_result']);

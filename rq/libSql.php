@@ -125,12 +125,12 @@ function guideline_get_n($idBoard, $tokenName, $guideNumber){
 
 # Insert token in database, if there is not $img_src or $border ignore it
 # If the token id is duplicate, just update it
-function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border){
+function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border, $file){
 	global $db;
 	$name = ($name=='')?'NULL':$name;
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
-	$query = "INSERT INTO `tokens` (`idBoard`,`name`,`x`,`y`,`z`,`w`,`h`,`step`,`img`,`border`, `actionId`, `dice_result`) ";
-	$query.= " VALUES ('$idBoard', '$name', $x, $y, $z, $w, $h, 1, ";
+	$query = "INSERT INTO `tokens` (`idBoard`,`name`,file,`x`,`y`,`z`,`w`,`h`,`step`,`img`,`border`, `actionId`, `dice_result`) ";
+	$query.= " VALUES ('$idBoard', '$name', '$file', $x, $y, $z, $w, $h, 1, ";
 	$query.= "'$img_src', '$border',$nextActionId, NULL) ";
 	$query.= " ON DUPLICATE KEY UPDATE x=$x, y=$y";
 	if ($img_src != ''){
@@ -185,7 +185,6 @@ function set_dice($idBoard, $name, $value, $targets=''){
 	$result = run_sql($query) or die();
 	$row = mysqli_fetch_array($result);
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
-	error_log("NEXT $nextActionId\n");
 	$dice_action_targets = trim($targets,',');
 	$query = "UPDATE tokens SET dice_result = '$value', dice_actionId=$nextActionId, ";
 	$query.= "dice_action_targets = '$dice_action_targets', actionId=$nextActionId  ";
@@ -214,7 +213,7 @@ function get_bg_ts($idBoard){
 function remove_token($idBoard, $name){
 	global $db;
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
-	$query = "UPDATE boards SET lastActionId = $nextActionId;";
+	$query = "UPDATE boards SET lastActionId = $nextActionId";
 	run_sql($query) or die();
 	/*
 	$query = "DELETE FROM tokens WHERE idBoard = $idBoard AND name='$name';";

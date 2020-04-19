@@ -1,0 +1,55 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: GEA 1.08\n"
+"Report-Msgid-Bugs-To: info@samuelgomez.es \n"
+"Last-Translator: Samuel Gómez <info@samuelgomez.es>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "STR"
+msgstr "fue"
+
+msgid "DEX"
+msgstr "des"
+
+msgid "NO AMMO"
+msgstr "sin munición"
+
+msgid "DISTANCE"
+msgstr "distancia"
+
+msgid "ATTACKS"
+msgstr "ataca"
+
+msgid "ATTACKS TO"
+msgstr "ataca a"
+
+msgid "CRITICAL HIT"
+msgstr "crítico"
+
+msgid "FAIL"
+msgstr "fallo"
+
+msgid "OUT OF RANGE"
+msgstr "fuera de rango"
+
+msgid "FAVORED ENEMY"
+msgstr "enemigo predilecto"
+
+msgid "MOVES TO"
+msgstr "se mueve a"
+
+msgid "WITH"
+msgstr "con"
+
+msgid "REMAINS"
+msgstr "restantes"
+
+msgid "AMMUNITION"
+msgstr "munición"
+
+msgid "MISSILES"
+msgstr "proyectiles"

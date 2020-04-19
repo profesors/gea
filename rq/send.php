@@ -2,6 +2,7 @@
 	include_once('libSql.php');
 	include_once('libControllers.php');
 	connectDB();
+	setup_lang();
 	#$_GET['m'] = "@bar #1d20,1d10-2 to1";
 	#$_GET['idBoard'] = 4;
 
@@ -47,7 +48,7 @@
 		} else if ($name!=null && $x!=null && $y!=null){
 			# MOVIMIENTO DE TOKEN
 			move_token($idBoard, $name, $x, $y);
-			insert_action($idBoard, "@$name moves to $x,$y");
+			insert_action($idBoard, "$name "._("MOVES TO")." $x,$y");
 		}
 
 		# tiles
@@ -82,7 +83,7 @@
 		} 
 		# Dice command
 		if(preg_match("/\s#([^ ]*)/", $command, $arrTmp)){
-			$dice = roll_dice($arrTmp[1]);
+			$dice = roll_dice_from_line($arrTmp[1]);
 			$sDescription = $dice[0]['n'].'d'.$dice[0]['size'];
 			$sDescription.= $dice[0]['mod']!=0?$dice[0]['mod']:'';
 			$sDescription.= '=<span class="red">'.$dice[0]['result'].'</span> ';
@@ -117,34 +118,3 @@
 	
 	}
 
-/*
-function roll_dice($strDices,$extraMod=0, $bCrit=false){
-	$strResults = '';
-	$arrDices = explode(',', $strDices);
-	$sDescription = '';
-	$arrRet = Array();
-	foreach($arrDices as $oneDice){
-		preg_match("/(\d*)d(\d*)(([\+\-])(\d*))?/", $oneDice, $arrDice);
-		$n = $bCrit?2*$arrDice[1]:$arrDice[1];
-		$size = $arrDice[2];
-		$mod = 0;
-		if (array_key_exists('4',$arrDice)){
-			$mod = $arrDice[4]=='+'?$arrDice[5]:-($arrDice[5]);
-		}
-		$mod+=$extraMod;
-		$result = 0;
-		for ($i=0; $i<$n;$i++){
-			$result += rand(1, $size);
-		}
-		$result += $mod;
-		$strResults .= ' '.$result;
-		$sMod = '';
-		if ($mod>0) $sMod = '+'.$mod;
-		if ($mod<0) $sMod = $mod;
-		$sDescription= $n."d$size$sMod=<span class='red'>$result</span> ";
-		$r = Array('n'=>$n, 'size'=>$size, 'mod'=>$mod, 'result'=>$result, 'desc'=>$sDescription);
-		array_push($arrRet, $r);
-	}
-	return $arrRet;
-}
- */

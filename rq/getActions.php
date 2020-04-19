@@ -1,7 +1,9 @@
 <?php
 include_once('libSql.php');
+include_once('libControllers.php');
 
 connectDB();
+setup_lang();
 
 $idBoard = secure_param('idBoard');
 $op = secure_param('op');
@@ -15,6 +17,6 @@ while ($row = mysqli_fetch_array($result)){
 	if (($op=='player' && strpos($row['action'],'!')) || strlen($row['action'])==0){
 		// No mostrar al jugador esta acción	
 	} else {
-		echo '<po>'.date("H:i", strtotime($row['ts']))." ".$row['action']."</p>";
+		echo '<p>'.date("H:i", strtotime($row['ts']))." ".utf8_encode($row['action'])."</p>";
 	}
 } 

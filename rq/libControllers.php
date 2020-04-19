@@ -1,13 +1,25 @@
 <?php
+
+function setup_lang(){
+	setlocale(LC_MESSAGES, 'es_ES.UTF-8');
+	bindtextdomain('gea',dirname(__FILE__).'/../lang');
+	textdomain('gea');
+}
+
+function roll_dice($str_dice){
+	$arr_dice = split_dice($str_dice);
+}
+
+
 # Roll one or more dices
-function roll_dice($strDices,$extraMod=0, $bCrit=false){
+function roll_dice_from_line($strDices, $extraMod=0){
 	$strResults = '';
 	$arrDices = explode(',', $strDices);
 	$sDescription = '';
 	$arrRet = Array();
 	foreach($arrDices as $oneDice){
 		preg_match("/(\d*)d(\d*)(([\+\-])(\d*))?/", $oneDice, $arrDice);
-		$n = $bCrit?2*$arrDice[1]:$arrDice[1];
+		$n = $arrDice[1];
 		$size = $arrDice[2];
 		$mod = 0;
 		if (array_key_exists('4',$arrDice)){
@@ -18,13 +30,14 @@ function roll_dice($strDices,$extraMod=0, $bCrit=false){
 		for ($i=0; $i<$n;$i++){
 			$result += rand(1, $size);
 		}
+		$natural = $result;
 		$result += $mod;
 		$strResults .= ' '.$result;
 		$sMod = '';
 		if ($mod>0) $sMod = '+'.$mod;
 		if ($mod<0) $sMod = $mod;
 		$sDescription= $n."d$size$sMod=<span class='red'>$result</span> ";
-		$r = Array('n'=>$n, 'size'=>$size, 'mod'=>$mod, 'result'=>$result, 'desc'=>$sDescription);
+		$r = Array('n'=>$n, 'size'=>$size, 'mod'=>$mod, 'natural'=>$natural, 'result'=>$result, 'desc'=>$sDescription);
 		array_push($arrRet, $r);
 	}
 	return $arrRet;
@@ -86,4 +99,24 @@ function get_token_and_attrs($idBoard, $tokenName){
 	return $token;
 }
 
+# It gets a dice expression like '1d6' and returns structure
+function split_dice($string_dice){
+	#preg_match("/(\d)+d(\d)(([+-])(\d))*/", $string_dice, $arrDice);
+	preg_match("/(\d+)d(\d+)/", $string_dice, $arrDice);
+	return array('n'=>$arrDice[1], 'sides'=>$arrDice[2]);
+}
+
+# $n dices of $sides sides
+function one_roll($n, $sides){
+	$result = 0;
+	for($i=0; $i<$n; $i++){
+		$result+=rand(1,$sides);
+	}
+	return $result;
+}
+
+function mb_ucfirst($str) {
+    $fc = mb_strtoupper(mb_substr($str, 0, 1));
+    return $fc.mb_substr($str, 1);
+}
 ?>

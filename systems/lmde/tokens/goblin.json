@@ -3,6 +3,9 @@
 	"border": "5px+solid+red",
 	"w": 1,
 	"h": 1,
+	"type":"humanoid",
+	"pc":0,
+	"tags":["goblinoid"],
 	"attrs":{
 		"maxhp": 8,
 		"hp":800,
@@ -11,13 +14,15 @@
 	"guidelines":[
 		{
 		"number":1,
-		"name":"Lanza, 1d6",
-		"action": "flmde_attack r1 a1d20+1 d1d6"
+		"name":"lanza",
+		"short_desc":"1d6",
+		"action": "flmde_attack r1 d1d6"
 		},
 		{
 		"number":2,
-		"name":"Arco corto 5/10/15 1d20+1, 1d6",
-		"action": "flmde_rangedAttack r5,10,15 a1d20+1 d1d6",
+		"name":"arco corto",
+		"short_desc":"rango 5/10/15, 1d6",
+		"action": "flmde_rangedAttack r5,10,15 d1d6",
 		"n": 10,
 		"maxn": 10
 		}
