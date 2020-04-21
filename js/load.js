@@ -148,17 +148,19 @@ async function getTokens(idBoard, fromActionId=null){
 			// Case 2: Token is death in this action
 			if (token.attrs.hp >= 0 && upToken.attrs.hp<0){
 				//console.log("Caso 2: "+token.name+" HP:"+token.attrs.hp+" -> "+upToken.attrs.hp);
+				showDamage(token, token.attrs.hp-upToken.attrs.hp);
 				token.attrs = upToken.attrs;
 				updateHp(token);
 				removeToken(token.name);
-			}
-			// Case 3
-			if (token.attrs.hp<0){
+			} else if (token.attrs.hp<0){	// Caso 3
 				token.attrs = upToken.attrs;
+				updateHp(token);
+				/*
 				var bPj= document.getElementById("b"+token.name);
 				if (bPj!=null){
 					bPj.style.opacity="0.3";
-				}
+				}*/
+				removeToken(token.name);
 			}
 		}	// for
 

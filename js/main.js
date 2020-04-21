@@ -105,12 +105,7 @@ function inputKeyPress_allDocument(event){
 		break;
 	case 72:	// h
 		const panel = document.getElementById("panelI");
-		if (panel.style.display != 'block'){
-			panel.style.display = 'block';
-			updateActionsPanel(board.id);
-		} else {
-			panel.style.display = 'none';
-		}
+		togglePanelI();
 		break
 	case 78:	// n	Muestra los nombres
 		setOpacityDivNames(1-getOpacityDivNames());

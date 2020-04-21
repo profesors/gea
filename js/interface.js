@@ -499,6 +499,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	// Show character sheet
 	document.querySelectorAll(".portrait").forEach(function (item) {
 		item.addEventListener('click', function () {
+			hidePanelI();			
 			var name = item.parentElement.id.substring(1);
 			var divInfo = document.getElementById("info_character");
 			divInfo.style.display = "grid";

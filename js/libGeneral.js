@@ -511,3 +511,18 @@ async function showDamage(token, damage){
 		token.divIndicator.style.opacity=0;
 	},2000);
 }
+
+function togglePanelI(){
+	var panel = document.getElementById("panelI");
+	if (panel.style.display != 'block'){
+		panel.style.display = 'block';
+		updateActionsPanel(board.id);
+	} else {
+		panel.style.display = 'none';
+	}
+}
+
+function hidePanelI(){
+	var panel = document.getElementById("panelI");
+	panel.style.display = 'none';
+}

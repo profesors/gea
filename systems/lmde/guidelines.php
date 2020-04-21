@@ -21,8 +21,9 @@ function lmde_generic_attack($idBoard, $token1, $token2, $guideline){
 		$at_total += $mod_val;
 	}
 
-	$action_string = $token1['name'].' '._('ATTACKS TO').' '.$token2['name'].' '._('WITH').' '.$guideline['name'];
-	$action_string.= '<span class="attack_text">'.mb_ucfirst(_('ATTACK')).':&nbsp;<span class="red">'.$at_total;
+	$action_string = '<span class="name_text">'.$token1['name'].'</span> '._('ATTACKS TO').' ';
+	$action_string.= '<span class="name_text">'.$token2['name'].'</span> '._('WITH').' '.$guideline['name'];
+	$action_string.= '<span class="attack_text">'.mb_ucfirst(_('ATTACK')).'&nbsp;<span class="red">'.$at_total;
 	$action_string.= '</span>='.$d20.'(1d20)'.$sMod.'</span>';
 	if ($at_total >= $ac){	# HIT
 		$sMod='';
@@ -42,7 +43,7 @@ function lmde_generic_attack($idBoard, $token1, $token2, $guideline){
 		$token2['attrs']['hp']-=$damage_total;
 		set_attr($idBoard, $token2['name'], 'hp', $token2['attrs']['hp']);
 
-		$action_string.= '<span class="dmg_text">'.mb_ucfirst(_('DAMAGE')).':&nbsp;';
+		$action_string.= '<span class="dmg_text">'.mb_ucfirst(_('DAMAGE')).'&nbsp;';
 		$action_string.= '<span class="red">'.$damage_total.'</span>='.$damage.'(';
 		$action_string.= $guideline['guideAction']['damage']['n'].'d'.$guideline['guideAction']['damage']['sides'];
 		$action_string.= ')'.$sMod;
@@ -74,7 +75,7 @@ function lmde_attack($idBoard, $token1, $token2, $guideline){
 
 # Ranged Attack
 function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
-	#print_r($token2); print_r($guideline); die();
+	#print_r($token1); print_r($guideline); die();
 	# Ammunition
 	if ($guideline['n']!=0){
 		$arrDist = distanceTokens($token1, $token2);

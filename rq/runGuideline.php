@@ -5,7 +5,7 @@ include_once('../systems/lmde/guidelines.php');
 connectDB();
 setup_lang();
 
-#$_GET['m'] = "@exp g2 tg2";
+#$_GET['m'] = "@exp g2 tg3";
 #$_GET['idBoard'] = 1;
 # select * from attrs where idBoard = 4 AND tokenName in ('bar', 'gw1')
 
