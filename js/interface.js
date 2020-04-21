@@ -508,7 +508,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			var name = item.parentElement.id.substring(1);
 			var divInfo = document.getElementById("info_character");
 			divInfo.style.display = "grid";
-			divInfo.innerHTML = name+" loading<br/>"+divInfo.innerHTML;
+			//divInfo.innerHTML = name+" loading<br/>"+divInfo.innerHTML;
 			getSheetCharacter(name, board.id, divInfo);
 		});
 	});
@@ -524,6 +524,6 @@ function showDefaultGuidelineInSheet(name, id){
 	sendCommand(":g"+name+","+id);
 	var divInfo = document.getElementById("info_character");
 	divInfo.style.display = "grid";
-	divInfo.innerHTML = name+" loading<br/>"+divInfo.innerHTML;
+	//divInfo.innerHTML = name+" loading<br/>"+divInfo.innerHTML;
 	getSheetCharacter(name, board.id, divInfo);
 }
