@@ -204,11 +204,7 @@ function movementClick(event){
 			if (destToken.name != movement.token.name && isEnabled(movement.token)){
 				var d = distanceFromTokenToToken(movement.token, getTokenByTile(tilex, tiley));
 				var target = getTokenByTile(d.p2.x, d.p2.y);
-				if (Math.floor(d.distance)<=movement.token.w){
-					runGuideline(encodeURI("@"+movement.token.name+" g1 t"+target.name));
-				} else {
-					runGuideline(encodeURI("@"+movement.token.name+" g2 t"+target.name));
-				}
+				runGuideline(encodeURI("@"+movement.token.name+" t"+target.name));
 			}
 		}
 		movement.token.divName.style.color="yellow";

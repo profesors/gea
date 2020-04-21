@@ -22,13 +22,11 @@
 	margin: 1rem 0;
 }
 
-.sheet1{
+.sheet_left{
 	grid-column: 1;
 }
 
-
-
-.sheet2{
+.sheet_right{
 	grid-column: 2;
 	padding: 1rem;
 	margin-right: 128px;
@@ -78,4 +76,10 @@
 #info_character .half{
 	display: inline-block;
 	width: 49%;
+}
+
+#info_character .select_box{
+	text-decoration: none;
+	color: black;
+	font-weight: bold;
 }

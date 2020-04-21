@@ -5,7 +5,7 @@ include_once('../systems/lmde/guidelines.php');
 connectDB();
 setup_lang();
 
-#$_GET['m'] = "@exp g2 tg3";
+#$_GET['m'] = "@exp tg3";
 #$_GET['idBoard'] = 1;
 # select * from attrs where idBoard = 4 AND tokenName in ('bar', 'gw1')
 
@@ -23,7 +23,7 @@ if (preg_match("/@([^ ]+)/", $m, $arrTmp)){
 }
 
 # Guide number
-$guide_number = 0;
+$guide_number = 0;	# 0 = DefaultGuideline
 if (preg_match("/\sg(\d+)/", $m, $arrTmp)){
 	$guide_number = $arrTmp[1];
 }
@@ -36,21 +36,22 @@ if (preg_match("/\st([^ ]+)/", $m, $arrTmp)){
 
 # Guideline
 $guideline;
-if ($token_name != '' && $guide_number != 0) {
-	$guideline = get_guideline($idBoard, $token_name, $guide_number);
+if ($token_name != '') {
+	$guideline = get_guideline($idBoard, $token_name, $guide_number);	# If guide_number==0: default guideline
 }
-$f = getGuideActionFunction($guideline['guideAction']);
-
-if (!is_null($f)){
-	$token1 = get_token_and_attrs($idBoard, $token_name);
-	$token2 = get_token_and_attrs($idBoard, $target);
-	$guideline['guideAction'] = splitGuideAction($guideline);
-	try{
-		call_user_func($f, $idBoard, $token1, $token2, $guideline);
-	} catch(Exception $e){
-		error_log("ERROR runGuideline.php: No call_user_func\n");
+if (!is_null($guideline)){	# If still no guideline, do nothing
+	$f = getGuideActionFunction($guideline['guideAction']);
+	if (!is_null($f)){
+		$token1 = get_token_and_attrs($idBoard, $token_name);
+		$token2 = get_token_and_attrs($idBoard, $target);
+		$guideline['guideAction'] = splitGuideAction($guideline);
+		try{
+			call_user_func($f, $idBoard, $token1, $token2, $guideline);
+		} catch(Exception $e){
+			error_log("ERROR runGuideline.php: No call_user_func\n");
+		}
+	} else {
+		error_log("ERROR runGuideline.php: No guideline");
 	}
-} else {
-	error_log("ERROR runGuideline.php: No guideline");
 }
 ?>

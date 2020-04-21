@@ -3,8 +3,8 @@
 	include_once('libControllers.php');
 	connectDB();
 	setup_lang();
-	#$_GET['m'] = "@bar #1d20,1d10-2 to1";
-	#$_GET['idBoard'] = 4;
+	#$_GET['m'] = ":gbar,1";
+	#$_GET['idBoard'] = 1;
 
 	# Multiple spaces into just one
 	$m = str_replace('%20',' ',secure_param('m'));
@@ -15,6 +15,7 @@
 	#$m = trim(preg_replace('/\s+/', '', $m));
 	$arrCommands = explode(';', $m);
 	foreach($arrCommands as $kCommand => $command){
+		error_log("COMMAND: ".$command);
 		$command = trim($command);
 		$manual_command = '';
 	
@@ -87,6 +88,14 @@
 				#insert_action($idBoard, "@$name ($guideNumber)$guideAction");
 			}
 		} 
+
+		# Set default guideline
+		if(preg_match_all("/:g([^,]+),(\d+)/", $command, $arrTmp)){
+			$name = $arrTmp[1][0];
+			$guide_id = $arrTmp[2][0];
+			set_default_guideline_id($idBoard, $name, $guide_id);
+		}
+
 		# Dice command
 		if(preg_match("/\s#([^ ]*)/", $command, $arrTmp)){
 			$dice = roll_dice_from_line($arrTmp[1]);

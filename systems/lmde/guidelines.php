@@ -70,6 +70,10 @@ function lmde_attack($idBoard, $token1, $token2, $guideline){
 		if ($mod_str!=0)	add_mod_attack($guideline, $mod_str, _('STR'));
 		# Attack
 		lmde_generic_attack($idBoard, $token1, $token2, $guideline);
+	} else {
+		$action_string = _('OUT OF RANGE');
+		set_dice($idBoard, $token1['name'], $action_string, $token2['name']);
+		insert_action($idBoard, $action_string);
 	}
 }
 
@@ -79,7 +83,7 @@ function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
 	# Ammunition
 	if ($guideline['n']!=0){
 		$arrDist = distanceTokens($token1, $token2);
-		if (floor($arrDist['d']) <= $guideline['guideAction']['range'][2]){
+		if (floor($arrDist['d'])>1 && floor($arrDist['d']) <= $guideline['guideAction']['range'][2]){
 			# Distance mod
 			$distance_mod = 0;
 			if ($arrDist['d']<=$guideline['guideAction']['range'][2])	$distance_mod=-1;

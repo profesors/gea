@@ -160,7 +160,7 @@ async function getTokens(idBoard, fromActionId=null){
 				if (bPj!=null){
 					bPj.style.opacity="0.3";
 				}*/
-				removeToken(token.name);
+				//removeToken(token.name);
 			}
 		}	// for
 

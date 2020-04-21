@@ -28,6 +28,7 @@ while($row = mysqli_fetch_array($result)){
 	$r->diceResult = trim($row['dice_result']);
 	$r->diceActionId = $row['dice_actionId'];
 	$r->diceActionTargets= $row['dice_action_targets'];
+	$r->defaultGuideline = $row['defaultGuideline'];
 	# Attrs
 	$query = "SELECT * FROM attrs WHERE idBoard=$idBoard AND tokenName='".$row['name']."';";
 	$result_attrs = run_sql($query) or die();

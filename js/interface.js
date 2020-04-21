@@ -499,6 +499,11 @@ document.addEventListener('DOMContentLoaded', function(){
 	// Show character sheet
 	document.querySelectorAll(".portrait").forEach(function (item) {
 		item.addEventListener('click', function () {
+			if (movement.token!=null){
+				movement.token.divName.style.color="yellow";
+				movement.token.divName.style.opacity = movement.opacityDivName;
+				movement.token = null;
+			}
 			hidePanelI();			
 			var name = item.parentElement.id.substring(1);
 			var divInfo = document.getElementById("info_character");
@@ -513,4 +518,12 @@ function closeInfoCharacter(){
 	event.stopPropagation();
 	var divInfo = document.getElementById("info_character");
 	divInfo.style.display = "none";
+}
+
+function showDefaultGuidelineInSheet(name, id){
+	sendCommand(":g"+name+","+id);
+	var divInfo = document.getElementById("info_character");
+	divInfo.style.display = "grid";
+	divInfo.innerHTML = name+" loading<br/>"+divInfo.innerHTML;
+	getSheetCharacter(name, board.id, divInfo);
 }

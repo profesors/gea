@@ -17,7 +17,7 @@ $token_json = file_get_contents("../systems/lmde/tokens/$name.json");
 $token_json = json_decode($token_json);
 
 $sheet = file_get_contents("../systems/lmde/sheet.html");
-preg_match_all("/%([tagf]):([^%]*)%/", $sheet, $arrExp);
+preg_match_all("/%([tagfG]):([^%]*)%/", $sheet, $arrExp);
 #print_r($token_json);die();
 #print_r($token);die();
 #print_r($arrExp);die();
@@ -26,19 +26,31 @@ for($i=0; $i<sizeof($arrExp[0]); $i++){
 	$type = $arrExp[1][$i];
 	$with;
 	switch ($type){
-		case 't':
+		case 't':	# *T*oken field
 			$with = $token[$arrExp[2][$i]];
 			break;
-		case 'a':
+		case 'a':	# *A*ttr field
 			$with = $token['attrs'][$arrExp[2][$i]];
 			break;
-		case 'g':
+		case 'g':	# *G*uideline
 			$arrGuide = explode(':',$arrExp[2][$i]);
 			$with = $token['guidelines'][$arrGuide[1]][$arrGuide[0]];
 			break;
-		case 'f':
+		case 'f':	# from jason *F*ile 
 			$field = $arrExp[2][$i];
 			$with = $token_json->$field;
+			break;
+		case 'G':	# *G*uideline selected object or selected guideline
+			$guide_id = $arrExp[2][$i];
+			$default_guide_id = get_default_guideline_id($idBoard, $token['name']);
+			if ($guide_id != $default_guide_id){
+				$with = '<a href="javascript:showDefaultGuidelineInSheet(\''.$token['name'].'\','.$guide_id.');"';
+				$with.= 'class="select_box">&#9744;</a>';
+				error_log("DEFAULT $default_guide_id\n");
+				error_log("REPLACE: $with\n");
+			} else {
+				$with = '&#9989;';
+			}
 			break;
 	}
 	$sheet = str_replace($replace, $with, $sheet);

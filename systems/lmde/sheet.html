@@ -1,10 +1,10 @@
-<span class="sheet1">
+<span class="sheet_left">
 	<h1>%f:pc_name%</h1>
 	<p>%f:short_description% </p>
 	<img src="img/sheet/human_body2.png">
 </span>
 
-<span class="sheet2">
+<span class="sheet_right">
 <a class="close" onclick="closeInfoCharacter();">Cerrar</a>
 
 <div class="section">
@@ -47,7 +47,10 @@
 <div class="section">
 	<h2>Ataques</h2>
 	<table>
-		<tr><td><strong>Cuerpo a cuerpo</strong></td><td>%g:name:1%</td></tr>
-		<tr><td><strong>Distancia</strong></td><td>%g:name:2%(%g:n:2%)</td></tr>
+		<tr><td>%G:1%</td>
+			<td><strong>Cuerpo a cuerpo</strong></td><td>%g:name:1%</td></tr>
+
+		<tr><td>%G:2%</td>
+			<td><strong>Distancia</strong></td><td>%g:name:2%(%g:n:2%)</td></tr>
 	</table>
 </div>

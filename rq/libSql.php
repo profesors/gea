@@ -259,6 +259,9 @@ function get_guidelines($idBoard, $name){
 
 function get_guideline($idBoard, $tokenName, $guideNumber){
 	global $db;
+	if ($guideNumber == 0){
+		$guideNumber = get_default_guideline_id($idBoard, $tokenName);
+	}
 	$query = "SELECT * FROM guidelines WHERE idBoard=$idBoard AND tokenName='$tokenName' AND guideNumber=$guideNumber LIMIT 1";
 	$result = run_sql($query) or die();
 	return mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -271,5 +274,23 @@ function insert_board($board){
 	$query.= " $board->offsetx, $board->offsety, '$board->bg', $board->drawGrid, 0) ";
 	$result = run_sql($query) or die();
 	return mysqli_insert_id($db);
+}
+
+function set_default_guideline_id($idBoard, $tokenName, $guide_id){
+	global $db;
+	$query = "UPDATE tokens SET defaultGuideline=$guide_id WHERE idBoard=$idBoard AND name='$tokenName'";
+	$result = run_sql($query) or die();
+	$nextActionId = intval(read_last_actionId($idBoard))+1;
+	$query = "UPDATE tokens SET actionId=$nextActionId WHERE idBoard=$idBoard";
+    $query.= " AND name='$tokenName'";
+	run_sql($query) or die();
+	increase_last_actionId($idBoard, 1);
+}
+
+function get_default_guideline_id($idBoard, $tokenName){
+	global $db;
+	$query= "SELECT defaultGuideline FROM tokens WHERE idBoard=$idBoard AND name='$tokenName' LIMIT 1";
+	$result = run_Sql($query) or die();
+	return (mysqli_fetch_array($result))[0];
 }
 ?>
