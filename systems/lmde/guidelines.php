@@ -22,7 +22,8 @@ function lmde_generic_attack($idBoard, $token1, $token2, $guideline){
 	}
 
 	$action_string = $token1['name'].' '._('ATTACKS TO').' '.$token2['name'].' '._('WITH').' '.$guideline['name'];
-	$action_string.= ' At:<span class="red">'.$at_total.'</span>='.$d20.'(1d20)'.$sMod;
+	$action_string.= '<span class="attack_text">'.mb_ucfirst(_('ATTACK')).':&nbsp;<span class="red">'.$at_total;
+	$action_string.= '</span>='.$d20.'(1d20)'.$sMod.'</span>';
 	if ($at_total >= $ac){	# HIT
 		$sMod='';
 		$damage = one_roll($guideline['guideAction']['damage']['n'], $guideline['guideAction']['damage']['sides']);
@@ -41,7 +42,8 @@ function lmde_generic_attack($idBoard, $token1, $token2, $guideline){
 		$token2['attrs']['hp']-=$damage_total;
 		set_attr($idBoard, $token2['name'], 'hp', $token2['attrs']['hp']);
 
-		$action_string.= ' Dmg:<span class="red">'.$damage_total.'</span>='.$damage.'(';
+		$action_string.= '<span class="dmg_text">'.mb_ucfirst(_('DAMAGE')).':&nbsp;';
+		$action_string.= '<span class="red">'.$damage_total.'</span>='.$damage.'(';
 		$action_string.= $guideline['guideAction']['damage']['n'].'d'.$guideline['guideAction']['damage']['sides'];
 		$action_string.= ')'.$sMod;
 		$action_string.= $critic?' <span class="red">(x2)'._('CRITICAL HIT').'</span>':'';
@@ -50,6 +52,7 @@ function lmde_generic_attack($idBoard, $token1, $token2, $guideline){
 		$action_string.= ' <span class="red">'._('FAIL').'</span>';
 		set_dice($idBoard, $token1['name'], $at_total.' '._('FAIL'), $token2['name']);
 	}
+	$action_string.= '</span>';
 	if ($guideline['n'] != -1) {
 		$action_string.= ' '._('AMMUNITION').' '.$guideline['name'].' '.($guideline['n']-1);
 	}
@@ -111,8 +114,18 @@ function lmde_attack_enemy($idBoard, $token1, $token2, $guideline){
 	$token_file = json_decode(file_get_contents('../systems/lmde/tokens/'.$token2['file'].'.json'));
 	if (property_exists($token_file, 'tags') && in_array('goblinoid', $token_file->tags)){
 		add_mod_attack($guideline, 2, _('FAVORED ENEMY'));
-		lmde_generic_attack($idBoard, $token1, $token2, $guideline);
 	}	
+	lmde_generic_attack($idBoard, $token1, $token2, $guideline);
+}
+
+# For Rangers
+function lmde_rangedAttack_enemy($idBoard, $token1, $token2, $guideline){
+	global $token_file;
+	$token_file = json_decode(file_get_contents('../systems/lmde/tokens/'.$token2['file'].'.json'));
+	if (property_exists($token_file, 'tags') && in_array('goblinoid', $token_file->tags)){
+		add_mod_attack($guideline, 2, _('FAVORED ENEMY'));
+	}	
+	lmde_rangedAttack($idBoard, $token1, $token2, $guideline);
 }
 
 

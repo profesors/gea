@@ -41,14 +41,20 @@
 		preg_match("/_([^ ]*)/", $command, $arrTmp);
 		$border = array_key_exists(1, $arrTmp)?$arrTmp[1]:null;
 
+		# Animation
+		preg_match("/\sa([^ ]*)/", $command, $arrTmp);
+		$animation = array_key_exists(1, $arrTmp)?$arrTmp[1]:null;
+
 		# INSERCIÓN COMPLETA DE TOKEN
 		if ($name!=null && $x!=null && $y!=null && $img_src!=null && $border!=null){
 			insert_token($idBoard, $name, $x, $y, 1, $w, $h, $img_src, $border);
 			#insert_action($idBoard, "@$name p$x,$y,$w,$h !img_src _$border");
 		} else if ($name!=null && $x!=null && $y!=null){
-			# MOVIMIENTO DE TOKEN
+			# SOLO MOVIMIENTO DE TOKEN
 			move_token($idBoard, $name, $x, $y);
-			insert_action($idBoard, "$name "._("MOVES TO")." $x,$y");
+			if ($animation != 'out'){
+				insert_action($idBoard, "$name "._("MOVES TO")." $x,$y");
+			}
 		}
 
 		# tiles

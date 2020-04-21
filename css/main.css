@@ -32,9 +32,8 @@ svg{
 	width: 400px;
 	height: 100%;
 	z-index: 101;
-	background-color: grey;
 	display: none;
-	opacity: 0.8;
+	opacity: 0.7;
 }
 
 #panelD{
@@ -62,11 +61,27 @@ svg{
 	overflow-x: scroll;
 	background-color: white;
 	height: 5rem;
+	font-size: 90%;
 }
 
 #stdOutput time{
 	color: grey;
-	font-size: 80%;
+	font-weight: bold;
+	margin-right: 1rem;
+}
+
+#stdOutput p{
+	margin: 1rem 0 0 1rem;
+}
+
+#stdOutput .attack_text{
+	margin: 0.5rem 0 0.5rem 0;
+	display: block;
+}
+
+#stdOutput .dmg_text{
+	margin: 0.5rem 0 0.5rem 0;
+	display: block;
 }
 
 

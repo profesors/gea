@@ -7,7 +7,8 @@
 
 ## Versiones
 
-1.08	El explorador tiene +2 al atacar a pieles verdes
+1.09	El explorador tiene +2 al atacar a pieles verde a distancia
+1.08	El explorador tiene +2 al atacar a pieles verdes en cuerpo a cuerpo
 		Array
 		(
 			[idBoard] => 1

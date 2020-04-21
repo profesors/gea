@@ -29,7 +29,7 @@
 		"number":2,
 		"name":"arco largo",
 		"short_desc":"1d8",
-		"action": "flmde_rangedAttack r8,15,23 d1d8",
+		"action": "flmde_rangedAttack_enemy r8,15,23 d1d8",
 		"maxn": 20,
 		"n": 20
 		}

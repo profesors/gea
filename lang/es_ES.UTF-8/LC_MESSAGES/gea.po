@@ -24,11 +24,17 @@ msgstr "distancia"
 msgid "ATTACKS"
 msgstr "ataca"
 
+msgid "ATTACK"
+msgstr "ataque"
+
 msgid "ATTACKS TO"
 msgstr "ataca a"
 
 msgid "CRITICAL HIT"
 msgstr "crítico"
+
+msgid "DAMAGE"
+msgstr "daño"
 
 msgid "FAIL"
 msgstr "fallo"

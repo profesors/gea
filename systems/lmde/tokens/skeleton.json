@@ -1,0 +1,21 @@
+{
+	"img": "skeleton.jpg",
+	"border": "5px+solid+red",
+	"w": 1,
+	"h": 1,
+	"type":"undead",
+	"pc":0,
+	"attrs":{
+		"maxhp": 8,
+		"hp":8,
+		"ac":13
+	},
+	"guidelines":[
+		{
+		"number":1,
+		"name":"espada",
+		"short_desc":"1d6",
+		"action": "flmde_attack r1 d1d6"
+		}
+	]
+}

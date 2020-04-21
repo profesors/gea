@@ -458,7 +458,7 @@ async function removeToken(name){
 		await sleep(T_PRECISION);
 		t = (new Date).getTime()-t0;
 	}
-	sendCommand("@"+name+" p"+(board.ntilesw+1)+","+(board.ntilesh+1));
+	sendCommand("@"+name+" p"+(board.ntilesw+1)+","+(board.ntilesh+1)+" aout");
 	token.div.style.left = (board.ntilesw*board.tilew)+"px";
 	token.div.style.top = (board.ntilesh*board.tilesh)+"px";
 }

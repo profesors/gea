@@ -8,7 +8,7 @@
 	"tags":["goblinoid"],
 	"attrs":{
 		"maxhp": 8,
-		"hp":800,
+		"hp":4,
 		"ac":10
 	},
 	"guidelines":[
