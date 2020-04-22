@@ -8,8 +8,8 @@
 	"type":"humanoid",
 	"pc":1,
 	"attrs":{
-		"maxhp": 56,
-		"hp":56,
+		"maxhp": 12,
+		"hp":12,
 		"ac":16,
 		"str":17,
 		"dex":13,

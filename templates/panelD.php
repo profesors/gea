@@ -62,7 +62,6 @@ svg circle, svg text{
 
 
 	<!-- PJ 3 ------------------------------>
-	<!--
 	<svg id="belf" width="128px" height="140px">
 	<image class="portrait" href="img/tokens/007.png" width="100px" x="30px" y="0"/>
 	<rect x="17" y="0" width="8px" height="100" fill="white" stroke-width="1px" stroke="white"/>
@@ -89,7 +88,6 @@ svg circle, svg text{
 	<text class="b39a" x="13" y="115" fill="red" font-size="1rem" font-weight="bolder">+</text>
 	<text class="b29b" x="17" y="135" fill="blue" font-size="1rem" font-weight="bolder">-</text>
 	</svg>
-	-->
 
 	<!-- PJ 4 ------------------------------>
 	<!--

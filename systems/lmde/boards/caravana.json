@@ -23,6 +23,12 @@
 			"y": 4
 		},
 		{
+			"file": "elf",
+			"name": "elf",
+			"x": 14,
+			"y": 3
+		},
+		{
 			"file": "goblin",
 			"name": "g1",
 			"x": 14,
