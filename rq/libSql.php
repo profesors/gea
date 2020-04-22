@@ -126,13 +126,14 @@ function guideline_get_n($idBoard, $tokenName, $guideNumber){
 
 # Insert token in database, if there is not $img_src or $border ignore it
 # If the token id is duplicate, just update it
-function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border, $file){
+function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border, $file, $default_guideline_id){
 	global $db;
 	$name = ($name=='')?'NULL':$name;
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
-	$query = "INSERT INTO `tokens` (`idBoard`,`name`,file,`x`,`y`,`z`,`w`,`h`,`step`,`img`,`border`, `actionId`, `dice_result`) ";
+	$query = "INSERT INTO `tokens` (`idBoard`,`name`,file,`x`,`y`,`z`,`w`,`h`,`step`,`img`,`border`, `actionId`, `dice_result`, ";
+	$query.= " defaultGuideline)";
 	$query.= " VALUES ('$idBoard', '$name', '$file', $x, $y, $z, $w, $h, 1, ";
-	$query.= "'$img_src', '$border',$nextActionId, NULL) ";
+	$query.= "'$img_src', '$border',$nextActionId, NULL, $default_guideline_id) ";
 	$query.= " ON DUPLICATE KEY UPDATE x=$x, y=$y";
 	if ($img_src != ''){
 		$query.= ", img='$img_src'";

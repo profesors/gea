@@ -7,6 +7,7 @@
 
 ## Versiones
 
+1.13	Los tokens pueden eer importados en un escenario con un defaultGuideline
 1.12	Resuelto BUG al mostrar la ficha de personaje, los tokens del tablero aún pueden ser seleccionados
 1.11	Los tokens muestran el guideline por defecto
 1.10	Los PJs deben seleccionar el guideline a utilizar por anticipado

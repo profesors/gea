@@ -3,7 +3,7 @@
 	include_once('libControllers.php');
 	connectDB();
 	setup_lang();
-	#$_GET['m'] = ":gbar,1";
+	#$_GET['m'] = ":gg1,2";
 	#$_GET['idBoard'] = 1;
 
 	# Multiple spaces into just one

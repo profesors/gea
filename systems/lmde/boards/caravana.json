@@ -26,31 +26,36 @@
 			"file": "goblin",
 			"name": "g1",
 			"x": 9,
-			"y": 14
+			"y": 14,
+			"default_guideline_id":1
 		},
 		{
 			"file": "goblin",
 			"name": "g2",
 			"x": 10,
-			"y": 15
+			"y": 15,
+			"default_guideline_id":1
 		},
 		{
 			"file": "goblin",
 			"name": "g3",
 			"x": 10,
-			"y": 16
+			"y": 16,
+			"default_guideline_id":1
 		},
 		{
 			"file": "goblin",
 			"name": "g4",
 			"x": 8,
-			"y": 17
+			"y": 17,
+			"default_guideline_id":1
 		},
 		{
 			"file": "skeleton",
 			"name": "e1",
 			"x": 9,
-			"y": 17
+			"y": 17,
+			"default_guideline_id":1
 		}
 	]
 }
