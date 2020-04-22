@@ -190,7 +190,7 @@ function movementClick(event){
 	const tilex = Math.floor((x-board.offsetx)/board.tilew)+1;
 	const tiley = Math.floor((y-board.offsety)/board.tileh)+1;
 	var divInfoCharacter = document.getElementById("info_character");
-	if (divInfoCharacter.style.display != "block"){
+	if (divInfoCharacter.style.display == "none"){
 	if (movement.token == null){	// Select token (first click)
 		movement.token = getTokenByTile(tilex, tiley);
 		if (movement.token!=null) {

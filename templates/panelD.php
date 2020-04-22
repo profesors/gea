@@ -62,6 +62,7 @@ svg circle, svg text{
 
 
 	<!-- PJ 3 ------------------------------>
+	<!--
 	<svg id="belf" width="128px" height="140px">
 	<image class="portrait" href="img/tokens/007.png" width="100px" x="30px" y="0"/>
 	<rect x="17" y="0" width="8px" height="100" fill="white" stroke-width="1px" stroke="white"/>
@@ -88,9 +89,10 @@ svg circle, svg text{
 	<text class="b39a" x="13" y="115" fill="red" font-size="1rem" font-weight="bolder">+</text>
 	<text class="b29b" x="17" y="135" fill="blue" font-size="1rem" font-weight="bolder">-</text>
 	</svg>
-
+	-->
 
 	<!-- PJ 4 ------------------------------>
+	<!--
 	<svg id="bcle" width="128px" height="140px">
 	<image class="portrait" href="img/tokens/011.png" width="100px" x="30px" y="0"/>
 	<rect x="17" y="0" width="8px" height="100" fill="white" stroke-width="1px" stroke="white"/>
@@ -117,8 +119,10 @@ svg circle, svg text{
 	<text class="b49a" x="13" y="115" fill="red" font-size="1rem" font-weight="bolder">+</text>
 	<text class="b49b" x="17" y="135" fill="blue" font-size="1rem" font-weight="bolder">-</text>
 	</svg>
+	-->
 
 	<!-- PJ 5 ------------------------------>
+	<!--
 	<svg id="blad" width="128px" height="140px">
 	<image class="portrait" href="img/tokens/010.png" width="100px" x="30px" y="0"/>
 	<rect x="17" y="0" width="8px" height="100" fill="white" stroke-width="1px" stroke="white"/>
@@ -145,7 +149,7 @@ svg circle, svg text{
 	<text class="b59a" x="13" y="115" fill="red" font-size="1rem" font-weight="bolder">+</text>
 	<text class="b59b" x="17" y="135" fill="blue" font-size="1rem" font-weight="bolder">-</text>
 	</svg>
-
+	-->
 <audio id="aDado" controls style="display:none">
 <source src="audio/dado.mp3" type="audio/mpeg">
 </audio>

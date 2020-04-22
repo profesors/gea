@@ -7,8 +7,7 @@
 
 ## Versiones
 
-1.12	@TODO al mostrar la ficha de personaje, los tokens del tablero aún pueden ser seleccionados
-
+1.12	Resuelto BUG al mostrar la ficha de personaje, los tokens del tablero aún pueden ser seleccionados
 1.11	Los tokens muestran el guideline por defecto
 1.10	Los PJs deben seleccionar el guideline a utilizar por anticipado
 1.09	El explorador tiene +2 al atacar a pieles verde a distancia
