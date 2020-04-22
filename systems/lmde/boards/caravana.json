@@ -27,7 +27,7 @@
 			"name": "g1",
 			"x": 9,
 			"y": 14,
-			"default_guideline_id":1
+			"default_guideline_id":2
 		},
 		{
 			"file": "goblin",
@@ -48,7 +48,7 @@
 			"name": "g4",
 			"x": 8,
 			"y": 17,
-			"default_guideline_id":1
+			"default_guideline_id":2
 		},
 		{
 			"file": "skeleton",

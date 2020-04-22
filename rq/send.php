@@ -49,12 +49,12 @@
 		# INSERCIÓN COMPLETA DE TOKEN
 		if ($name!=null && $x!=null && $y!=null && $img_src!=null && $border!=null){
 			insert_token($idBoard, $name, $x, $y, 1, $w, $h, $img_src, $border);
-			#insert_action($idBoard, "@$name p$x,$y,$w,$h !img_src _$border");
+			#insert_action($idBoard, "$name p$x,$y,$w,$h !img_src _$border");
 		} else if ($name!=null && $x!=null && $y!=null){
 			# SOLO MOVIMIENTO DE TOKEN
 			move_token($idBoard, $name, $x, $y);
 			if ($animation != 'out'){
-				insert_action($idBoard, "$name "._("MOVES TO")." $x,$y");
+				insert_action($idBoard, "<span class='name_text'>$name</span>"._("MOVES TO")." $x,$y");
 			}
 		}
 
@@ -114,7 +114,7 @@
 				$diceResult .= $dice[$i]['result'];
 			}
 			set_dice($idBoard, $name, $diceResult);
-			insert_action($idBoard, "@$name ".trim($sDesc));
+			insert_action($idBoard, "$name ".trim($sDesc));
 		}
 	
 		# Remove token
