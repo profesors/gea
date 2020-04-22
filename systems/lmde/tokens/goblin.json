@@ -14,12 +14,14 @@
 	"guidelines":[
 		{
 		"number":1,
+		"icon":"swords.png",
 		"name":"lanza",
 		"short_desc":"1d6",
 		"action": "flmde_attack r1 d1d6"
 		},
 		{
 		"number":2,
+		"icon":"bow.png",
 		"name":"arco corto",
 		"short_desc":"rango 5/10/15, 1d6",
 		"action": "flmde_rangedAttack r5,10,15 d1d6",

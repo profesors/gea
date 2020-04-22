@@ -113,6 +113,19 @@ async function getTokens(idBoard, fromActionId=null){
 				token.divIndicator.style.opacity = 0;
 				token.div.appendChild(token.divIndicator);
 
+				// Div with guideline icon
+				token.divGuideline = document.createElement("img");
+				token.divGuideline.id = "divGuideline_"+upToken.name;
+				token.divGuideline.style.color = "white";
+				token.divGuideline.style.position = "absolute";
+				token.divGuideline.style.top = 0;
+				token.divGuideline.style.right = 0;
+				token.divGuideline.style.width = "20px";
+
+				token.divGuideline.style.zIndex = 3;
+				token.divGuideline.style.opacity = 1;
+				token.div.appendChild(token.divGuideline);
+
 				arrTokens.push(token);
 				canvas.appendChild(token.div);
 				updateHp(token);
@@ -131,6 +144,11 @@ async function getTokens(idBoard, fromActionId=null){
 					updateHp(token);
 				} 
 				token.guidelines = upToken.guidelines;
+				token.defaultGuideline.n = upToken.defaultGuideline.n;
+				token.defaultGuideline.icon = upToken.defaultGuideline.icon;
+				if (upToken.defaultGuideline.icon != null){
+					document.getElementById("divGuideline_"+token.name).src = 'img/icons/'+token.defaultGuideline.icon;
+				}
 				moveToken(token, upToken.x, upToken.y);
 
 				// This token has pending actions to show

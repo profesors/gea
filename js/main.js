@@ -57,7 +57,7 @@ function inputKeyPress_inputBox(event){
 		break;
 	}
 	var opacity = 0, name = '';
-	if (input.value.includes('@')){
+	if (input.value.includes('@') || input.value.includes(':')){
 		opacity = 1;
 		if (input.value.includes('#')){
 			var arrM = input.value.split('@');
@@ -94,6 +94,8 @@ function inputKeyPress_allDocument(event){
 		bShowInput = true;
 		break;
 	case 50:	// @ arroba
+		bShowInput = true;
+		setOpacityDivNames(1);
 		//input.value = "@";
 		//bShowInput = true;
 		break;
@@ -112,6 +114,7 @@ function inputKeyPress_allDocument(event){
 		break;
 	case 190:	// :
 		bShowInput = true;
+		setOpacityDivNames(1);
 		break;
 	}
 	if (bShowInput){
@@ -270,7 +273,7 @@ async function main(){
 	// Go Full screen
     document.getElementById("canvas").addEventListener("click", function(e){
 		if (!canvas.fullScreen){
-			getFullscreen(document.documentElement);
+			//getFullscreen(document.documentElement);
 			canvas.fullScreen = true;
 		}
     },false);

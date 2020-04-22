@@ -96,8 +96,9 @@ function set_guideline($idBoard, $tokenName, $guideline){
 	global $db;
 	if (!property_exists($guideline, 'n')) $guideline->n = -1;
 	if (!property_exists($guideline, 'maxn')) $guideline->maxn = -1;
-	$query = "INSERT INTO `guidelines` (idBoard, tokenName, guideNumber, name, guideAction, n, maxn) ";
-	$query.= "VALUES ($idBoard, '$tokenName', $guideline->number, '$guideline->name', '$guideline->action', ";
+	$query = "INSERT INTO `guidelines` (idBoard, tokenName, guideNumber, name, icon, guideAction, n, maxn) ";
+	$query.= "VALUES ($idBoard, '$tokenName', $guideline->number, '$guideline->name', '$guideline->icon'";
+	$query.= ", '$guideline->action', ";
 	$query.= " $guideline->n, $guideline->maxn) ";
 	$query.= " ON DUPLICATE KEY UPDATE guideAction='$guideline->action'";
 	run_sql($query) or die();

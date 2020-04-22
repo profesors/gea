@@ -115,7 +115,6 @@ function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
 
 # For Rangers
 function lmde_attack_enemy($idBoard, $token1, $token2, $guideline){
-	global $token_file;
 	$token_file = json_decode(file_get_contents('../systems/lmde/tokens/'.$token2['file'].'.json'));
 	if (property_exists($token_file, 'tags') && in_array('goblinoid', $token_file->tags)){
 		add_mod_attack($guideline, 2, _('FAVORED ENEMY'));
@@ -125,7 +124,6 @@ function lmde_attack_enemy($idBoard, $token1, $token2, $guideline){
 
 # For Rangers
 function lmde_rangedAttack_enemy($idBoard, $token1, $token2, $guideline){
-	global $token_file;
 	$token_file = json_decode(file_get_contents('../systems/lmde/tokens/'.$token2['file'].'.json'));
 	if (property_exists($token_file, 'tags') && in_array('goblinoid', $token_file->tags)){
 		add_mod_attack($guideline, 2, _('FAVORED ENEMY'));
