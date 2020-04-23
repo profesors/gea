@@ -54,7 +54,7 @@
 			# SOLO MOVIMIENTO DE TOKEN
 			move_token($idBoard, $name, $x, $y);
 			if ($animation != 'out'){
-				insert_action($idBoard, "<span class='name_text'>$name</span>"._("MOVES TO")." $x,$y");
+				insert_action($idBoard, "<span class='name_text'>$name</span> "._("MOVES TO")." $x,$y");
 			}
 		}
 

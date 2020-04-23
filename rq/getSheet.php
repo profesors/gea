@@ -44,10 +44,8 @@ for($i=0; $i<sizeof($arrExp[0]); $i++){
 			$guide_id = $arrExp[2][$i];
 			$default_guide_id = get_default_guideline_id($idBoard, $token['name']);
 			if ($guide_id != $default_guide_id){
-				$with = '<a href="javascript:showDefaultGuidelineInSheet(\''.$token['name'].'\','.$guide_id.');"';
+				$with = '<a onclick="javascript:showDefaultGuidelineInSheet(\''.$token['name'].'\','.$guide_id.');"';
 				$with.= 'class="select_box">&#9744;</a>';
-				error_log("DEFAULT $default_guide_id\n");
-				error_log("REPLACE: $with\n");
 			} else {
 				$with = '&#9989;';
 			}

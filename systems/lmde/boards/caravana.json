@@ -14,19 +14,22 @@
 			"file": "bar",
 			"name": "bar",
 			"x": 11,
-			"y": 3
+			"y": 3,
+			"default_guideline_id":1
 		},
 		{
 			"file": "exp",
 			"name": "exp",
 			"x": 13,
-			"y": 4
+			"y": 4,
+			"default_guideline_id":2
 		},
 		{
 			"file": "elf",
 			"name": "elf",
 			"x": 14,
-			"y": 3
+			"y": 3,
+			"default_guideline_id":2
 		},
 		{
 			"file": "goblin",

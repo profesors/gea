@@ -2,11 +2,14 @@
 $token_file = null;
 
 # Esta debe ser general
-function lmde_generic_attack($idBoard, $token1, $token2, $guideline){
+function lmde_generic_attack($idBoard, &$token1, &$token2, &$guideline){
 	#print_r($token1); print_r($guideline); die();
 	$arrDist = distanceTokens($token1, $token2);
+	compute_mods($idBoard, $token1, $token2, $guideline);
+
 	$d20 = one_roll(1,20);
 	$critic = $d20==20?true:false;
+
 	$ac = $token2['attrs']['ac'];
 	$sMod = '';
 	$at_total = $d20;
@@ -64,11 +67,6 @@ function lmde_generic_attack($idBoard, $token1, $token2, $guideline){
 function lmde_attack($idBoard, $token1, $token2, $guideline){
 	$arrDist = distanceTokens($token1, $token2);
 	if (floor($arrDist['d'])<=1){
-		# STR mod
-		$str = $token1['attrs']['str'];
-		$mod_str = mod($str);
-		if ($mod_str!=0)	add_mod_attack($guideline, $mod_str, _('STR'));
-		# Attack
 		lmde_generic_attack($idBoard, $token1, $token2, $guideline);
 	} else {
 		$action_string = _('OUT OF RANGE');
@@ -90,6 +88,7 @@ function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
 			if ($arrDist['d']<=$guideline['guideAction']['range'][1])	$distance_mod=0;
 			if ($arrDist['d']<=$guideline['guideAction']['range'][0])	$distance_mod=1;
 			add_mod_attack($guideline, $distance_mod, _('DISTANCE'));
+			/*
 			# Dex mod
 			$dex = $token1['attrs']['dex'];
 			$mod_dex = mod($dex);
@@ -98,6 +97,7 @@ function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
 			$str = $token1['attrs']['str'];
 			$mod_str = mod($str);
 			if ($mod_str!=0)	add_mod_damage($guideline, $mod_str, _('STR'));
+			 */
 			# Attack
 			guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
 			lmde_generic_attack($idBoard, $token1, $token2, $guideline);
@@ -113,25 +113,6 @@ function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
 	}
 }
 
-# For Rangers
-function lmde_attack_enemy($idBoard, $token1, $token2, $guideline){
-	$token_file = json_decode(file_get_contents('../systems/lmde/tokens/'.$token2['file'].'.json'));
-	if (property_exists($token_file, 'tags') && in_array('goblinoid', $token_file->tags)){
-		add_mod_attack($guideline, 2, _('FAVORED ENEMY'));
-	}	
-	lmde_generic_attack($idBoard, $token1, $token2, $guideline);
-}
-
-# For Rangers
-function lmde_rangedAttack_enemy($idBoard, $token1, $token2, $guideline){
-	$token_file = json_decode(file_get_contents('../systems/lmde/tokens/'.$token2['file'].'.json'));
-	if (property_exists($token_file, 'tags') && in_array('goblinoid', $token_file->tags)){
-		add_mod_attack($guideline, 2, _('FAVORED ENEMY'));
-	}	
-	lmde_rangedAttack($idBoard, $token1, $token2, $guideline);
-}
-
-
 
 # ************************************** GENERAL PURPOSE ***************************
 
@@ -145,6 +126,38 @@ function splitGuideAction($guideline){
 	$guideAction['damage'] = getGuideActionByCode('d', $guideline['guideAction']);
 	$guideAction['damage'] = split_dice($guideAction['damage']);
 	return $guideAction;
+}
+
+function compute_mods($idBoard, &$token1, &$token2, &$guideline){
+	$arrAtMods_id = explode(',',getGuideActionByCode('ba', $guideline['guideAction']['string_guideline']));
+	$arrDamageMods_id = explode(',',getGuideActionByCode('bd', $guideline['guideAction']['string_guideline']));
+	$token2_file = json_decode(file_get_contents('../systems/lmde/tokens/'.$token2['file'].'.json'));
+	foreach($arrAtMods_id as $mod_id){
+		switch ($mod_id){
+		case 1:		# THACO
+			error_log("**".$token1['attrs']['thaco']);
+			add_mod_attack($guideline, $token1['attrs']['thaco'], _('THACO'));
+			break;
+		case 2:		# STR to attack
+			add_mod_attack($guideline, mod($token1['attrs']['str']), _('STR'));
+			break;
+		case 3:		# DEX to attack
+			add_mod_attack($guideline, mod($token1['attrs']['dex']), _('DEX'));
+			break;
+		case 10:	# Ranger favored enemy
+			if (property_exists($token2_file, 'tags') && in_array('goblinoid', $token2_file->tags)){
+				add_mod_attack($guideline, 2, _('FAVORED ENEMY'));
+			}	
+			break;
+		}
+	}
+	foreach($arrDamageMods_id as $mod_id){
+		switch ($mod_id){
+		case 1:		# STR to damage
+			add_mod_damage($guideline, mod($token1['attrs']['str']), _('STR'));
+			break;
+		}
+	}
 }
 
 function add_mod_attack(&$guideline, $mod, $desc){

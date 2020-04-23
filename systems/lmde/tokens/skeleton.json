@@ -8,7 +8,8 @@
 	"attrs":{
 		"maxhp": 8,
 		"hp":8,
-		"ac":13
+		"ac":13,
+		"thaco":1
 	},
 	"guidelines":[
 		{
@@ -16,7 +17,7 @@
 		"icon":"swords.png",
 		"name":"espada",
 		"short_desc":"1d6",
-		"action": "flmde_attack r1 d1d6"
+		"action": "flmde_attack r1 d1d6 ba1"
 		}
 	]
 }

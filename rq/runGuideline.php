@@ -5,7 +5,7 @@ include_once('../systems/lmde/guidelines.php');
 connectDB();
 setup_lang();
 
-#$_GET['m'] = "@exp tg3";
+#$_GET['m'] = "@exp tg1";
 #$_GET['idBoard'] = 1;
 # select * from attrs where idBoard = 4 AND tokenName in ('bar', 'gw1')
 
@@ -33,7 +33,6 @@ $target = '';
 if (preg_match("/\st([^ ]+)/", $m, $arrTmp)){
 	$target = $arrTmp[1];
 }
-
 # Guideline
 $guideline;
 if ($token_name != '') {

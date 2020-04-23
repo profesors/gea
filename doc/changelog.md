@@ -7,6 +7,8 @@
 
 ## Versiones
 
+1.15	Los bonus del guideline están incluidos en la línea de comando guideline
+1.14	Los tokens muestran el icono del guideline seleccionado
 1.13	Los tokens pueden ser importados en un escenario con un defaultGuideline
 1.12	Resuelto BUG al mostrar la ficha de personaje, los tokens del tablero aún pueden ser seleccionados
 1.11	Los tokens muestran el guideline por defecto

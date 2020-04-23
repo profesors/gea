@@ -9,7 +9,6 @@ $fromActionId = secure_param('fromActionId');
 
 # Get tokens from board
 $query = "SELECT * FROM tokens WHERE idBoard = $idBoard AND actionId>$fromActionId;";
-#echo "**$query**";
 $result = run_sql($query) or die();
 $arr = Array();
 while($row = mysqli_fetch_array($result)){
@@ -28,6 +27,7 @@ while($row = mysqli_fetch_array($result)){
 	$r->diceResult = trim($row['dice_result']);
 	$r->diceActionId = $row['dice_actionId'];
 	$r->diceActionTargets= $row['dice_action_targets'];
+	$r->defaultGuideline = new stdClass();
 	$r->defaultGuideline->n = $row['defaultGuideline'];
 	# Attrs
 	$query = "SELECT * FROM attrs WHERE idBoard=$idBoard AND tokenName='".$row['name']."';";

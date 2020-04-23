@@ -17,7 +17,8 @@
 		"con":11,
 		"int":14,
 		"wis":11,
-		"car":10
+		"car":10,
+		"thaco":1
 	},
 	"guidelines":[
 		{
@@ -25,14 +26,14 @@
 		"icon":"swords.png",
 		"name":"espada larga",
 		"short_desc": "1d8",
-		"action": "flmde_attack r1 d1d8"
+		"action": "flmde_attack r1 d1d8 ba1,2 bd1"
 		},
 		{
 		"number":2,
 		"icon":"bow.png",
 		"name":"arco largo",
 		"short_desc":"Alcance 5/10/15 1d8",
-		"action": "flmde_rangedAttack r5,10,15 d1d8",
+		"action": "flmde_rangedAttack r5,10,15 d1d8 ba1,3 bd1",
 		"maxn": 20,
 		"n": 20
 		}

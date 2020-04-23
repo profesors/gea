@@ -1,3 +1,4 @@
+var test;
 // Load functions of the board
 function getBoard(idBoard){
 	const rq = new XMLHttpRequest();
@@ -36,45 +37,44 @@ async function getTokens(idBoard, fromActionId=null){
 		//console.log(arrUpdatedTokens);
 		// Create arr tokens
 		for(var i=0; i<arrUpdatedTokens.length; i++){
-			var upToken = arrUpdatedTokens[i];	// Updated token
-			//console.log("Nuevo token:"+upToken);
+			var newToken = arrUpdatedTokens[i];	// Updated token
 			var token = getTokenByName(arrUpdatedTokens[i].name);
 			if (token==null){	// Es un nuevo token
-				token = upToken;
+				token = newToken;
 				// Position of the token
 				var px = getPixel(token.x, board.tilew, board.offsetx);
 				var py = getPixel(token.y, board.tileh, board.offsety)
 
 				// DIV container
 				token.div = document.createElement("div");
-				token.div.id = "token_"+upToken.name;
+				token.div.id = "token_"+newToken.name;
 				token.div.class = "token";
 				token.div.style.position = "absolute";
 				token.div.style.left = px.toString()+"px";
 				token.div.style.top = py.toString()+"px";
-				token.div.style.width = (board.tilew*upToken.w)+"px";
-				token.div.style.height = (board.tileh*upToken.h)+"px";
+				token.div.style.width = (board.tilew*newToken.w)+"px";
+				token.div.style.height = (board.tileh*newToken.h)+"px";
 				token.div.style.textAlign = "center";
 
 				// IMG of the token	NEW
 				token.img = document.createElement("img");
-				token.img.src = "img/tokens/"+upToken.imgSrc;
+				token.img.src = "img/tokens/"+newToken.imgSrc;
 				token.img.style.position = "absolute";
 				token.img.style.left = 0;
 				token.img.style.top = 0;
 				token.img.style.zIndex = 1;
 				token.img.style.borderRadius = "50%";
-				token.img.style.border = upToken.border.replace(/\+/g," ");
+				token.img.style.border = newToken.border.replace(/\+/g," ");
 				var reBorderWidth = RegExp(/^(\d)+/);
 				var borderWidth = reBorderWidth.exec(token.img.style.border.split(' ')[0])[0];
-				token.img.style.width = ((board.tilew*upToken.w)-(2*borderWidth))+"px";
-				token.img.style.height = ((board.tileh*upToken.h)-(2*borderWidth))+"px";
+				token.img.style.width = ((board.tilew*newToken.w)-(2*borderWidth))+"px";
+				token.img.style.height = ((board.tileh*newToken.h)-(2*borderWidth))+"px";
 				token.div.appendChild(token.img);
 
 				// Div with the NAME NEW
 				token.divName = document.createElement("div");
-				token.divName.id = "divName_"+upToken.name;
-				token.divName.innerHTML = "@"+upToken.name;
+				token.divName.id = "divName_"+newToken.name;
+				token.divName.innerHTML = newToken.name;
 				token.divName.style.color = "yellow";
 				token.divName.style.position = "absolute";
 				token.divName.style.fontWeight = "bold";
@@ -87,7 +87,7 @@ async function getTokens(idBoard, fromActionId=null){
 
 				// Div with DICE results NEW token
 				token.divDice = document.createElement("div");
-				token.divDice.id = "divDice_"+upToken.name;
+				token.divDice.id = "divDice_"+newToken.name;
 				token.divDice.style.color = "white";
 				token.divDice.style.position = "absolute";
 				token.divDice.style.fontWeight = "bold";
@@ -101,7 +101,7 @@ async function getTokens(idBoard, fromActionId=null){
 
 				// Div with Indicator results token
 				token.divIndicator = document.createElement("div");
-				token.divIndicator.id = "divIndicator_"+upToken.name;
+				token.divIndicator.id = "divIndicator_"+newToken.name;
 				token.divIndicator.style.color = "white";
 				token.divIndicator.style.position = "absolute";
 				token.divIndicator.style.fontWeight = "bold";
@@ -115,7 +115,7 @@ async function getTokens(idBoard, fromActionId=null){
 
 				// Div with guideline icon
 				token.divGuideline = document.createElement("img");
-				token.divGuideline.id = "divGuideline_"+upToken.name;
+				token.divGuideline.id = "divGuideline_"+newToken.name;
 				token.divGuideline.style.color = "white";
 				token.divGuideline.style.position = "absolute";
 				token.divGuideline.style.top = 0;
@@ -135,28 +135,29 @@ async function getTokens(idBoard, fromActionId=null){
 				}
 			}	// if NEW token
 
-			// Caso 1: El token está sano
-			if (token.attrs.hp>=0 && upToken.attrs.hp>=0){
-				//console.log("Caso 1: "+token.name+" HP:"+token.attrs.hp+" -> "+upToken.attrs.hp);
-				if (token.attrs.hp > upToken.attrs.hp){	// Lose HP
-					showDamage(token, token.attrs.hp-upToken.attrs.hp);
-					token.attrs.hp = upToken.attrs.hp;
+			test = token;
+			// Caso 1: Token is healthy
+			if (token.attrs.hp>0 && newToken.attrs.hp>0){
+				console.log("Caso 1: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
+				if (token.attrs.hp > newToken.attrs.hp){	// Lose HP
+					showDamage(token, token.attrs.hp-newToken.attrs.hp);
+					token.attrs.hp = newToken.attrs.hp;
 					updateHp(token);
 				} 
-				token.guidelines = upToken.guidelines;
-				token.defaultGuideline.n = upToken.defaultGuideline.n;
-				token.defaultGuideline.icon = upToken.defaultGuideline.icon;
-				if (upToken.defaultGuideline.icon != null){
+				token.guidelines = newToken.guidelines;
+				token.defaultGuideline.n = newToken.defaultGuideline.n;
+				token.defaultGuideline.icon = newToken.defaultGuideline.icon;
+				if (newToken.defaultGuideline.icon != null){
 					document.getElementById("divGuideline_"+token.name).src = 'img/icons/'+token.defaultGuideline.icon;
 				}
-				moveToken(token, upToken.x, upToken.y);
+				moveToken(token, newToken.x, newToken.y);
 
 				// This token has pending actions to show
-				if (token.diceActionId < upToken.diceActionId){	
-					token.diceActionId = upToken.diceActionId;
-					token.diceResult = upToken.diceResult;
+				if (token.diceActionId < newToken.diceActionId){	
+					token.diceActionId = newToken.diceActionId;
+					token.diceResult = newToken.diceResult;
 					showDiceResult(token.name);
-					var token2 = getTokenByName(upToken.diceActionTargets);
+					var token2 = getTokenByName(newToken.diceActionTargets);
 					var returnedData = parseInt((token.diceResult.split(' '))[0]);
 					if (token2 != null && Number.isInteger(returnedData)){	// A roll dice without target has not token2
 						runAnimationAttack(token, token2);
@@ -164,20 +165,16 @@ async function getTokens(idBoard, fromActionId=null){
 				}
 			} else
 			// Case 2: Token is death in this action
-			if (token.attrs.hp >= 0 && upToken.attrs.hp<0){
-				//console.log("Caso 2: "+token.name+" HP:"+token.attrs.hp+" -> "+upToken.attrs.hp);
-				showDamage(token, token.attrs.hp-upToken.attrs.hp);
-				token.attrs = upToken.attrs;
+			if (token.attrs.hp > 0 && newToken.attrs.hp<=0){
+				console.log("Caso 2: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
+				showDamage(token, token.attrs.hp-newToken.attrs.hp);
+				token.attrs = newToken.attrs;
 				updateHp(token);
 				removeToken(token.name);
 			} else if (token.attrs.hp<0){	// Caso 3
-				token.attrs = upToken.attrs;
+				console.log("Caso 3: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
+				token.attrs = newToken.attrs;
 				updateHp(token);
-				/*
-				var bPj= document.getElementById("b"+token.name);
-				if (bPj!=null){
-					bPj.style.opacity="0.3";
-				}*/
 				//removeToken(token.name);
 			}
 		}	// for

@@ -2,6 +2,7 @@ var MAXX = 0, MAXY = 0;
 var T_PRECISION = 20;
 var reRemoveToken = RegExp(/\sx/);
 var reTokenName = RegExp(/@([^ ]*)/);
+const DISABLED_OPACITY = 0.3;
 
 // Wait for a time
 // You can use it so: await sleep(ms);	Remember your delayed function must be 'async'
@@ -79,15 +80,15 @@ function setOpacityDivDice(name, newVal){
 // It shows the result of the dice fadeIn and then fadoOut
 async function showDiceResult(name){
 	setOpacityDivDice(name, 0);
+	var dice = document.getElementById("divDice_"+name);
+	dice.innerHTML = getTokenByName(name).diceResult;
 	try{
-		//navigator.mediaDevices.getUserMedia({audio:true, video:false}).then(function() {
+		if (Number.isInteger(parseInt(getTokenByName(name).diceResult.split(' ')[0]))){
 			document.getElementById("aDado").play();
-		//});
+		}
 	} catch(e){
 		console.log("Sonido de lanzamiento de dados. Audio no habilitado");
 	}
-	var dice = document.getElementById("divDice_"+name);
-	dice.innerHTML = getTokenByName(name).diceResult;
 	var y = 2*board.tileh/3;
 	var y0 = y;
 	dice.style.top = y+"px";
@@ -196,6 +197,9 @@ async function updateHp(token){
 			if (npy>100) npy=100;
 			hpnum.setAttribute("y",npy);
 			hpnum.innerHTML = token.attrs.hp;
+			if (token.attrs.hp<=0){
+				document.getElementById("b"+token.name).style.opacity = DISABLED_OPACITY;
+			}
 		}
 	}
 }
@@ -402,7 +406,7 @@ async function disablePj(token, time){
 	var tf = (new Date).getTime()+time;
 	var bPj= document.getElementById("b"+token.name);
 	if (bPj!=null){
-		bPj.style.opacity="0.3";
+		bPj.style.opacity= DISABLED_OPACITY;
 		var t = tf-(new Date).getTime();
 		while((tf-(new Date).getTime())>0) await sleep(T_PRECISION);
 		bPj.style.opacity="1";

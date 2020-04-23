@@ -9,7 +9,8 @@
 	"attrs":{
 		"maxhp": 8,
 		"hp":6,
-		"ac":10
+		"ac":10,
+		"thaco":1
 	},
 	"guidelines":[
 		{

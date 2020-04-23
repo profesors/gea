@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	document.querySelectorAll(".b11").forEach(function (item){
 		item.addEventListener('click', function (){
 		var token = getTokenByName(item.parentElement.id.substring(1));
-		if (item.parentElement.style.opacity!="0.3"){
+		if (item.parentElement.style.opacity!= DISABLED_OPACITY){
 			sendCommand("@"+token.name+" "+token.guidelines[1]);
 		}
 		event.stopPropagation();
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			var maxhp = token.attrs.maxhp;
 			currenthp++;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			token.attrs.hp = currenthp;
+			//token.attrs.hp = currenthp;
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
 		event.stopPropagation();
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			var maxhp = parseInt(token.attrs.maxhp);
 			currenthp--;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			token.attrs.hp = currenthp;
+			//token.attrs.hp = currenthp;
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
 		event.stopPropagation();
@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			var maxhp = parseInt(token.attrs.maxhp);
 			currenthp++;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			token.attrs.hp = currenthp;
+			//token.attrs.hp = currenthp;
 			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			var maxhp = parseInt(token.attrs.maxhp);
 			currenthp--;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			token.attrs.hp = currenthp;
+			//token.attrs.hp = currenthp;
 			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
@@ -276,7 +276,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			var maxhp = parseInt(token.attrs.maxhp);
 			currenthp++;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			token.attrs.hp = currenthp;
+			//token.attrs.hp = currenthp;
 			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
@@ -292,7 +292,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			var maxhp = parseInt(token.attrs.maxhp);
 			currenthp--;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			token.attrs.hp = currenthp;
+			//token.attrs.hp = currenthp;
 			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
@@ -374,7 +374,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			var maxhp = parseInt(token.attrs.maxhp);
 			currenthp++;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			token.attrs.hp = currenthp;
+			//token.attrs.hp = currenthp;
 			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
@@ -390,7 +390,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			var maxhp = parseInt(token.attrs.maxhp);
 			currenthp--;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			token.attrs.hp = currenthp;
+			//token.attrs.hp = currenthp;
 			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
@@ -472,7 +472,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			var maxhp = parseInt(token.attrs.maxhp);
 			currenthp++;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			token.attrs.hp = currenthp;
+			//token.attrs.hp = currenthp;
 			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
@@ -488,7 +488,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			var maxhp = parseInt(token.attrs.maxhp);
 			currenthp--;
 			(currenthp>maxhp)?hpbar.setAttribute("fill","orange"):hpbar.setAttribute("fill","lime");
-			token.attrs.hp = currenthp;
+			//token.attrs.hp = currenthp;
 			updateHp(token);
 			sendCommand("@"+token.name+" [hp:"+currenthp+"]");
 		}
