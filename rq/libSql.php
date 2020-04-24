@@ -295,4 +295,13 @@ function get_default_guideline_id($idBoard, $tokenName){
 	$result = run_Sql($query) or die();
 	return (mysqli_fetch_array($result))[0];
 }
+
+function set_animation($idBoard, $tokenName, $animation_string){
+	global $db;
+	$nextActionId = intval(read_last_actionId($idBoard))+1;
+	$query= "UPDATE tokens SET animation_actionId=$nextActionId, animation='$animation_string',";
+	$query.=" actionId=$nextActionId";
+   	$query.=" WHERE idBoard=$idBoard AND name='$tokenName'";
+	$result = run_Sql($query) or die();
+}
 ?>

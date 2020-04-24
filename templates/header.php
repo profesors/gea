@@ -13,6 +13,7 @@
 	<script src='js/main.js?t=1'></script>
 	<script src='js/load.js?t=1'></script>
 	<script src='js/interface.js?t=1'></script>
+	<script src='js/animations.js?t=1'></script>
 	<!--<script src='js/three.js'></script>
 	<script src='js/three_main.js'></scrip>-->
 

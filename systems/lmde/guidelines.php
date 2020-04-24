@@ -68,6 +68,11 @@ function lmde_attack($idBoard, $token1, $token2, $guideline){
 	$arrDist = distanceTokens($token1, $token2);
 	if (floor($arrDist['d'])<=1){
 		lmde_generic_attack($idBoard, $token1, $token2, $guideline);
+		$animation = new stdClass();
+		$animation->id = 1;
+		$animation->from = array($token1['name']);
+		$animation->to = array($token2['name']);
+		set_animation($idBoard, $token1['name'], json_encode($animation));
 	} else {
 		$action_string = _('OUT OF RANGE');
 		set_dice($idBoard, $token1['name'], $action_string, $token2['name']);
@@ -91,6 +96,11 @@ function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
 			# Attack
 			guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
 			lmde_generic_attack($idBoard, $token1, $token2, $guideline);
+			$animation = new stdClass();
+			$animation->id = 2;
+			$animation->from = array($token1['name']);
+			$animation->to = array($token2['name']);
+			set_animation($idBoard, $token1['name'], json_encode($animation));
 		} else {
 			$action_string = _('OUT OF RANGE');
 			set_dice($idBoard, $token1['name'], $action_string, $token2['name']);
@@ -104,14 +114,26 @@ function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
 }
 
 function lmde_mm($idBoard, $token1, $token2, $guideline){
-	guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
-	$d6 = one_roll(1,6);
-	$token2['attrs']['hp'] -= $d6;
-	set_attr($idBoard, $token2['name'], 'hp', $token2['attrs']['hp']);
-	$action_string = '<span class="name_text">'.$token1['name'].'</span> '._('ATTACKS TO').' ';
-	$action_string.= '<span class="name_text">'.$token2['name'].'</span> '._('WITH').' '.$guideline['name'];
-	$action_string.= '<span class="dmg_text">'.mb_ucfirst(_('DAMAGE')).'&nbsp;<span class="red">'.$d6;
-	$action_string.= '</span>';
+	if ($guideline['n']!=0){
+		$d6 = one_roll(1,6);
+		$token2['attrs']['hp'] -= $d6;
+		$action_string = '<span class="name_text">'.$token1['name'].'</span> '._('ATTACKS TO').' ';
+		$action_string.= '<span class="name_text">'.$token2['name'].'</span> '._('WITH').' '.$guideline['name'];
+		$action_string.= '<span class="dmg_text">'.mb_ucfirst(_('DAMAGE')).'&nbsp;<span class="red">'.$d6;
+		$action_string.= '</span>';
+		guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
+		$animation = new stdClass();
+		$animation->id = 3;
+		$animation->from = array($token1['name']);
+		$animation->to = array($token2['name']);
+		set_animation($idBoard, $token1['name'], json_encode($animation));
+		set_attr($idBoard, $token2['name'], 'hp', $token2['attrs']['hp']);
+		set_dice($idBoard, $token1['name'], $guideline['name'], $token2['name']);
+	} else {
+		$action_string = '<span class="name_text">'.$token1['name'].'</span> ';
+		$action_string.= ' '._('NO SPELLS').' '.$guideline['name'];
+		set_dice($idBoard, $token1['name'], _('NO SPELLS'), $token2['name']);
+	}
 	insert_action($idBoard, $action_string);
 }
 

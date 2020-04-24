@@ -7,6 +7,7 @@
 
 ## Versiones
 
+1.17	Animaciones en su propio archivo .js
 1.16	Proyectil mágico, primer hechizo implementado
 1.15	Los bonus del guideline están incluidos en la línea de comando guideline
 1.14	Los tokens muestran el icono del guideline seleccionado

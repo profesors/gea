@@ -43,8 +43,8 @@
 		"name":"proyectil mágico",
 		"short_desc":"Alcance 5/10/15 1d6",
 		"action": "flmde_mm r5,10,15 d1d6",
-		"maxn": 20,
-		"n": 20
+		"maxn": 10,
+		"n": 10
 		}
 	]
 }

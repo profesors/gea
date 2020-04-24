@@ -27,6 +27,8 @@ while($row = mysqli_fetch_array($result)){
 	$r->diceResult = trim($row['dice_result']);
 	$r->diceActionId = $row['dice_actionId'];
 	$r->diceActionTargets= $row['dice_action_targets'];
+	$r->animationActionId = $row['animation_actionId'];
+	$r->animation = $row['animation'];
 	$r->defaultGuideline = new stdClass();
 	$r->defaultGuideline->n = $row['defaultGuideline'];
 	# Attrs

@@ -68,3 +68,6 @@ msgstr "conjura"
 
 msgid "TARGET"
 msgstr "objetivo"
+
+msgid "NO SPELLS"
+msgstr "sin conjuros"

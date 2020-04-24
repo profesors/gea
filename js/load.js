@@ -139,7 +139,7 @@ async function getTokens(idBoard, fromActionId=null){
 			test = token;
 			// Caso 1: Token is healthy
 			if (token.attrs.hp>0 && newToken.attrs.hp>0){
-				console.log("Caso 1: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
+				//console.log("Caso 1: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
 				if (token.attrs.hp > newToken.attrs.hp){	// Lose HP
 					showDamage(token, token.attrs.hp-newToken.attrs.hp);
 					token.attrs.hp = newToken.attrs.hp;
@@ -152,28 +152,35 @@ async function getTokens(idBoard, fromActionId=null){
 					document.getElementById("divGuideline_"+token.name).src = 'img/icons/'+token.defaultGuideline.icon;
 				}
 				moveToken(token, newToken.x, newToken.y);
+				//console.log(token.name+": "+token.animationActionId+" "+newToken.animationActionId);
+				if (token.animationActionId < newToken.animationActionId){
+					token.animationActionId = newToken.animationActionId;
+					token.animation = JSON.parse(newToken.animation);
+					runAnimation(token);
+				}
 
 				// This token has pending actions to show
 				if (token.diceActionId < newToken.diceActionId){	
 					token.diceActionId = newToken.diceActionId;
 					token.diceResult = newToken.diceResult;
 					showDiceResult(token.name);
+					/*
 					var token2 = getTokenByName(newToken.diceActionTargets);
 					var returnedData = parseInt((token.diceResult.split(' '))[0]);
 					if (token2 != null && Number.isInteger(returnedData)){	// A roll dice without target has not token2
-						runAnimationAttack(token, token2);
-					}
+						runAnimation(token);
+					}*/
 				}
 			} else
 			// Case 2: Token is death in this action
 			if (token.attrs.hp > 0 && newToken.attrs.hp<=0){
-				console.log("Caso 2: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
+				//console.log("Caso 2: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
 				showDamage(token, token.attrs.hp-newToken.attrs.hp);
 				token.attrs = newToken.attrs;
 				updateHp(token);
 				removeToken(token.name);
 			} else if (token.attrs.hp<0){	// Caso 3
-				console.log("Caso 3: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
+				//console.log("Caso 3: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
 				token.attrs = newToken.attrs;
 				updateHp(token);
 				//removeToken(token.name);

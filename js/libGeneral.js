@@ -126,60 +126,6 @@ async function showDiceResult(name){
 	dice.style.opacity = 0;
 }
 
-async function moveToken(token, toX, toY){
-	// From (ox, oy) to (ox+dx, oy+dy)
-	if (token.x != toX || token.y != toY){
-		token.divDice.style.opacity=0;
-		//setOpacityCoordinates(0);
-		//setOpacityDivNames(0);
-		var ox = getPixel(token.x, board.tilew, board.offsetx);
-		var oy = getPixel(token.y, board.tileh, board.offsety);
-		const dx = getPixel(toX, board.tilew, board.offsetx)-ox;
-		const dy = getPixel(toY, board.tileh, board.offsety)-oy;
-		const oz = token.z;
-		token.div.style.zIndex = 10;
-		const pi2 = Math.PI/2;
-		var t0 = (new Date).getTime();
-		var tf = t0+500;
-		var tt = tf-t0;
-		var t = 0.0;
-		const k = Math.PI/(2*tt);
-		const dx2 = dx/2;
-		const dy2 = dy/2;
-		while(t<tt){
-			//token.div.style.left = (ox+dx2*Math.sin(t*k))+"px";
-			//token.div.style.top = (oy+dy2*Math.sin(t*k))+"px";
-			var p = t/tt;
-			token.div.style.left = (ox+dx2*p)+"px";
-			token.div.style.top = (oy+dy2*p)+"px";
-			token.div.style.transform = "scale("+(0.5*Math.sin(t*k)+1)+")";
-			await sleep(T_PRECISION);
-			t = (new Date).getTime() - t0;
-		}
-		t0 = (new Date).getTime();
-		tf = t0+500;
-		tt = tf-t0;
-		t = 0.0;
-		ox += dx2;
-		oy += dy2;
-		while(t<tt){
-			//token.div.style.left = (ox+dx2+dx2*Math.sin(t*k))+"px";
-			//token.div.style.top = (oy+dy2+dy2*Math.sin(t*k))+"px";
-			var p = t/tt;
-			token.div.style.left = (ox+dx2*p)+"px";
-			token.div.style.top = (oy+dy2*p)+"px";
-			token.div.style.transform = "scale("+(0.5*Math.cos(t*k)+1)+")";
-			await sleep(T_PRECISION);
-			t = (new Date).getTime() - t0;
-		}
-		token.x = toX;
-		token.y = toY;
-		token.div.style.left = (ox+dx2)+"px";
-		token.div.style.top = (oy+dy2)+"px";
-		token.div.style.zIndex = 1;
-		token.div.style.transform = "scale(1)";
-	}
-}
 
 async function updateHp(token){
 	if (Number.isInteger(parseInt(token.attrs.hp)) && Number.isInteger(parseInt(token.attrs.maxhp))){
@@ -258,114 +204,6 @@ function addSvgLine(id, x0, y0, x1, y1, color, width, extraStyle=null){
 	return el;
 }
 
-// Draw a combat icon from token to tilex, tiley and then disappears
-async function drawCloseCombat(token, tilex, tiley){
-	disablePj(token, 6000);
-	var el = document.createElementNS("http://www.w3.org/2000/svg", "line");
-	var id = "attack"+(new Date).getTime();
-	var x1 = getPixel(token.x, board.tilew, board.offsetx+board.tilew/2);
-	var y1 = getPixel(token.y, board.tileh, board.offsety+board.tileh/2);
-	var x2 = getPixel(tilex, board.tilew, board.offsetx+board.tilew/2);
-	var y2 = getPixel(tiley, board.tileh, board.offsety+board.tileh/2);
-	var pmx = (x2+x1)/2;	// Middle point in x
-	var pmy = (y2+y1)/2;	// Middle point in y
-	var tx = (x2-x1)/3;		// Transaltion in x
-	var ty = (y2-y1)/3;		// Translation in y
-	el.setAttribute("id",id);
-	el.setAttribute("x1", (pmx+x1)/2);
-	el.setAttribute("y1", (pmy+y1)/2);
-	el.setAttribute("x2", x2);
-	el.setAttribute("y2", y2);
-	var style = "stroke-width: 12; stroke:"+token.img.style.border.split(' ')[2]+"; ";
-	style+= "stroke-linecap:butt; stroke-dasharray:10,5; opacity:1;";
-	el.setAttribute("style", style);
-	var transform = "translate("+tx+" "+ty+") rotate("+(70+Math.floor(Math.random()*40)+1)+" "+pmx+" "+pmy+")";
-	el.setAttribute("transform",transform);
-	svg.appendChild(el);
-
-	var tokenTarget = getTokenByTile(tilex, tiley);
-	var t0 = (new Date).getTime();
-	var tf = t0+1000;
-	var tt = tf-t0;
-	var t = 0.0;
-	const k = Math.PI/(2*tt);
-	while (t<tt){
-		el.style.opacity = Math.sin(t*k);
-		await sleep(T_PRECISION);
-		t = (new Date).getTime()-t0;
-	}
-	svg.removeChild(el);
-}
-
-// Draw a ranged combat icon from token to tilex, tiley and then disappears
-async function drawRangedCombat(token, tilex, tiley){
-	disablePj(token, 6000);
-	var elLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-	var id = "ranged"+(new Date).getTime();
-	var x1 = getPixel(token.x, board.tilew, board.offsetx+board.tilew/2);
-	var y1 = getPixel(token.y, board.tileh, board.offsety+board.tileh/2);
-	var x2 = getPixel(tilex, board.tilew, board.offsetx+board.tilew/2);
-	var y2 = getPixel(tiley, board.tileh, board.offsety+board.tileh/2);
-	var pmx = (x2+x1)/2;	// Middle point in x
-	var pmy = (y2+y1)/2;	// Middle point in y
-	var tx = (x2-x1)/2;		// Transaltion in x
-	var ty = (y2-y1)/2;		// Translation in y
-	elLine.setAttribute("id",id);
-	elLine.setAttribute("x1", x1);
-	elLine.setAttribute("y1", y1);
-	elLine.setAttribute("x2", x1);
-	elLine.setAttribute("y2", y1);
-	var style = "stroke-width: 2; stroke:"+token.img.style.border.split(' ')[2]+"; opacity: 0;";
-	style += "stroke-linecap:butt; stroke-dasharray:5,30;";
-	elLine.setAttribute("style", style);
-	// First part: Arrow flying
-	svg.appendChild(elLine);
-
-	var t0 = (new Date).getTime();	// Time _0
-	var tt = 500;					// Total Time
-	var tf = t0+tt;					// Time _final
-	var t = 0.0;					// current Time
-	const k = (Math.PI/2)/(tf-t0);	// Constant
-	var vX = x2-x1, vY = y2-y1;
-	while(t<tt){					//t*k \in {0, pi/2}
-		var p = t/tt;				// Lineal proportionality \in {0..1}
-		elLine.style.opacity = Math.sin(t*k);
-		elLine.setAttribute("x2", (x1+p*vX));
-		elLine.setAttribute("y2", (y1+p*vY));
-		await sleep(T_PRECISION);
-		t = (new Date).getTime()-t0;
-	}
-	// Second part: Circle expands
-	var idC = "circ"+(new Date).getTime();
-	var elCircle = addSvgCircle(idC,x2,y2,20,token.img.style.border.split(' ')[2], "opacity:1;");
-	t0 = (new Date).getTime();
-	tt = 500;
-	tf = t0 + tt;
-	t = 0.0;
-	while(t<tt){
-		var p = t/tt;
-		elCircle.style.opacity = Math.sin(t*k);
-		elCircle.setAttribute("r", 20*p);
-		await sleep(T_PRECISION);
-		t = (new Date).getTime()-t0;
-	}
-	// Third part: Fadeout
-	var tokenTarget = getTokenByTile(tilex, tiley);
-	t0 = (new Date).getTime();
-	tt = 500;
-	tf = t0 + tt;
-	t = 0.0;
-	while(t<tt){
-		elCircle.style.opacity = Math.cos(t*k);
-		elCircle.style.opacity = Math.cos(t*k);
-		elCircle.setAttribute("r", 20*Math.cos(t*k));
-		await sleep(T_PRECISION);
-		t = (new Date).getTime()-t0;
-	}
-	svg.removeChild(elLine);
-	svg.removeChild(elCircle);
-	
-}
 
 function sendCommand(command){
 	var rq = new XMLHttpRequest();
@@ -391,27 +229,7 @@ function getSheetCharacter(name, idBoard, destDiv){
 	}
 }
 
-function runAnimationAttack(token1, token2){
-	var d = distanceFromTokenToToken(token1, token2);
-	// Acording to de distance, use one guideline or other
-	if (Math.floor(d.distance)<=token1.w){
-		drawCloseCombat(token1, d.p2.x, d.p2.y);
-	}
-	if (Math.floor(d.distance)>token1.w){
-		drawRangedCombat(token1, d.p2.x, d.p2.y);
-	}
-}
 
-async function disablePj(token, time){
-	var tf = (new Date).getTime()+time;
-	var bPj= document.getElementById("b"+token.name);
-	if (bPj!=null){
-		bPj.style.opacity= DISABLED_OPACITY;
-		var t = tf-(new Date).getTime();
-		while((tf-(new Date).getTime())>0) await sleep(T_PRECISION);
-		bPj.style.opacity="1";
-	}
-}
 
 function isEnabled(token){
 	var bRet = true;
@@ -497,24 +315,10 @@ function distanceFromTokenToToken(token1, token2){
 	return {distance:dMin, p1:{x:x1, y:y1}, p2:{x:x2, y:y2}};
 }
 
-async function showDamage(token, damage){
-	token.divIndicator.style.opacity = 0;
-	token.divIndicator.innerHTML = "";
-	await sleep(1000);
-	token.divIndicator.style.opacity=1;
-	token.divIndicator.innerHTML = -damage;
-	token.divIndicator.style.top = (board.tileh/2)+"px";
-	token.divIndicator.style.color = "red";
-	var hpbar = document.getElementById("hpbar_"+token.name)
-	if (hpbar != null){
-		token.divDice.innerHTML = -damage;
-	} else {
-		token.divDice.innerHTML = -damage;//(-token2.attrs.maxhp+token2.attrs.hp);
-	}
-	setTimeout(function (){
-		token.divIndicator.style.opacity=0;
-	},2000);
+function distance(x1, y1, x2, y2){
+	return Math.sqrt(((x2-x1)**2+(y2-y1)**2));
 }
+
 
 function togglePanelI(){
 	var panel = document.getElementById("panelI");
