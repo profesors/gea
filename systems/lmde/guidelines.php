@@ -88,16 +88,6 @@ function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
 			if ($arrDist['d']<=$guideline['guideAction']['range'][1])	$distance_mod=0;
 			if ($arrDist['d']<=$guideline['guideAction']['range'][0])	$distance_mod=1;
 			add_mod_attack($guideline, $distance_mod, _('DISTANCE'));
-			/*
-			# Dex mod
-			$dex = $token1['attrs']['dex'];
-			$mod_dex = mod($dex);
-			if ($mod_dex!=0)	add_mod_attack($guideline, $mod_dex, _('DEX'));
-			# STR mod
-			$str = $token1['attrs']['str'];
-			$mod_str = mod($str);
-			if ($mod_str!=0)	add_mod_damage($guideline, $mod_str, _('STR'));
-			 */
 			# Attack
 			guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
 			lmde_generic_attack($idBoard, $token1, $token2, $guideline);
@@ -113,6 +103,17 @@ function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
 	}
 }
 
+function lmde_mm($idBoard, $token1, $token2, $guideline){
+	guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
+	$d6 = one_roll(1,6);
+	$token2['attrs']['hp'] -= $d6;
+	set_attr($idBoard, $token2['name'], 'hp', $token2['attrs']['hp']);
+	$action_string = '<span class="name_text">'.$token1['name'].'</span> '._('ATTACKS TO').' ';
+	$action_string.= '<span class="name_text">'.$token2['name'].'</span> '._('WITH').' '.$guideline['name'];
+	$action_string.= '<span class="dmg_text">'.mb_ucfirst(_('DAMAGE')).'&nbsp;<span class="red">'.$d6;
+	$action_string.= '</span>';
+	insert_action($idBoard, $action_string);
+}
 
 # ************************************** GENERAL PURPOSE ***************************
 

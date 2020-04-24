@@ -62,3 +62,9 @@ msgstr "proyectiles"
 
 msgid "THACO"
 msgstr "Gac0"
+
+msgid "SPELLS"
+msgstr "conjura"
+
+msgid "TARGET"
+msgstr "objetivo"

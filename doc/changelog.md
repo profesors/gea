@@ -7,6 +7,7 @@
 
 ## Versiones
 
+1.16	Proyectil mágico, primer hechizo implementado
 1.15	Los bonus del guideline están incluidos en la línea de comando guideline
 1.14	Los tokens muestran el icono del guideline seleccionado
 1.13	Los tokens pueden ser importados en un escenario con un defaultGuideline
@@ -15,16 +16,6 @@
 1.10	Los PJs deben seleccionar el guideline a utilizar por anticipado
 1.09	El explorador tiene +2 al atacar a pieles verde a distancia
 1.08	El explorador tiene +2 al atacar a pieles verdes en cuerpo a cuerpo
-		Array
-		(
-			[idBoard] => 1
-			[tokenName] => exp
-			[guideNumber] => 1
-			[name] => Espada larga 1d8+2
-			[guideAction] => flmde_attack_enemy r1 a1d8+2 d1d12+2
-			[n] => -1
-			[maxn] => -1
-		)
 1.07	Simplificar _guidelines_ de _lmde_
 1.06	Fichas de personaje mejoradas
 1.05	Las fichas muestran los datos dinámicos

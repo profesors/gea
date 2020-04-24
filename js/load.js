@@ -114,13 +114,14 @@ async function getTokens(idBoard, fromActionId=null){
 				token.div.appendChild(token.divIndicator);
 
 				// Div with guideline icon
+				const iconSize = 20;
 				token.divGuideline = document.createElement("img");
 				token.divGuideline.id = "divGuideline_"+newToken.name;
 				token.divGuideline.style.color = "white";
 				token.divGuideline.style.position = "absolute";
-				token.divGuideline.style.top = 0;
+				token.divGuideline.style.top = (board.tileh-iconSize)+"px";
 				token.divGuideline.style.right = 0;
-				token.divGuideline.style.width = "20px";
+				token.divGuideline.style.width = iconSize+"px";
 
 				token.divGuideline.style.zIndex = 3;
 				token.divGuideline.style.opacity = 1;

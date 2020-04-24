@@ -199,6 +199,7 @@ function movementClick(event){
 			movement.token.divName.style.color = "white";
 		}
 	} else {	// Second click
+		console.log("Second click");
 		movement.token.divName.style.color = "yellow";
 		var destToken = getTokenByTile(tilex,tiley);
 		if (destToken==null){	// Destination is empty, you can move

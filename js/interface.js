@@ -524,6 +524,13 @@ function showDefaultGuidelineInSheet(name, id){
 	sendCommand(":g"+name+","+id);
 	var divInfo = document.getElementById("info_character");
 	divInfo.style.display = "grid";
-	//divInfo.innerHTML = name+" loading<br/>"+divInfo.innerHTML;
 	getSheetCharacter(name, board.id, divInfo);
+}
+
+function mm(tokenName){
+	closeInfoCharacter();
+	console.log(tokenName);
+	movement.token = getTokenByName(tokenName);
+	//runGuideline(encodeURI("@"+tokenName);
+	sendCommand("/:g"+tokenName+",3");
 }
