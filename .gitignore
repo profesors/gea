@@ -1,6 +1,7 @@
 *.swp
 *.swo
 *.png
+*.mo
 img/tokens/original
 img/tokens/procesar
 tmp
