@@ -1,22 +1,15 @@
-function runAnimation(token){
-	var animation = token.animation;
-	switch(token.animation.id){
+function runAnimation(token, i){
+	switch(token.animation[i].typeId){
 		case 1:
-			var tokenFrom = getTokenByName(token.animation.from);
-			var tokenTo = getTokenByName(token.animation.to);
-			runAnimation_closeCombat(tokenFrom, tokenTo);
+			runAnimation_closeCombat(token, i);
 			break;
 		case 2:
-			var tokenFrom = getTokenByName(token.animation.from);
-			var tokenTo = getTokenByName(token.animation.to);
-			runAnimation_rangedCombat(tokenFrom, tokenTo);
+			runAnimation_rangedCombat(token, i);
 			break;
 		case 3:
-			var tokenFrom = getTokenByName(token.animation.from);
-			var tokenTo = getTokenByName(token.animation.to);
-			runAnimation_magicMissile(tokenFrom, tokenTo);
+			runAnimation_magicMissile(token, i);
 			break;
-	}
+	}	// Switch case
 }
 
 async function showDamage(token, damage){
@@ -104,27 +97,15 @@ async function disablePc(token, time){
 	}
 }
 
-
-/*
-function runAnimation_attackGeneral(token1, token2){
-	var d = distanceFromTokenToToken(token1, token2);
-	if (Math.floor(d.distance)<=token1.w){
-		runAnimation_closeCombat(token1, d.p2.x, d.p2.y);
-	}
-	if (Math.floor(d.distance)>token1.w){
-		runAnimation_rangedCombat(token1, d.p2.x, d.p2.y);
-	}
-}*/
-
 // Draw a combat icon from token to tilex, tiley and then disappears
-async function runAnimation_closeCombat(token1, token2){
-	disablePc(token1, 6000);
+async function runAnimation_closeCombat(token, i){
+	disablePc(token, 6000);
 	var el = document.createElementNS("http://www.w3.org/2000/svg", "line");
 	var id = "attack"+(new Date).getTime();
-	var x1 = getPixel(token1.x, board.tilew, board.offsetx+board.tilew/2);
-	var y1 = getPixel(token1.y, board.tileh, board.offsety+board.tileh/2);
-	var x2 = getPixel(token2.x, board.tilew, board.offsetx+board.tilew/2);
-	var y2 = getPixel(token2.y, board.tileh, board.offsety+board.tileh/2);
+	var x1 = getPixel(token.animation[i].src_x, board.tilew, board.offsetx+board.tilew/2);
+	var y1 = getPixel(token.animation[i].src_y, board.tileh, board.offsety+board.tileh/2);
+	var x2 = getPixel(token.animation[i].target_x, board.tilew, board.offsetx+board.tilew/2);
+	var y2 = getPixel(token.animation[i].target_y, board.tileh, board.offsety+board.tileh/2);
 	var pmx = (x2+x1)/2;	// Middle point in x
 	var pmy = (y2+y1)/2;	// Middle point in y
 	var tx = (x2-x1)/2;		// Transaltion in x
@@ -134,7 +115,7 @@ async function runAnimation_closeCombat(token1, token2){
 	el.setAttribute("y1", (pmy+y1)/2);
 	el.setAttribute("x2", x2);
 	el.setAttribute("y2", y2);
-	var style = "stroke-width: 12; stroke:"+token1.img.style.border.split(' ')[2]+"; ";
+	var style = "stroke-width: 12; stroke:"+token.img.style.border.split(' ')[2]+"; ";
 	style+= "stroke-linecap:butt; stroke-dasharray:10,5; opacity:1;";
 	el.setAttribute("style", style);
 	var transform = "translate("+tx+" "+ty+") rotate("+(70+Math.floor(Math.random()*40)+1)+" "+pmx+" "+pmy+")";
@@ -222,16 +203,16 @@ async function runAnimation_rangedCombat(token, tilex, tiley){
 	svg.removeChild(elCircle);
 }*/
 // Draw a ranged combat icon from token to tilex, tiley and then disappears
-async function runAnimation_rangedCombat(token1, token2){
-	disablePc(token1, 6000);
+async function runAnimation_rangedCombat(token, i){
+	disablePc(token, 6000);
 	var elLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
 	var id = "ranged"+(new Date).getTime();
-	var x1 = getPixel(token1.x, board.tilew, board.offsetx+board.tilew/2);
-	var y1 = getPixel(token1.y, board.tileh, board.offsety+board.tileh/2);
-	var x2 = getPixel(token2.x, board.tilew, board.offsetx+board.tilew/2);
-	var y2 = getPixel(token2.y, board.tileh, board.offsety+board.tileh/2);
+	var x1 = getPixel(token.animation[i].src_x, board.tilew, board.offsetx+board.tilew/2);
+	var y1 = getPixel(token.animation[i].src_y, board.tileh, board.offsety+board.tileh/2);
+	var x2 = getPixel(token.animation[i].target_x, board.tilew, board.offsetx+board.tilew/2);
+	var y2 = getPixel(token.animation[i].target_y, board.tileh, board.offsety+board.tileh/2);
 	elLine.setAttribute("id",id);
-	var style = "stroke-width: 2; stroke:"+token1.img.style.border.split(' ')[2]+"; opacity: 1;";
+	var style = "stroke-width: 2; stroke:"+token.img.style.border.split(' ')[2]+"; opacity: 1;";
 	style += "stroke-linecap:butt;";
 	elLine.setAttribute("style", style);
 	svg.appendChild(elLine);
@@ -265,33 +246,33 @@ async function runAnimation_rangedCombat(token1, token2){
 	setTimeout(function(){svg.removeChild(elLine);}, 1000);
 }
 
-async function runAnimation_magicMissile(token1, token2){
-	disablePc(token1, 6000);
+async function runAnimation_magicMissile(token, i){
+	disablePc(token, 6000);
 	var elLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-	var id = "mm";//+(new Date).getTime();
-	var x1 = getPixel(token1.x, board.tilew, board.offsetx+board.tilew/2);
-	var y1 = getPixel(token1.y, board.tileh, board.offsety+board.tileh/2);
-	var x2 = getPixel(token2.x, board.tilew, board.offsetx+board.tilew/2);
-	var y2 = getPixel(token2.y, board.tileh, board.offsety+board.tileh/2);
+	var id = "mm"+(new Date).getTime();
+	var x1 = getPixel(token.animation[i].src_x, board.tilew, board.offsetx+board.tilew/2);
+	var y1 = getPixel(token.animation[i].src_y, board.tileh, board.offsety+board.tileh/2);
+	var x2 = getPixel(token.animation[i].target_x, board.tilew, board.offsetx+board.tilew/2);
+	var y2 = getPixel(token.animation[i].target_y, board.tileh, board.offsety+board.tileh/2);
 	elLine.setAttribute("id",id);
-	var style = "stroke-width: 2; stroke:"+token1.img.style.border.split(' ')[2]+"; opacity: 1;";
+	var style = "stroke-width: 2; stroke:"+token.img.style.border.split(' ')[2]+"; opacity: 1;";
 	style += "stroke-linecap:butt; stroke-dasharray:5,30;";
 	elLine.setAttribute("style", style);
 	svg.appendChild(elLine);
 	
 	// First part: Circle expands
 	var idC = "circ"+(new Date).getTime();
-	var elCircle = addSvgCircle(idC,x1,y1,0,token1.img.style.border.split(' ')[2], "opacity:1;");
+	var elCircle = addSvgCircle(idC,x1,y1,0,token.img.style.border.split(' ')[2], "opacity:1;");
 	t0 = (new Date).getTime();
 	tt = 1500;
 	tf = t0 + tt;
 	t = 0.0;
 	var dest_x = -0.5*board.tilew+board.tilew*Math.random();
-	var dest_y = -0.5*board.tileh+board.tileh*Math.random();
+	var dest_y = -0.5*board.tileh;
 	const k = (Math.PI/2)/(tf-t0);	// Constant
 	while(t<tt){
 		var p = t/tt;
-		elCircle.style.opacity = Math.sin(t*k);
+		elCircle.style.opacity = p;
 		elCircle.setAttribute("r", 10*p);
 		elCircle.setAttribute("cx", x1+p*dest_x);
 		elCircle.setAttribute("cy", y1+p*dest_y);

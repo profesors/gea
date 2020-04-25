@@ -136,7 +136,6 @@ async function getTokens(idBoard, fromActionId=null){
 				}
 			}	// if NEW token
 
-			test = token;
 			// Caso 1: Token is healthy
 			if (token.attrs.hp>0 && newToken.attrs.hp>0){
 				//console.log("Caso 1: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
@@ -152,12 +151,17 @@ async function getTokens(idBoard, fromActionId=null){
 					document.getElementById("divGuideline_"+token.name).src = 'img/icons/'+token.defaultGuideline.icon;
 				}
 				moveToken(token, newToken.x, newToken.y);
-				//console.log(token.name+": "+token.animationActionId+" "+newToken.animationActionId);
-				if (token.animationActionId < newToken.animationActionId){
-					token.animationActionId = newToken.animationActionId;
-					token.animation = JSON.parse(newToken.animation);
-					runAnimation(token);
-				}
+
+				/* Animations */
+				for (var ani_step=0; newToken.animation!=null && ani_step<newToken.animation.length; ani_step++){
+					//console.log(board.lastActionId+" "+newToken.animation[0].actionId);
+					if (board.lastActionId<newToken.animation[ani_step].actionId){
+						token.animation = newToken.animation;
+						runAnimation(token, ani_step);
+					} else {
+						token.animation = null;
+					}
+				} 
 
 				// This token has pending actions to show
 				if (token.diceActionId < newToken.diceActionId){	

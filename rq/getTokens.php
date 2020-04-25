@@ -27,8 +27,24 @@ while($row = mysqli_fetch_array($result)){
 	$r->diceResult = trim($row['dice_result']);
 	$r->diceActionId = $row['dice_actionId'];
 	$r->diceActionTargets= $row['dice_action_targets'];
-	$r->animationActionId = $row['animation_actionId'];
-	$r->animation = $row['animation'];
+	# Animations
+	$r->animation = Array();
+	$query = "SELECT * FROM animations WHERE idBoard=$idBoard AND tokenName='".$row['name'];
+	$query.= "' AND action_id>=$fromActionId";
+	$result_animations = run_sql($query);
+	while($row_animation = mysqli_fetch_array($result_animations)){
+		$animation = new stdClass();
+		$animation->actionId = $row_animation['action_id'];
+		$animation->typeId = $row_animation['type_id'];
+		$animation->step = $row_animation['step'];
+		$animation->delayAfterStep = $row_animation['delay_after_step'];
+		$animation->src_x = $row_animation['src_x'];
+		$animation->src_y = $row_animation['src_y'];
+		$animation->target_x = $row_animation['target_x'];
+		$animation->target_y = $row_animation['target_y'];
+		array_push($r->animation, $animation);
+	}
+	# **
 	$r->defaultGuideline = new stdClass();
 	$r->defaultGuideline->n = $row['defaultGuideline'];
 	# Attrs

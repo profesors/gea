@@ -7,6 +7,7 @@
 
 ## Versiones
 
+1.18	Nueva tabla de la base de datos para guardar las animaciones
 1.17	Animaciones en su propio archivo .js
 1.16	Proyectil mágico, primer hechizo implementado
 1.15	Los bonus del guideline están incluidos en la línea de comando guideline

@@ -32,6 +32,8 @@ function reset_db(){
 	run_sql($query) or die();
 	$query = "TRUNCATE tokens;";
 	run_sql($query) or die();
+	$query = "TRUNCATE animations;";
+	run_sql($query);
 }
 
 function secure_param($name){
@@ -65,7 +67,7 @@ function write_last_actionId($idBoard, $actionId){
 
 function increase_last_actionId($idBoard, $ammount){
 	global $db;
-	$query = "UPDATE boards SET lastActionId = lastActionId + $ammount;";
+	$query = "UPDATE boards SET lastActionId = lastActionId + $ammount WHERE id=$idBoard;";
 	run_sql($query) or die();
 }
 function read_last_actionId($idBoard){
@@ -183,9 +185,6 @@ function reset_board($idBoard){
 # Updates the dice column of a token
 function set_dice($idBoard, $name, $value, $targets=''){
 	global $db;
-	$query = "SELECT lastActionId FROM boards WHERE id = $idBoard LIMIT 1;";
-	$result = run_sql($query) or die();
-	$row = mysqli_fetch_array($result);
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
 	$dice_action_targets = trim($targets,',');
 	$query = "UPDATE tokens SET dice_result = '$value', dice_actionId=$nextActionId, ";
@@ -292,16 +291,20 @@ function set_default_guideline_id($idBoard, $tokenName, $guide_id){
 function get_default_guideline_id($idBoard, $tokenName){
 	global $db;
 	$query= "SELECT defaultGuideline FROM tokens WHERE idBoard=$idBoard AND name='$tokenName' LIMIT 1";
-	$result = run_Sql($query) or die();
+	$result = run_sql($query) or die();
 	return (mysqli_fetch_array($result))[0];
 }
 
-function set_animation($idBoard, $tokenName, $animation_string){
+function set_animation($idBoard, $tokenName, $step, $delay_after_step, $type_id, $src_x, $src_y, $target_x, $target_y){
 	global $db;
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
-	$query= "UPDATE tokens SET animation_actionId=$nextActionId, animation='$animation_string',";
-	$query.=" actionId=$nextActionId";
-   	$query.=" WHERE idBoard=$idBoard AND name='$tokenName'";
-	$result = run_Sql($query) or die();
+	$query = "DELETE FROM animations WHERE idBoard=$idBoard AND tokenName='$tokenName'";
+	$result = run_sql($query) or die();
+	$query = "INSERT INTO animations (idBoard, tokenName, step, delay_after_step, action_id, type_id, ";
+	$query.= " src_x, src_y, target_x, target_y)";
+	$query.= " VALUES ($idBoard, '$tokenName', $step, $delay_after_step, $nextActionId, $type_id, ";
+	$query.= "$src_x, $src_y, $target_x, $target_y) ";
+	$result = run_sql($query) or die();
+	increase_last_actionId($idBoard, 1);
 }
 ?>
