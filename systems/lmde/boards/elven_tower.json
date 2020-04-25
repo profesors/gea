@@ -1,0 +1,70 @@
+{
+	"name":"Elven tower",
+	"tilew":70,
+	"tileh":70,
+	"ntilesw":25,
+	"ntilesh":25,
+	"offsetx":0,
+	"offsety":0,
+	"bg":"010bg.jpg",
+	"drawGrid":0,
+	"lastActionId":0,
+	"tokens": [
+		{
+			"file": "bar",
+			"name": "bar",
+			"x": 14,
+			"y": 23,
+			"default_guideline_id":1
+		},
+		{
+			"file": "exp",
+			"name": "exp",
+			"x": 14,
+			"y": 24,
+			"default_guideline_id":2
+		},
+		{
+			"file": "elf",
+			"name": "elf",
+			"x": 14,
+			"y": 25,
+			"default_guideline_id":3
+		},
+		{
+			"file": "goblin",
+			"name": "g1",
+			"x": 14,
+			"y": 10,
+			"default_guideline_id":2
+		},
+		{
+			"file": "goblin",
+			"name": "g2",
+			"x": 13,
+			"y": 9,
+			"default_guideline_id":1
+		},
+		{
+			"file": "goblin",
+			"name": "g3",
+			"x": 14,
+			"y": 8,
+			"default_guideline_id":1
+		},
+		{
+			"file": "goblin",
+			"name": "g4",
+			"x": 15,
+			"y": 10,
+			"default_guideline_id":2
+		},
+		{
+			"file": "skeleton",
+			"name": "e1",
+			"x": 10,
+			"y": 1,
+			"default_guideline_id":1
+		}
+	]
+}

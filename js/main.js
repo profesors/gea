@@ -1,4 +1,4 @@
-var canvas, svg, panelI, input, output;
+var canvas, canvasOver, svg, panelI, input, output;
 var arrTokens = [];						// Tokens in the board
 var arrCommands = [], iCommands = 0;	// Commands sended. Array and index to ArrowUp and ArrowDown recover
 var timerUpdates;						// Timer to check each second for updates from the server
@@ -163,13 +163,23 @@ function checkUpdates(){
 		if (rq.readyState == XMLHttpRequest.DONE && rq.status == 200){
 			var s = rq.responseText;
 			remoteLastAction = JSON.parse(s);
-			/*
-			if (board.lastAction.bgTs < currentLastAction.bgTs){	// Update BG
-				const tsNow = (new Date()).getTime();
-				canvas.style.backgroundImage = "url('img/bg/"+board.bg+"?cache="+tsNow+"')";
-				board.lastAction.bgTs = currentLastAction.bgTs;
-			}*/
 
+			// Update Board
+			//console.log(board.bgTs+" "+remoteLastAction.bgTs);
+			if (board.bgTs < remoteLastAction.bgTs){	// Update BG
+				const tsNow = (new Date()).getTime();
+
+				var canvasOver = document.getElementById("canvas_over");
+				var newBg = new Image();
+				newBg.onload = function(){changeBackground(newBg.src);}
+				newBg.src = "img/bg/"+board.bg+"?cache="+tsNow+"')";
+				//console.log("UPDATE BG "+newBg.src);
+
+				//canvas.style.backgroundImage = "url('img/bg/"+board.bg+"?cache="+tsNow+"')";
+				board.bgTs = remoteLastAction.bgTs;
+			}
+
+			// Update tokens
 			if (board.lastActionId < remoteLastAction.id){	// Update tokens
 				getTokens(board.id, board.lastActionId);
 				if (panelI.style.display == 'block')	updateActionsPanel(board.id);

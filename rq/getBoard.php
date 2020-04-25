@@ -18,6 +18,7 @@ $ret->ntilesh = $row['ntilesh'];
 $ret->offsetx = $row['offsetx'];
 $ret->offsety = $row['offsety'];
 $ret->bg = $row['bg'];
+$ret->bgTs = get_bg_ts($idBoard);
 $ret->drawGrid = $row['drawGrid'];
 $ret->lastActionId = $row['lastActionId'];
 echo json_encode($ret, JSON_NUMERIC_CHECK);

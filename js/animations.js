@@ -298,3 +298,29 @@ async function runAnimation_magicMissile(token, i){
 	}
 	setTimeout(function(){svg.removeChild(elCircle);}, 100);
 }
+
+async function changeBackground(newBg){
+	const tsNow = (new Date()).getTime();
+	var canvasOver = document.getElementById("canvas_over");
+	canvasOver.style.backgroundImage = "url('"+newBg+"?cache="+tsNow+"')";
+	var t0 = (new Date).getTime();
+	var tf = t0+1000;
+	var tt = tf-t0;
+	var t = 0.0;
+	const k = Math.PI/(2*tt);
+	while(t<tt){
+		var p = t/tt;
+		canvasOver.style.opacity = p;
+		await sleep(T_PRECISION);
+		t = (new Date).getTime() - t0;
+	}
+	//setTimeout(function(){canvasOver.style.opacity=0; console.log("OUT");}, 4000);
+	var definitiveBg = new Image();
+	definitiveBg.onload = function(){
+		canvasOver.style.opacity=0;
+		document.getElementById("canvas_bg").style.backgroundImage = "url('"+newBg+"?cache="+tsNow+"')";
+	}
+	definitiveBg.src = "img/bg/"+board.bg+"?cache="+tsNow;
+	//document.getElementById("canvas").style.backgroundImage = "url('img/bg/"+board.bg+"?cache="+tsNow+"')";
+
+}

@@ -10,11 +10,35 @@ function getBoard(idBoard){
 			board = JSON.parse(s);
 
 			// BG
+			var canvasBg = document.getElementById("canvas_bg");
+			canvasBg.style.backgroundImage = "url(img/bg/"+board.bg+")";
+			canvasBg.style.backgroundRepeat = "no-repeat";
+			canvasBg.style.opacity=1;
+			canvasBg.style.zIndex=1;
+			canvasBg.style.position = "absolute";
+			canvasBg.style.width = (parseInt(board.tilew)*parseInt(board.ntilesw))+0.5*board.tilew+100+"px";
+			canvasBg.style.height = (board.tileh*board.ntilesh)+0.5*board.tileh+"px";
+
 			var canvas = document.getElementById("canvas");
-			canvas.style.backgroundImage = "url(img/bg/"+board.bg+")";
-			canvas.style.backgroundRepeat = "no-repeat";
+			canvas.style.zIndex=2;
+			canvas.style.position = "absolute";
+			canvas.style.left=0;
+			canvas.style.top=0;
+			//canvas.style.backgroundColor = "rgba(255,255,255,0)";
 			canvas.style.width = (parseInt(board.tilew)*parseInt(board.ntilesw))+0.5*board.tilew+100+"px";
 			canvas.style.height = (board.tileh*board.ntilesh)+0.5*board.tileh+"px";
+
+			var canvasOver = document.getElementById("canvas_over");
+			canvasOver.style.opacity = 0;
+			canvasOver.style.zIndex=2;
+			canvasOver.style.position = "absolute";
+			canvasOver.style.left=0;
+			canvasOver.style.top=0;
+			canvasOver.style.backgroundImage = "url(img/bg/009bg.jpg)";
+			canvasOver.style.backgroundRepeat = "no-repeat";
+			canvasOver.style.width = (parseInt(board.tilew)*parseInt(board.ntilesw))+0.5*board.tilew+100+"px";
+			canvasOver.style.height = (board.tileh*board.ntilesh)+0.5*board.tileh+"px";
+
 			getTokens(board.id, 0);	
 			const scrollTop = Cookies.get("scrollTop");
 			const scrollLeft =Cookies.get("scrollLeft"); 
@@ -52,6 +76,7 @@ async function getTokens(idBoard, fromActionId=null){
 				token.div.style.position = "absolute";
 				token.div.style.left = px.toString()+"px";
 				token.div.style.top = py.toString()+"px";
+				token.div.style.zIndex = 10;
 				token.div.style.width = (board.tilew*newToken.w)+"px";
 				token.div.style.height = (board.tileh*newToken.h)+"px";
 				token.div.style.textAlign = "center";
@@ -62,7 +87,7 @@ async function getTokens(idBoard, fromActionId=null){
 				token.img.style.position = "absolute";
 				token.img.style.left = 0;
 				token.img.style.top = 0;
-				token.img.style.zIndex = 1;
+				token.img.style.zIndex = 10;
 				token.img.style.borderRadius = "50%";
 				token.img.style.border = newToken.border.replace(/\+/g," ");
 				var reBorderWidth = RegExp(/^(\d)+/);
@@ -81,7 +106,7 @@ async function getTokens(idBoard, fromActionId=null){
 				token.divName.style.top = 0.75*board.tileh*token.h+"px";
 				token.divName.style.width = board.tilew*token.w+"px";
 				token.divName.style.textShadow = "2px 2px black";
-				token.divName.style.zIndex = 2;
+				token.divName.style.zIndex = 11;
 				token.divName.style.opacity = 0;
 				token.div.appendChild(token.divName);
 
@@ -95,7 +120,7 @@ async function getTokens(idBoard, fromActionId=null){
 				token.divDice.style.width = board.tilew+"px";
 				token.divDice.style.textShadow = "-2px 0 black, 0 2px black, 2px 0 black, 0 -2px black";
 				token.divDice.style.fontSize = "1.4rem";
-				token.divDice.style.zIndex = 3;
+				token.divDice.style.zIndex = 12;
 				token.divDice.style.opacity = 0;
 				token.div.appendChild(token.divDice);
 
@@ -109,7 +134,7 @@ async function getTokens(idBoard, fromActionId=null){
 				token.divIndicator.style.width = board.tilew+"px";
 				token.divIndicator.style.textShadow = "-2px 0 black, 0 2px black, 2px 0 black, 0 -2px black";
 				token.divIndicator.style.fontSize = "1.4rem";
-				token.divIndicator.style.zIndex = 3;
+				token.divIndicator.style.zIndex = 13;
 				token.divIndicator.style.opacity = 0;
 				token.div.appendChild(token.divIndicator);
 
@@ -123,7 +148,7 @@ async function getTokens(idBoard, fromActionId=null){
 				token.divGuideline.style.right = 0;
 				token.divGuideline.style.width = iconSize+"px";
 
-				token.divGuideline.style.zIndex = 3;
+				token.divGuideline.style.zIndex = 13;
 				token.divGuideline.style.opacity = 1;
 				token.div.appendChild(token.divGuideline);
 

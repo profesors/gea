@@ -5,10 +5,12 @@
 	</div>
 
 	<div id="input_hidden"></div>
+	<div id="canvas_over"></div>
 	<div id="canvas">
 		<input type="text" id="stdInput" placeholder="Input...">
 		<!--<div id="canvas_dados"></div>-->
 	</div>
+	<div id="canvas_bg"></div>
 	<div id="info_character"><img src="img/loading.gif"></div>
 	<?php include('templates/panelD.php'); ?>
 </div>

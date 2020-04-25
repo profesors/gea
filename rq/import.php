@@ -4,7 +4,7 @@ connectDB();
 
 reset_db();
 # Import tokens to database
-$board = json_decode(file_get_contents('../systems/lmde/boards/caravana.json'));
+$board = json_decode(file_get_contents('../systems/lmde/boards/elven_tower.json'));
 $idBoard = insert_board($board);
 foreach($board->tokens as $token_in_board){
 	$token = json_decode(file_get_contents('../systems/lmde/tokens/'.$token_in_board->file.'.json'));
