@@ -22,6 +22,7 @@ body {
 
 svg{
 	opacity: 1;
+	z-index: 20;
 }
 
 #panelI{

@@ -1,4 +1,3 @@
-var test;
 // Load functions of the board
 function getBoard(idBoard){
 	const rq = new XMLHttpRequest();

@@ -81,7 +81,7 @@ async function moveToken(token, toX, toY){
 		token.y = toY;
 		token.div.style.left = (ox+dx2)+"px";
 		token.div.style.top = (oy+dy2)+"px";
-		token.div.style.zIndex = 1;
+		token.div.style.zIndex = 10;
 		token.div.style.transform = "scale(1)";
 	}
 }

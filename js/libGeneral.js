@@ -171,7 +171,7 @@ function addSvgCanvas(){
 	svg.setAttribute("id", "svgCanvas");
 	svg.setAttribute("width", w);
 	svg.setAttribute("height", h);
-	svg.setAttribute("style", "z-index: 5; position: absolute;");
+	svg.setAttribute("style", "z-index: 20; position: absolute;");
 	svg.setAttribute("version", "1.1");
 	canvas.appendChild(svg);
 }
