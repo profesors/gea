@@ -15,11 +15,8 @@ msgstr "fue"
 msgid "DEX"
 msgstr "des"
 
-msgid "NO AMMO"
-msgstr "sin munición"
-
-msgid "DISTANCE"
-msgstr "distancia"
+msgid "ACTIONS"
+msgstr "acciones"
 
 msgid "ATTACKS"
 msgstr "ataca"
@@ -36,17 +33,23 @@ msgstr "crítico"
 msgid "DAMAGE"
 msgstr "daño"
 
+msgid "DISTANCE"
+msgstr "distancia"
+
 msgid "FAIL"
 msgstr "fallo"
-
-msgid "OUT OF RANGE"
-msgstr "fuera de rango"
 
 msgid "FAVORED ENEMY"
 msgstr "enemigo predilecto"
 
+msgid "NO AMMO"
+msgstr "sin munición"
+
 msgid "MOVES TO"
 msgstr "se mueve a"
+
+msgid "OUT OF RANGE"
+msgstr "fuera de rango"
 
 msgid "WITH"
 msgstr "con"

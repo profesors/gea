@@ -247,13 +247,13 @@ function get_attrs($idBoard, $name){
 
 function get_guidelines($idBoard, $name){
 	global $db;
-	$query = "SELECT guideNumber, name, n, maxn FROM guidelines WHERE idBoard=$idBoard AND tokenName='$name'";
+	$query = "SELECT * FROM guidelines WHERE idBoard=$idBoard AND tokenName='$name'";
 	$result = run_sql($query) or die();
 	#$result = mysqli_query($db, $query);
 	$arrGuidelines = Array();
 	while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
-		$arrGuidelines[$row['guideNumber']] = Array('name'=>$row['name'],
-			'n'=>$row['n'], 'maxn'=>$row['maxn']);
+		#$arrGuidelines[$row['guideNumber']] = Array('name'=>$row['name'], 'n'=>$row['n'], 'maxn'=>$row['maxn']);
+		$arrGuidelines[$row['guideNumber']] = $row;
 	}
 	return $arrGuidelines;
 }

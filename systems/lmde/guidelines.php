@@ -107,17 +107,24 @@ function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
 
 function lmde_mm($idBoard, $token1, $token2, $guideline){
 	if ($guideline['n']!=0){
-		$d6 = one_roll(1,6);
-		$token2['attrs']['hp'] -= $d6+1;
-		$action_string = '<span class="name_text">'.$token1['name'].'</span> '._('ATTACKS TO').' ';
-		$action_string.= '<span class="name_text">'.$token2['name'].'</span> '._('WITH').' '.$guideline['name'];
-		$action_string.= '<span class="dmg_text">'.mb_ucfirst(_('DAMAGE')).'&nbsp;<span class="red">'.($d6+1);
-		$action_string.= '</span>';
-		$action_string.= "=$d6(1d6)+1";
-		guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
-		set_animation($idBoard, $token1['name'], 1, 0, 3, $token1['x'], $token1['y'], $token2['x'], $token2['y']);
-		set_attr($idBoard, $token2['name'], 'hp', $token2['attrs']['hp']);
-		set_dice($idBoard, $token1['name'], $guideline['name'], $token2['name']);
+		$arrDist = distanceTokens($token1, $token2);
+		if (floor($arrDist['d']) <= $guideline['guideAction']['range'][2]){
+			$d6 = one_roll(1,6);
+			$token2['attrs']['hp'] -= $d6+1;
+			$action_string = '<span class="name_text">'.$token1['name'].'</span> '._('ATTACKS TO').' ';
+			$action_string.= '<span class="name_text">'.$token2['name'].'</span> '._('WITH').' '.$guideline['name'];
+			$action_string.= '<span class="dmg_text">'.mb_ucfirst(_('DAMAGE')).'&nbsp;<span class="red">'.($d6+1);
+			$action_string.= '</span>';
+			$action_string.= "=$d6(1d6)+1";
+			guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
+			set_animation($idBoard, $token1['name'], 1, 0, 3, $token1['x'], $token1['y'], $token2['x'], $token2['y']);
+			set_attr($idBoard, $token2['name'], 'hp', $token2['attrs']['hp']);
+			set_dice($idBoard, $token1['name'], $guideline['name'], $token2['name']);
+		} else {
+			$action_string = _('OUT OF RANGE');
+			set_dice($idBoard, $token1['name'], $action_string, $token2['name']);
+			insert_action($idBoard, $action_string);
+		}
 	} else {
 		$action_string = '<span class="name_text">'.$token1['name'].'</span> ';
 		$action_string.= ' '._('NO SPELLS').' '.$guideline['name'];

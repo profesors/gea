@@ -31,7 +31,7 @@
 		"number":2,
 		"icon":"bow.png",
 		"name":"arco largo",
-		"short_desc":"1d8",
+		"short_desc":"Alcance 8/15/23 1d8",
 		"action": "flmde_rangedAttack r8,15,23 d1d8 ba1,3,10 bd1",
 		"maxn": 20,
 		"n": 20

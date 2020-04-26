@@ -7,6 +7,8 @@
 
 ## Versiones
 
+1.20	Guidelines para la ficha generados en el servidor
+1.19	Cambio de fondo gradual y suave y nuevos iconos SVG
 1.18	Nueva tabla de la base de datos para guardar las animaciones
 1.17	Animaciones en su propio archivo .js
 1.16	Proyectil mágico, primer hechizo implementado

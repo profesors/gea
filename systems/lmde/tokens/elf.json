@@ -41,8 +41,8 @@
 		"number":3,
 		"icon":"energy-arrow.png",
 		"name":"proyectil mágico",
-		"short_desc":"Alcance 5/10/15 1d6",
-		"action": "flmde_mm r5,10,15 d1d6",
+		"short_desc":"Alcance 13 1d6",
+		"action": "flmde_mm r13,13,13 d1d6",
 		"maxn": 10,
 		"n": 10
 		}
