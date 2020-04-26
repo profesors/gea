@@ -11,11 +11,12 @@ foreach($board->tokens as $token_in_board){
 	$token->x = $token_in_board->x;
 	$token->y = $token_in_board->y;
 	$token->name = $token_in_board->name;
+
 	if (!property_exists($token_in_board, 'default_guideline_id')){
 		$token_in_board->default_guideline_id = 0;
 	}
 	insert_token($idBoard, $token->name, $token->x, $token->y, 1, $token->w, $token->h, $token->img, $token->border, 
-		$token_in_board->file, $token_in_board->default_guideline_id);
+		$token->pc, $token_in_board->file, $token->pc, $token_in_board->default_guideline_id);
 	foreach($token->attrs as $k => $v){
 		set_attr($idBoard, $token->name, $k, $v);
 	}

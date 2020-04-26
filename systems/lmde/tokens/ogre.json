@@ -1,0 +1,24 @@
+{
+	"img": "ogre.jpg",
+	"border": "5px+solid+red",
+	"w": 2,
+	"h": 2,
+	"type":"giant",
+	"pc":0,
+	"attrs":{
+		"maxhp": 21,
+		"hp":21,
+		"ac":15,
+		"thaco":5,
+		"str":14
+	},
+	"guidelines":[
+		{
+		"number":1,
+		"icon":"sword.png",
+		"name":"garrote",
+		"short_desc":"1d12+2",
+		"action": "flmde_attack r2 d1d12 ba1 bd1"
+		}
+	]
+}

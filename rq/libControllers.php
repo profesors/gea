@@ -116,8 +116,106 @@ function one_roll($n, $sides){
 	return $result;
 }
 
+# Number of corners in a token (w x h = corners => 1x1=4, 2x2=9, 3x3=16)
+function get_number_of_corners_in_token(&$token){
+	return ($token['w']+1)*($token['h']+1);
+}
+
+# Returns min number of hidden corners
+function min_hidden_corners_visible($im_bg_wall, &$token1, &$token2, &$board){
+	//global $img_bg_wall;
+	$min_hidden_corners = PHP_INT_MAX;
+	for($a=0; $a<=1; $a++){		# Origin corner
+		for ($b=0; $b<=1; $b++){
+			$x1=$board->tilew*($token1['x']-1+$a);
+			$y1=$board->tileh*($token1['y']-1+$b);
+			$hidden_corners = 0;
+			for ($y=0; $y<=$token2['h']; $y++){	# Destiny corner
+				for ($x=0; $x<=$token2['w']; $x++){
+					$x2=$board->tilew*($token2['x']-1+$x);
+					$y2=$board->tileh*($token2['y']-1+$y);
+					$v = isVisible_between_pixels($im_bg_wall, $x1, $y1, $x2, $y2);
+					if (!$v){
+						$hidden_corners++;
+					} 
+					#echo "Origen($a,$b) Destino($x,$y) ".($v?'v':'nv')." HIDDEN CORNERS $hidden_corners\n";
+					#echo "Origen($x1,$y1) Destino($x2,$y2) ".($v?'v':'nv')." HIDDEN CORNERS $hidden_corners\n";
+					if ($hidden_corners > $min_hidden_corners)	break(2);
+				}
+			}
+			$min_hidden_corners = ($hidden_corners < $min_hidden_corners)?$hidden_corners:$min_hidden_corners;
+			if ($min_hidden_corners==0) return 0;
+			#echo "\n";
+		}
+	}
+	#echo "MIN $min_hidden_corners\n";
+	return $min_hidden_corners;
+}
+
+function can_see_tokens($im_bg_wall, &$token1, &$token2, &$board){
+	for($a=0; $a<=1; $a++){		# Origin corner
+		for ($b=0; $b<=1; $b++){
+			$x1=$board->tilew*($token1['x']-1+$a);
+			$y1=$board->tileh*($token1['y']-1+$b);
+			$hidden_corners = 0;
+			for ($y=0; $y<=$token2['h']; $y++){	# Destiny corner
+				for ($x=0; $x<=$token2['w']; $x++){
+					$x2=$board->tilew*($token2['x']-1+$x);
+					$y2=$board->tileh*($token2['y']-1+$y);
+					$v = isVisible_between_pixels($im_bg_wall, $x1, $y1, $x2, $y2);
+					if ($v) {
+						return true;
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+
+
+# Check if is visible from pixel to piexel
+function isVisible_between_pixels($im, $x1, $y1, $x2, $y2){
+	$visible = true;
+	$d = sqrt(pow(($x2-$x1),2)+pow(($y2-$y1),2));
+	if ($d>0){
+		$dx = ($x2 - $x1)/$d;
+		$dy = ($y2 - $y1)/$d;
+		$t=0;
+		while ($t<$d){
+			$x = floor($x1+$t*$dx)-1;
+			$y = floor($y1+$t*$dy)-1;
+			$rgb = imagecolorat($im, $x, $y);
+			$r = ($rgb>>16) & 0xFF;
+			$g = ($rgb>>8) & 0xFF;
+			$b = $rgb & 0xFF;
+			if ($r==0 && $g==255 && $b==0)	{
+				$visible = false;
+				break;
+			}
+			$t++;
+		}
+	}
+	return $visible;
+}
+
+function show_visible_npc($idBoard, $tokenName){
+	$im_bg_wall = imagecreatefrompng("../img/bg/010bg_walls.png");
+	$board = get_board($idBoard);
+	$rsTokens = get_npc_hidden_tokens($idBoard);
+	$tokenPc = get_token($idBoard, $tokenName);
+	$arrTokens = array();
+	while ($tokenNpc = mysqli_fetch_array($rsTokens, MYSQLI_ASSOC)){
+		$v =can_see_tokens($im_bg_wall, $tokenPc, $tokenNpc, $board); 
+		if ($v){
+			set_token_opacity_by_name($idBoard, $tokenNpc['name'], 1);
+		}
+	}
+}
+
 function mb_ucfirst($str) {
     $fc = mb_strtoupper(mb_substr($str, 0, 1));
     return $fc.mb_substr($str, 1);
 }
+
 ?>

@@ -3,7 +3,7 @@
 	include_once('libControllers.php');
 	connectDB();
 	setup_lang();
-	#$_GET['m'] = ":gg1,2";
+	#$_GET['m'] = "@bar p10,21";
 	#$_GET['idBoard'] = 1;
 
 	# Multiple spaces into just one
@@ -53,6 +53,7 @@
 		} else if ($name!=null && $x!=null && $y!=null){
 			# SOLO MOVIMIENTO DE TOKEN
 			move_token($idBoard, $name, $x, $y);
+			show_visible_npc($idBoard, $name);
 			if ($animation != 'out'){
 				insert_action($idBoard, "<span class='name_text'>$name</span> "._("MOVES TO")." $x,$y");
 			}

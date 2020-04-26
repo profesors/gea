@@ -12,6 +12,7 @@ $query = "SELECT * FROM tokens WHERE idBoard = $idBoard AND actionId>$fromAction
 $result = run_sql($query) or die();
 $arr = Array();
 while($row = mysqli_fetch_array($result)){
+	# Token from Database
 	$r = new stdClass();
 	$r->x = $row['x'];
 	$r->y = $row['y'];
@@ -23,10 +24,12 @@ while($row = mysqli_fetch_array($result)){
 	$r->name = $row['name'];
 	$r->file = $row['file'];
 	$r->border = $row['border'];
+	$r->opacity = $row['opacity'];
 	$r->actionId = $row['actionId'];
 	$r->diceResult = trim($row['dice_result']);
 	$r->diceActionId = $row['dice_actionId'];
 	$r->diceActionTargets= $row['dice_action_targets'];
+	$r->pc = $row['pc'];
 	# Animations
 	$r->animation = Array();
 	$query = "SELECT * FROM animations WHERE idBoard=$idBoard AND tokenName='".$row['name'];

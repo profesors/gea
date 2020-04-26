@@ -34,7 +34,6 @@ function getBoard(idBoard){
 			canvasOver.style.position = "absolute";
 			canvasOver.style.left=0;
 			canvasOver.style.top=0;
-			canvasOver.style.backgroundImage = "url(img/bg/009bg.jpg)";
 			canvasOver.style.backgroundRepeat = "no-repeat";
 			canvasOver.style.width = (parseInt(board.tilew)*parseInt(board.ntilesw))+0.5*board.tilew+100+"px";
 			canvasOver.style.height = (board.tileh*board.ntilesh)+0.5*board.tileh+"px";
@@ -73,6 +72,8 @@ async function getTokens(idBoard, fromActionId=null){
 				token.div = document.createElement("div");
 				token.div.id = "token_"+newToken.name;
 				token.div.class = "token";
+				//console.log(newToken);
+				token.div.style.opacity = newToken.pc;
 				token.div.style.position = "absolute";
 				token.div.style.left = px.toString()+"px";
 				token.div.style.top = py.toString()+"px";
@@ -144,7 +145,7 @@ async function getTokens(idBoard, fromActionId=null){
 				token.divGuideline.id = "divGuideline_"+newToken.name;
 				token.divGuideline.style.color = "white";
 				token.divGuideline.style.position = "absolute";
-				token.divGuideline.style.top = (board.tileh-iconSize)+"px";
+				token.divGuideline.style.top = (board.tileh*newToken.h-iconSize)+"px";
 				token.divGuideline.style.right = 0;
 				token.divGuideline.style.width = iconSize+"px";
 
@@ -163,6 +164,9 @@ async function getTokens(idBoard, fromActionId=null){
 
 			// Caso 1: Token is healthy
 			if (token.attrs.hp>0 && newToken.attrs.hp>0){
+				if (token.div.style.opacity != newToken.opacity){
+					changeTokenOpacity(token, newToken.opacity);
+				}
 				//console.log("Caso 1: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
 				if (token.attrs.hp > newToken.attrs.hp){	// Lose HP
 					showDamage(token, token.attrs.hp-newToken.attrs.hp);

@@ -82,6 +82,26 @@ function read_last_actionId($idBoard){
 	return $lastId;
 }
 
+function get_board($idBoard){
+	$query = "SELECT * FROM boards WHERE id = $idBoard LIMIT 1;";
+	$result = run_sql($query) or die();
+	$row = mysqli_fetch_array($result);
+	$ret = new stdClass();
+	$ret->id = $row['id'];
+	$ret->name = $row['name'];
+	$ret->tilew = $row['tilew'];
+	$ret->tileh = $row['tileh'];
+	$ret->ntilesw = $row['ntilesw'];
+	$ret->ntilesh = $row['ntilesh'];
+	$ret->offsetx = $row['offsetx'];
+	$ret->offsety = $row['offsety'];
+	$ret->bg = $row['bg'];
+	$ret->bgTs = get_bg_ts($idBoard);
+	$ret->drawGrid = $row['drawGrid'];
+	$ret->lastActionId = $row['lastActionId'];
+	return $ret;
+}
+
 # Inser action in the DB table
 function insert_action($idBoard, $m){
 	global $db;
@@ -128,14 +148,15 @@ function guideline_get_n($idBoard, $tokenName, $guideNumber){
 
 # Insert token in database, if there is not $img_src or $border ignore it
 # If the token id is duplicate, just update it
-function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border, $file, $default_guideline_id){
+function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border, $opacity, $file, $pc, $default_guideline_id){
 	global $db;
 	$name = ($name=='')?'NULL':$name;
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
-	$query = "INSERT INTO `tokens` (`idBoard`,`name`,file,`x`,`y`,`z`,`w`,`h`,`step`,`img`,`border`, `actionId`, `dice_result`, ";
+	$query = "INSERT INTO `tokens` (`idBoard`,`name`,file,pc,`x`,`y`,`z`,`w`,`h`,`step`,`img`,`border`,";
+	$query.= " opacity, `actionId`, `dice_result`, ";
 	$query.= " defaultGuideline)";
-	$query.= " VALUES ('$idBoard', '$name', '$file', $x, $y, $z, $w, $h, 1, ";
-	$query.= "'$img_src', '$border',$nextActionId, NULL, $default_guideline_id) ";
+	$query.= " VALUES ('$idBoard', '$name', '$file',$pc, $x, $y, $z, $w, $h, 1, ";
+	$query.= "'$img_src', '$border', $opacity,$nextActionId, NULL, $default_guideline_id) ";
 	$query.= " ON DUPLICATE KEY UPDATE x=$x, y=$y";
 	if ($img_src != ''){
 		$query.= ", img='$img_src'";
@@ -234,6 +255,13 @@ function get_token($idBoard, $name){
 	return $row;
 }
 
+function get_npc_hidden_tokens($idBoard){
+	global $db;
+	$query = "SELECT * FROM tokens WHERE idBoard=$idBoard AND pc=0 AND opacity=0";
+	$result = run_sql($query) or die();
+	return $result;
+}
+
 function get_attrs($idBoard, $name){
 	global $db;
 	$query = "SELECT attr,val FROM attrs WHERE idBoard=$idBoard AND tokenName='$name'";
@@ -305,6 +333,15 @@ function set_animation($idBoard, $tokenName, $step, $delay_after_step, $type_id,
 	$query.= " VALUES ($idBoard, '$tokenName', $step, $delay_after_step, $nextActionId, $type_id, ";
 	$query.= "$src_x, $src_y, $target_x, $target_y) ";
 	$result = run_sql($query) or die();
+	increase_last_actionId($idBoard, 1);
+}
+
+
+function set_token_opacity_by_name($idBoard, $tokenName, $opacity){
+	global $db;
+	$nextActionId = intval(read_last_actionId($idBoard))+1;
+	$query = "UPDATE tokens SET opacity=$opacity, actionId=$nextActionId WHERE idBoard=$idBoard AND name='$tokenName'";
+	run_sql($query) or die();
 	increase_last_actionId($idBoard, 1);
 }
 ?>

@@ -321,6 +321,19 @@ async function changeBackground(newBg){
 		document.getElementById("canvas_bg").style.backgroundImage = "url('"+newBg+"?cache="+tsNow+"')";
 	}
 	definitiveBg.src = "img/bg/"+board.bg+"?cache="+tsNow;
-	//document.getElementById("canvas").style.backgroundImage = "url('img/bg/"+board.bg+"?cache="+tsNow+"')";
+}
 
+async function changeTokenOpacity(token, newVal){
+	await sleep(1000);
+	var t0 = (new Date).getTime();
+	var tf = t0+1000;
+	var tt = tf-t0;
+	var t = 0.0;
+	const k = Math.PI/(2*tt);
+	while(t<tt){
+		var p = t/tt;
+		token.div.style.opacity = p;
+		await sleep(T_PRECISION);
+		t = (new Date).getTime() - t0;
+	}
 }
