@@ -22,7 +22,7 @@
 	"guidelines":[
 		{
 		"number":1,
-		"icon":"swords.png",
+		"icon":"axe.png",
 		"name":"hacha 2 manos",
 		"short_desc": "1d12",
 		"action": "flmde_attack r1 d1d12 ba1,2 bd1"

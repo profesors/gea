@@ -23,7 +23,7 @@
 	"guidelines":[
 		{
 		"number":1,
-		"icon":"swords.png",
+		"icon":"sword.png",
 		"name":"espada larga",
 		"short_desc": "1d8",
 		"action": "flmde_attack r1 d1d8 ba1,2 bd1"
@@ -39,7 +39,7 @@
 		},
 		{
 		"number":3,
-		"icon":"spell.png",
+		"icon":"energy-arrow.png",
 		"name":"proyectil mágico",
 		"short_desc":"Alcance 5/10/15 1d6",
 		"action": "flmde_mm r5,10,15 d1d6",

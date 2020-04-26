@@ -2,6 +2,7 @@
 *.swo
 *.png
 *.mo
+doc/resources/game-icons.net.svg/
 img/tokens/original
 img/tokens/procesar
 tmp

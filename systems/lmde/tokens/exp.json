@@ -22,7 +22,7 @@
 	"guidelines":[
 		{
 		"number":1,
-		"icon":"swords.png",
+		"icon":"sword.png",
 		"name":"espada larga",
 		"short_desc":"1d8",
 		"action": "flmde_attack r1 d1d8 ba1,2,10 bd1"

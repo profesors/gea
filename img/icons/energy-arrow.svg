@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 690.91522 690.91522"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="energy-arrow.svg"
+   width="690.91522"
+   height="690.91522"
+   inkscape:export-filename="/home/samuel/Web/Gea/img/icons/energy-arrow.png"
+   inkscape:export-xdpi="19.450001"
+   inkscape:export-ydpi="19.450001"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <metadata
+     id="metadata14">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs12" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1024"
+     inkscape:window-height="740"
+     id="namedview10"
+     showgrid="false"
+     inkscape:pagecheckerboard="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="0.4609375"
+     inkscape:cx="319.42371"
+     inkscape:cy="345.45761"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg8" />
+  <circle
+     style="fill:#ffffff;fill-opacity:1;stroke:#00f900;stroke-width:0.13397647;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="path4524"
+     cx="345.45761"
+     cy="345.45761"
+     r="345.39062"
+     inkscape:export-xdpi="20"
+     inkscape:export-ydpi="20" />
+  <g
+     class=""
+     style="fill:#000000"
+     transform="rotate(-90,334.68166,269.07495)"
+     id="g6">
+    <path
+       d="m 84.066,17.832 9.3,55.445 -43.282,-40.412 h -0.002 l -14.018,14.015 38.424,41.155 -52.37,-8.252 52.695,76.11 58.958,-4.364 166.484,178.314 -48.95,-9.89 77.725,61.44 -117.69,-14.316 84.664,35.246 -42.86,16.95 64.217,19.97 -33.862,25.36 182.43,20.84 28.435,8.845 -5.28,-16.98 -4.808,-15.464 -20.51,-182.217 -25.894,32.993 -18.518,-59.56 -17.04,43.1 -35.177,-93.468 -1.87,110.494 -63.757,-91.374 10.5,55.594 L 156.234,131.966 160.83,69.873 84.068,17.828 Z m 184.204,53.422 142.714,156.144 30.81,14.963 -10.304,-62.438 z m -62.377,12.81 92.97,115.235 36.477,-0.935 -14.836,-35.195 -114.61,-79.106 z M 42.018,212.884 160.42,419.7 l 55.393,19.765 -8.333,-36.324 z m 92.117,23.08 46.824,83.112 47.577,18.723 -17.23,-41.66 -77.172,-60.175 z m 283.107,73.255 48.72,156.665 -156.665,-48.72 77.36,-30.59 30.585,-77.356 z"
+       id="path4"
+       style="fill:#000000;fill-opacity:1"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
