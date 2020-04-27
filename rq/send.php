@@ -53,8 +53,8 @@
 		} else if ($name!=null && $x!=null && $y!=null){
 			# SOLO MOVIMIENTO DE TOKEN
 			move_token($idBoard, $name, $x, $y);
-			show_visible_npc($idBoard, $name);
 			if ($animation != 'out'){
+				show_visible_npc($idBoard, $name);
 				insert_action($idBoard, "<span class='name_text'>$name</span> "._("MOVES TO")." $x,$y");
 			}
 		}

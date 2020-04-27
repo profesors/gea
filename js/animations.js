@@ -336,4 +336,5 @@ async function changeTokenOpacity(token, newVal){
 		await sleep(T_PRECISION);
 		t = (new Date).getTime() - t0;
 	}
+	token.div.style.opacity = 1;
 }

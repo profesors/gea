@@ -68,7 +68,7 @@ function lmde_attack($idBoard, $token1, $token2, $guideline){
 	$arrDist = distanceTokens($token1, $token2);
 	if (floor($arrDist['d'])<=1){
 		lmde_generic_attack($idBoard, $token1, $token2, $guideline);
-		set_animation($idBoard, $token1['name'], 1, 0, 1, $token1['x'], $token1['y'], $token2['x'], $token2['y']);
+		set_animation($idBoard, $token1['name'], 1, 0, 1, $token1['x'], $token1['y'], $arrDist['x2'], $arrDist['y2']);
 	} else {
 		$action_string = _('OUT OF RANGE');
 		set_dice($idBoard, $token1['name'], $action_string, $token2['name']);
@@ -92,7 +92,7 @@ function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
 			# Attack
 			guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
 			lmde_generic_attack($idBoard, $token1, $token2, $guideline);
-			set_animation($idBoard, $token1['name'], 1, 0, 2, $token1['x'], $token1['y'], $token2['x'], $token2['y']);
+			set_animation($idBoard, $token1['name'], 1, 0, 2, $token1['x'], $token1['y'], $arrDist['x2'], $arrDist['y2']);
 		} else {
 			$action_string = _('OUT OF RANGE');
 			set_dice($idBoard, $token1['name'], $action_string, $token2['name']);
@@ -117,7 +117,7 @@ function lmde_mm($idBoard, $token1, $token2, $guideline){
 			$action_string.= '</span>';
 			$action_string.= "=$d6(1d6)+1";
 			guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
-			set_animation($idBoard, $token1['name'], 1, 0, 3, $token1['x'], $token1['y'], $token2['x'], $token2['y']);
+			set_animation($idBoard, $token1['name'], 1, 0, 3, $token1['x'], $token1['y'], $arrDist['x2'], $arrDist['y2']);
 			set_attr($idBoard, $token2['name'], 'hp', $token2['attrs']['hp']);
 			set_dice($idBoard, $token1['name'], $guideline['name'], $token2['name']);
 		} else {

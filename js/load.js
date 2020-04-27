@@ -72,7 +72,7 @@ async function getTokens(idBoard, fromActionId=null){
 				token.div.id = "token_"+newToken.name;
 				token.div.class = "token";
 				//console.log(newToken);
-				token.div.style.opacity = newToken.pc;
+				token.div.style.opacity = newToken.opacity;
 				token.div.style.position = "absolute";
 				token.div.style.left = px.toString()+"px";
 				token.div.style.top = py.toString()+"px";
@@ -163,6 +163,7 @@ async function getTokens(idBoard, fromActionId=null){
 
 			// Caso 1: Token is healthy
 			if (token.attrs.hp>0 && newToken.attrs.hp>0){
+
 				if (token.div.style.opacity != newToken.opacity){
 					changeTokenOpacity(token, newToken.opacity);
 				}
