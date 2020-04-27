@@ -154,7 +154,6 @@ function compute_mods($idBoard, &$token1, &$token2, &$guideline){
 	foreach($arrAtMods_id as $mod_id){
 		switch ($mod_id){
 		case 1:		# THACO
-			error_log("**".$token1['attrs']['thaco']);
 			add_mod_attack($guideline, $token1['attrs']['thaco'], _('THACO'));
 			break;
 		case 2:		# STR to attack

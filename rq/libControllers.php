@@ -173,7 +173,6 @@ function can_see_tokens($im_bg_wall, &$token1, &$token2, &$board){
 	return false;
 }
 
-
 # Check if is visible from pixel to piexel
 function isVisible_between_pixels($im, $x1, $y1, $x2, $y2){
 	$visible = true;
@@ -186,17 +185,25 @@ function isVisible_between_pixels($im, $x1, $y1, $x2, $y2){
 			$x = floor($x1+$t*$dx)-1;
 			$y = floor($y1+$t*$dy)-1;
 			$rgb = imagecolorat($im, $x, $y);
-			$r = ($rgb>>16) & 0xFF;
+			#$r = ($rgb>>16) & 0xFF;
 			$g = ($rgb>>8) & 0xFF;
-			$b = $rgb & 0xFF;
-			if ($r==0 && $g==255 && $b==0)	{
-				$visible = false;
-				break;
+			#$b = $rgb & 0xFF;
+			if ($g==255)	{
+				return false;
 			}
 			$t++;
 		}
 	}
 	return $visible;
+}
+
+function can_move_to_tile(&$board, $im, &$token, $toX, $toY){
+	$x1 = ($token['x']-1)*$board->tilew+$board->offsetx+0.5*$board->tilew;
+	$y1 = ($token['y']-1)*$board->tileh+$board->offsety+0.5*$board->tileh;
+	$x2 = ($toX-1)*$board->tilew+$board->offsetx+0.5*$board->tilew;
+	$y2 = ($toY-1)*$board->tileh+$board->offsety+0.5*$board->tileh;
+	$v = isVisible_between_pixels($im, $x1, $y1, $x2, $y2);
+	return $v;
 }
 
 function show_visible_npc($idBoard, $tokenName){

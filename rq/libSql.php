@@ -168,13 +168,21 @@ function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border, $o
 	increase_last_actionId($idBoard, 1);
 }
 
-function move_token($idBoard, $name, $x, $y){
+function move_token($idBoard, $name, $x, $y, $force=false){
 	global $db;
-	$name = ($name=='')?'NULL':$name;
-	$nextActionId = intval(read_last_actionId($idBoard))+1;
-	$query = "UPDATE `tokens` SET x=$x, y=$y, actionId=$nextActionId WHERE idBoard=$idBoard AND name='$name'";
-	run_sql($query) or die();
-	increase_last_actionId($idBoard, 1);
+	$token = get_token($idBoard, $name);
+	$board = get_board($idBoard);
+	$im = imagecreatefrompng("../img/bg/010bg_walls.png");
+	$can_move = can_move_to_tile($board, $im, $token, $x, $y);
+	if ($can_move || $force) {
+		$name = ($name=='')?'NULL':$name;
+		$nextActionId = intval(read_last_actionId($idBoard))+1;
+		$query = "UPDATE `tokens` SET x=$x, y=$y, actionId=$nextActionId WHERE idBoard=$idBoard AND name='$name'";
+		run_sql($query) or die();
+		increase_last_actionId($idBoard, 1);
+	} else {
+		error_log("CAN NOT MOVE");
+	}
 }
 
 function set_attr($idBoard, $name, $attr, $val){

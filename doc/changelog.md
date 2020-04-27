@@ -7,6 +7,8 @@
 
 ## Versiones
 
+1.22	Impide mover tokens a zonas imposibles
+1.21	Resuelto problema que hacía parpadear tokens PNJ
 1.20	Guidelines para la ficha generados en el servidor
 1.19	Cambio de fondo gradual y suave y nuevos iconos SVG
 1.18	Nueva tabla de la base de datos para guardar las animaciones

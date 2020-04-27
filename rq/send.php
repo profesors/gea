@@ -52,8 +52,10 @@
 			#insert_action($idBoard, "$name p$x,$y,$w,$h !img_src _$border");
 		} else if ($name!=null && $x!=null && $y!=null){
 			# SOLO MOVIMIENTO DE TOKEN
-			move_token($idBoard, $name, $x, $y);
-			if ($animation != 'out'){
+			if ($animation == 'out'){
+				move_token($idBoard, $name, $x, $y, true);
+			} else {
+				move_token($idBoard, $name, $x, $y);
 				show_visible_npc($idBoard, $name);
 				insert_action($idBoard, "<span class='name_text'>$name</span> "._("MOVES TO")." $x,$y");
 			}
