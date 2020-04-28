@@ -548,10 +548,12 @@ async function drawMovementLine(e){
 		const tilex = Math.floor(e.offsetX/board.tilew)+1;
 		const tiley = Math.floor(e.offsetY/board.tileh)+1;
 
+
+		// There is other token in the cell
 		var tokenInCell = getTokenByTile(tilex, tiley);
 		if (tokenInCell != null &&
 			movement.token.img.style.border.split(' ')[2]!=tokenInCell.img.style.border.split(' ')[2]){
-			// Exit: you can not pass over an enemy
+			// Exit: Hide movement line and exit. Can not pass over enemy
 			movement.token.divName.style.color="yellow";
 			movement.token.divName.style.opacity = movement.opacityDivName;
 
@@ -561,7 +563,11 @@ async function drawMovementLine(e){
 			movement.pathTiles = null;
 			return;
 		}
-		if (!isInPathTiles(tilex, tiley)){	// Check is a new tiles not a return
+
+		var cx = e.offsetX-((tilex-0.5)*board.tilew);
+		var cy = e.offsetY-((tiley-0.5)*board.tileh);
+		var distToCenterOfTile = Math.round(Math.sqrt(cx**2+cy**2));
+		if (!isInPathTiles(tilex, tiley) && distToCenterOfTile<board.tilew/2){	// Check is a new tiles not a return
 			movement.pathTiles.push([tilex, tiley]);
 			var x1 = getPixel(movement.token.x, board.tilew, board.offsetx+(movement.token.w*board.tilew)/2);
 			var y1 = getPixel(movement.token.y, board.tileh, board.offsety+(movement.token.h*board.tileh)/2);

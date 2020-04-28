@@ -7,6 +7,7 @@
 
 ## Versiones
 
+1.24	Desplazamiento de tokens por esquinas
 1.23	Cuando un token se mueve se ve una línea del camino trazado antes de desplazarse
 1.22	Impide mover tokens por zonas imposibles (atravesar paredes)
 1.21	Resuelto problema que hacía parpadear tokens PNJ
