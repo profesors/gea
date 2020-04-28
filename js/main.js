@@ -226,7 +226,7 @@ function movementClick(event){
 				runGuideline(encodeURI("@"+movement.token.name+" t"+target.name));
 			} else {	// Click over the movement.token
 				if (movement.line!=null){
-					svg.removeChild(movement.line);
+					svgRemoveAllChildren();
 					movement.line = null;
 					movement.pathTiles = null;
 				}

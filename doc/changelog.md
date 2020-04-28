@@ -7,6 +7,7 @@
 
 ## Versiones
 
+1.25	Indica los pasos dados en el camino
 1.24	Desplazamiento de tokens por esquinas
 1.23	Cuando un token se mueve se ve una línea del camino trazado antes de desplazarse
 1.22	Impide mover tokens por zonas imposibles (atravesar paredes)

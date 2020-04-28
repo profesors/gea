@@ -62,7 +62,7 @@ async function moveTokenByPath(token, path){
 		token.y = path[path.length-1].y;
 
 		if (movement.line!=null){
-			svg.removeChild(movement.line);
+			svgRemoveAllChildren();
 			movement.line = null;
 			movement.pathTiles = null;
 		}
@@ -172,74 +172,7 @@ async function runAnimation_closeCombat(token, i){
 	}
 	svg.removeChild(el);
 }
-/*
-async function runAnimation_rangedCombat(token, tilex, tiley){
-	disablePc(token, 6000);
-	var elLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-	var id = "ranged"+(new Date).getTime();
-	var x1 = getPixel(token.x, board.tilew, board.offsetx+board.tilew/2);
-	var y1 = getPixel(token.y, board.tileh, board.offsety+board.tileh/2);
-	var x2 = getPixel(tilex, board.tilew, board.offsetx+board.tilew/2);
-	var y2 = getPixel(tiley, board.tileh, board.offsety+board.tileh/2);
-	var pmx = (x2+x1)/2;	// Middle point in x
-	var pmy = (y2+y1)/2;	// Middle point in y
-	var tx = (x2-x1)/2;		// Transaltion in x
-	var ty = (y2-y1)/2;		// Translation in y
-	elLine.setAttribute("id",id);
-	elLine.setAttribute("x1", x1);
-	elLine.setAttribute("y1", y1);
-	elLine.setAttribute("x2", x1);
-	elLine.setAttribute("y2", y1);
-	var style = "stroke-width: 2; stroke:"+token.img.style.border.split(' ')[2]+"; opacity: 0;";
-	style += "stroke-linecap:butt; stroke-dasharray:5,30;";
-	elLine.setAttribute("style", style);
-	// First part: Arrow flying
-	svg.appendChild(elLine);
 
-	var t0 = (new Date).getTime();	// Time _0
-	var tt = 500;					// Total Time
-	var tf = t0+tt;					// Time _final
-	var t = 0.0;					// current Time
-	const k = (Math.PI/2)/(tf-t0);	// Constant
-	var vX = x2-x1, vY = y2-y1;
-	while(t<tt){					//t*k \in {0, pi/2}
-		var p = t/tt;				// Lineal proportionality \in {0..1}
-		elLine.style.opacity = Math.sin(t*k);
-		elLine.setAttribute("x2", (x1+p*vX));
-		elLine.setAttribute("y2", (y1+p*vY));
-		await sleep(T_PRECISION);
-		t = (new Date).getTime()-t0;
-	}
-	// Second part: Circle expands
-	var idC = "circ"+(new Date).getTime();
-	var elCircle = addSvgCircle(idC,x2,y2,20,token.img.style.border.split(' ')[2], "opacity:1;");
-	t0 = (new Date).getTime();
-	tt = 500;
-	tf = t0 + tt;
-	t = 0.0;
-	while(t<tt){
-		var p = t/tt;
-		elCircle.style.opacity = Math.sin(t*k);
-		elCircle.setAttribute("r", 20*p);
-		await sleep(T_PRECISION);
-		t = (new Date).getTime()-t0;
-	}
-	// Third part: Fadeout
-	var tokenTarget = getTokenByTile(tilex, tiley);
-	t0 = (new Date).getTime();
-	tt = 500;
-	tf = t0 + tt;
-	t = 0.0;
-	while(t<tt){
-		elCircle.style.opacity = Math.cos(t*k);
-		elCircle.style.opacity = Math.cos(t*k);
-		elCircle.setAttribute("r", 20*Math.cos(t*k));
-		await sleep(T_PRECISION);
-		t = (new Date).getTime()-t0;
-	}
-	svg.removeChild(elLine);
-	svg.removeChild(elCircle);
-}*/
 // Draw a ranged combat icon from token to tilex, tiley and then disappears
 async function runAnimation_rangedCombat(token, i){
 	disablePc(token, 6000);

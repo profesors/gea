@@ -528,6 +528,8 @@ function showDefaultGuidelineInSheet(name, id){
 }
 
 async function drawMovementLine(e){
+	// New line and new path
+	var tokenColor = movement.token.img.style.border.split(' ')[2];
 	if (movement.token != null){
 		if (movement.line==null){
 			movement.line = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -551,19 +553,19 @@ async function drawMovementLine(e){
 
 		// There is other token in the cell
 		var tokenInCell = getTokenByTile(tilex, tiley);
-		if (tokenInCell != null &&
-			movement.token.img.style.border.split(' ')[2]!=tokenInCell.img.style.border.split(' ')[2]){
+		if (tokenInCell != null && tokenColor != tokenInCell.img.style.border.split(' ')[2]){
 			// Exit: Hide movement line and exit. Can not pass over enemy
 			movement.token.divName.style.color="yellow";
 			movement.token.divName.style.opacity = movement.opacityDivName;
 
 			svgOver.removeEventListener('mousemove', drawMovementLine, true);
-			svg.removeChild(movement.line);
+			svgRemoveAllChildren();
 			movement.line = null;
 			movement.pathTiles = null;
 			return;
 		}
 
+		// Build the path data structure
 		var cx = e.offsetX-((tilex-0.5)*board.tilew);
 		var cy = e.offsetY-((tiley-0.5)*board.tileh);
 		var distToCenterOfTile = Math.round(Math.sqrt(cx**2+cy**2));
@@ -573,12 +575,25 @@ async function drawMovementLine(e){
 			var y1 = getPixel(movement.token.y, board.tileh, board.offsety+(movement.token.h*board.tileh)/2);
 			var pathString = "M "+x1+" "+y1;
 			for (var i=1; i<movement.pathTiles.length; i++){
-				var x2 = (movement.pathTiles[i][0]-0.5)*board.tilew+board.offsetx;
+				var x2 = (movement.pathTiles[i][0]-0.5)*board.tilew+board.offsetx;	// [0] is x   [1] is y
 				var y2 = (movement.pathTiles[i][1]-0.5)*board.tileh+board.offsety;
 				pathString += " L "+x2+" "+y2;
 				//console.log(movement.pathTiles);
 				movement.line.setAttribute("d", pathString);
 			}
+			// Distance
+			var distanceOfPath = 0;
+			for (var i=0; i<movement.pathTiles.length-1; i++){
+				var tilex1 = movement.pathTiles[i][0];
+				var tiley1 = movement.pathTiles[i][1];
+				var tilex2 = movement.pathTiles[i+1][0];
+				var tiley2 = movement.pathTiles[i+1][1];
+				var x = (tilex2-0.5)*board.tilew+board.offsetx;
+				var y = (tiley2-0.1)*board.tileh+board.offsety;
+				distanceOfPath += getDistanceTiles(tilex1, tiley1, tilex2, tiley2);
+				addSvgText('movementLine_number'+i,x,y,tokenColor, null, Math.round(distanceOfPath), 24);
+			}
+			//console.log(Math.round(distanceOfPath));
 		}
 	}
 }

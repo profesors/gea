@@ -225,6 +225,23 @@ function addSvgLine(id, x0, y0, x1, y1, color, width, extraStyle=null){
 	return el;
 }
 
+function addSvgText(id ,x, y, color, colorStroke, text, size, extraStyle=null){
+	var el = document.createElementNS("http://www.w3.org/2000/svg", "text");
+	el.setAttribute("id",id);
+	el.setAttribute("x",x);
+	el.setAttribute("y",y);
+	el.setAttribute("fill", color);
+	el.setAttribute("stroke", colorStroke);
+	el.setAttribute("font-size", size+"px");
+	var style = "";
+	if (extraStyle!=null) style+=extraStyle;
+	el.setAttribute("style", style);
+	var txt = document.createTextNode(text);
+	el.appendChild(txt);
+	svg.appendChild(el);
+	return el;
+}
+
 
 function sendCommand(command){
 	var rq = new XMLHttpRequest();
@@ -367,4 +384,12 @@ function pathEqual(path1, path2){
 		if ((path1[i].y!=path2[i].y)) return false;
 	}
 	return true;
+}
+
+function svgRemoveAllChildren(){
+	var child = svg.lastElementChild;
+	while(child){
+		svg.removeChild(child);
+		child = svg.lastElementChild;
+	}
 }
