@@ -163,23 +163,31 @@ async function getTokens(idBoard, fromActionId=null){
 
 			// Caso 1: Token is healthy
 			if (token.attrs.hp>0 && newToken.attrs.hp>0){
+				//console.log("Caso 1: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
 
+				// Opacity
 				if (token.div.style.opacity != newToken.opacity){
 					changeTokenOpacity(token, newToken.opacity);
 				}
-				//console.log("Caso 1: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
+				// Lose HP
 				if (token.attrs.hp > newToken.attrs.hp){	// Lose HP
 					showDamage(token, token.attrs.hp-newToken.attrs.hp);
 					token.attrs.hp = newToken.attrs.hp;
 					updateHp(token);
 				} 
+				// New guidelines
 				token.guidelines = newToken.guidelines;
 				token.defaultGuideline.n = newToken.defaultGuideline.n;
 				token.defaultGuideline.icon = newToken.defaultGuideline.icon;
 				if (newToken.defaultGuideline.icon != null){
 					document.getElementById("divGuideline_"+token.name).src = 'img/icons/'+token.defaultGuideline.icon;
 				}
-				moveToken(token, newToken.x, newToken.y);
+				// Movement
+				var eq = pathEqual(token.path, newToken.path);
+				if (newToken.path != null && !eq){
+					token.path = newToken.path;
+					moveTokenByPath(token, token.path);
+				}
 
 				/* Animations */
 				for (var ani_step=0; newToken.animation!=null && ani_step<newToken.animation.length; ani_step++){

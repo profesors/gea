@@ -1,4 +1,3 @@
-var at;
 document.addEventListener('DOMContentLoaded', function(){ 
 	/******************* PJ 1 ********************************/
 	document.querySelectorAll(".b11").forEach(function (item){
@@ -512,6 +511,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			getSheetCharacter(name, board.id, divInfo);
 		});
 	});
+
 }, false);
 
 function closeInfoCharacter(){
@@ -527,10 +527,54 @@ function showDefaultGuidelineInSheet(name, id){
 	getSheetCharacter(name, board.id, divInfo);
 }
 
-function mm(tokenName){
-	closeInfoCharacter();
-	console.log(tokenName);
-	movement.token = getTokenByName(tokenName);
-	//runGuideline(encodeURI("@"+tokenName);
-	sendCommand("/:g"+tokenName+",3");
+async function drawMovementLine(e){
+	if (movement.token != null){
+		if (movement.line==null){
+			movement.line = document.createElementNS("http://www.w3.org/2000/svg", "path");
+			movement.line.setAttribute("id","movementLine");
+			const tilex = Math.floor(e.offsetX/board.tilew);
+			const tiley = Math.floor(e.offsetY/board.tileh);
+			movement.line.setAttribute("x1", x1);
+			movement.line.setAttribute("y1", y1);
+			movement.line.setAttribute("x2", x1);
+			movement.line.setAttribute("y2", y1);
+			var style = "stroke-width: 2; stroke:"+movement.token.img.style.border.split(' ')[2]+"; ";
+			style+= "stroke-linecap:butt; stroke-dasharray:5,5; opacity:1;";
+			style+= "fill: none;";
+			movement.line.setAttribute("style", style);
+			svg.appendChild(movement.line);
+			movement.pathTiles = [[tilex+1,tiley+1]];
+		}
+		const tilex = Math.floor(e.offsetX/board.tilew)+1;
+		const tiley = Math.floor(e.offsetY/board.tileh)+1;
+
+		var tokenInCell = getTokenByTile(tilex, tiley);
+		if (tokenInCell != null &&
+			movement.token.img.style.border.split(' ')[2]!=tokenInCell.img.style.border.split(' ')[2]){
+			// Exit: you can not pass over an enemy
+			movement.token.divName.style.color="yellow";
+			movement.token.divName.style.opacity = movement.opacityDivName;
+
+			svgOver.removeEventListener('mousemove', drawMovementLine, true);
+			svg.removeChild(movement.line);
+			movement.line = null;
+			movement.pathTiles = null;
+			return;
+		}
+		if (!isInPathTiles(tilex, tiley)){	// Check is a new tiles not a return
+			movement.pathTiles.push([tilex, tiley]);
+			var x1 = getPixel(movement.token.x, board.tilew, board.offsetx+(movement.token.w*board.tilew)/2);
+			var y1 = getPixel(movement.token.y, board.tileh, board.offsety+(movement.token.h*board.tileh)/2);
+			var pathString = "M "+x1+" "+y1;
+			for (var i=1; i<movement.pathTiles.length; i++){
+				var x2 = (movement.pathTiles[i][0]-0.5)*board.tilew+board.offsetx;
+				var y2 = (movement.pathTiles[i][1]-0.5)*board.tileh+board.offsety;
+				pathString += " L "+x2+" "+y2;
+				//console.log(movement.pathTiles);
+				movement.line.setAttribute("d", pathString);
+			}
+		}
+	}
 }
+
+

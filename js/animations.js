@@ -31,7 +31,45 @@ async function showDamage(token, damage){
 	},2000);
 }
 
-async function moveToken(token, toX, toY){
+async function moveTokenByPath(token, path){
+	if (path != null){
+		var ox = getPixel(token.x, board.tilew, board.offsetx);
+		var oy = getPixel(token.y, board.tileh, board.offsety);
+		for (var i=1; i<path.length; i++){
+			const dx = getPixel(path[i].x, board.tilew, board.offsetx)-ox;
+			const dy = getPixel(path[i].y, board.tileh, board.offsety)-oy;
+			const oz = token.z;
+			var t0 = (new Date).getTime();
+			var tf = t0+250;
+			var tt = tf-t0;
+			var t = 0.0;
+			const k = Math.PI/(2*tt);
+			while(t<tt){
+				var p = t/tt;
+				token.div.style.left = (ox+dx*p)+"px";
+				token.div.style.top = (oy+dy*p)+"px";
+				await sleep(T_PRECISION);
+				t = (new Date).getTime() - t0;
+			}
+			ox = getPixel(path[i].x, board.tilew, board.offsetx);
+			oy = getPixel(path[i].y, board.tileh, board.offsety);
+		}
+		token.div.style.left = getPixel(path[path.length-1].x,
+			board.tilew, board.offsetx)+"px";
+		token.div.style.top = getPixel(path[path.length-1].y,
+			board.tileh, board.offsety)+"px";
+		token.x = path[path.length-1].x;
+		token.y = path[path.length-1].y;
+
+		if (movement.line!=null){
+			svg.removeChild(movement.line);
+			movement.line = null;
+			movement.pathTiles = null;
+		}
+	}
+}
+
+async function moveTokenJumpTo(token, toX, toY){
 	// From (ox, oy) to (ox+dx, oy+dy)
 	if (token.x != toX || token.y != toY){
 		token.divDice.style.opacity=0;
@@ -338,3 +376,5 @@ async function changeTokenOpacity(token, newVal){
 	}
 	token.div.style.opacity = 1;
 }
+
+

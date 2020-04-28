@@ -42,6 +42,17 @@ function getTokenByTile(tilex,tiley){
 	return null;
 }
 
+function isInPathTiles(tilex, tiley){
+	if (movement.pathTiles != null){
+		for (var i=0; i<movement.pathTiles.length; i++){
+			if (tilex==movement.pathTiles[i][0] && tiley == movement.pathTiles[i][1]){
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 function getDistanceTiles(tilex1, tiley1, tilex2, tiley2){
 	return Math.sqrt(((tilex2-tilex1)**2+(tiley2-tiley1)**2));
 }
@@ -174,6 +185,16 @@ function addSvgCanvas(){
 	svg.setAttribute("style", "z-index: 20; position: absolute;");
 	svg.setAttribute("version", "1.1");
 	canvas.appendChild(svg);
+
+	var w = board.ntilesw*board.tilew;
+	var h = board.ntilesh*board.tileh;
+	svgOver = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+	svgOver.setAttribute("id", "svgCanvasOver");
+	svgOver.setAttribute("width", w);
+	svgOver.setAttribute("height", h);
+	svgOver.setAttribute("style", "z-index: 21; position: absolute;");
+	svgOver.setAttribute("version", "1.1");
+	canvas.appendChild(svgOver);
 }
 
 function addSvgCircle(id, x, y, r, fill, extraStyle=null){
@@ -333,4 +354,17 @@ function togglePanelI(){
 function hidePanelI(){
 	var panel = document.getElementById("panelI");
 	panel.style.display = 'none';
+}
+
+function pathEqual(path1, path2){
+	if (path1 == null) return false;
+	if (path2 == null) return false;
+	if (path1.length !== path2.length) return false;
+
+	// Check if all items exist and are in the same order
+	for (var i = 0; i < path1.length; i++) {
+		if ((path1[i].x!=path2[i].x)) return false;
+		if ((path1[i].y!=path2[i].y)) return false;
+	}
+	return true;
 }

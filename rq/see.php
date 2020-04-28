@@ -4,7 +4,6 @@ include_once('libControllers.php');
 
 connectDB();
 setup_lang();
-
 $idBoard = secure_param('idBoard');
 $name = secure_param('name');
 

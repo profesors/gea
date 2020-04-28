@@ -1,4 +1,5 @@
-var canvas, canvasOver, svg, panelI, input, output;
+var canvas, canvasOver, panelI, input, output;
+var svg, svgOver;
 var arrTokens = [];						// Tokens in the board
 var arrCommands = [], iCommands = 0;	// Commands sended. Array and index to ArrowUp and ArrowDown recover
 var timerUpdates;						// Timer to check each second for updates from the server
@@ -207,22 +208,34 @@ function movementClick(event){
 			movement.opacityDivName = movement.token.divName.style.opacity;
 			movement.token.divName.style.opacity = 1;
 			movement.token.divName.style.color = "white";
+			svgOver.addEventListener('mousemove', drawMovementLine, true);
 		}
 	} else {	// Second click
 		movement.token.divName.style.color = "yellow";
 		var destToken = getTokenByTile(tilex,tiley);
 		if (destToken==null){	// Destination is empty, you can move
-			sendCommand("@"+movement.token.name+" p"+tilex+","+tiley);
-		} else {	// There is a token in de destination cell. Run guidelines
+			var pathString = "p";
+			for (var i=0; i<movement.pathTiles.length; i++){
+				pathString+=movement.pathTiles[i][0]+","+movement.pathTiles[i][1]+",";
+			}
+			sendCommand("@"+movement.token.name+" "+pathString.substring(0,pathString.length-1));
+		} else {	// There is a token in destination cell. Run guidelines
 			if (destToken.name != movement.token.name && isEnabled(movement.token)){
 				var d = distanceFromTokenToToken(movement.token, getTokenByTile(tilex, tiley));
 				var target = getTokenByTile(d.p2.x, d.p2.y);
 				runGuideline(encodeURI("@"+movement.token.name+" t"+target.name));
+			} else {	// Click over the movement.token
+				if (movement.line!=null){
+					svg.removeChild(movement.line);
+					movement.line = null;
+					movement.pathTiles = null;
+				}
 			}
 		}
 		movement.token.divName.style.color="yellow";
 		movement.token.divName.style.opacity = movement.opacityDivName;
 		movement.token = null;
+		svgOver.removeEventListener('mousemove', drawMovementLine, true);
 	}
 	}	// close: if (divInfoCharacter.display != block)
 }

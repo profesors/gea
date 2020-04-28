@@ -5,7 +5,7 @@ $idBoard = secure_param('idBoard');
 $fromActionId = secure_param('fromActionId');
 
 #$fromActionId=10;
-#$idBoard = 4;
+#$idBoard = 1;
 
 # Get tokens from board
 $query = "SELECT * FROM tokens WHERE idBoard = $idBoard AND actionId>$fromActionId;";
@@ -30,6 +30,16 @@ while($row = mysqli_fetch_array($result)){
 	$r->diceActionId = $row['dice_actionId'];
 	$r->diceActionTargets= $row['dice_action_targets'];
 	$r->pc = $row['pc'];
+
+	$path = explode(',',$row['path']);
+	$r->path = null;
+	error_log(sizeof($path));
+	if (sizeof($path)>1){
+		$r->path = array();
+		for ($i=0; $i<sizeof($path); $i+=2){
+			array_push($r->path, array('x'=>$path[$i],'y'=>$path[$i+1]));
+		}
+	}
 	# Animations
 	$r->animation = Array();
 	$query = "SELECT * FROM animations WHERE idBoard=$idBoard AND tokenName='".$row['name'];
