@@ -12,15 +12,8 @@ var touch = {
 	x: 0,
 	y: 0
 }
-var movement = {
-	pixel_x0: -1,
-	pixel_y0: -1,
-	pixel_x1: -1,
-	pixel_y1: -1,
-	token: null,
-	toTileX: 0,
-	toTileY: 0
-}
+
+var movement;
 
 function inputKeyPress_inputBox(event){
 	//console.log(event.keyCode);
@@ -84,7 +77,7 @@ function inputKeyPress_allDocument(event){
 		setOpacityCoordinates(0);
 		setOpacityDivNames(0);
 		iCommands = arrCommands.length;
-		movement.token = null;
+		movement.reset();
 		break;
 	case 32:	// Space
 			bShowInput = true;
@@ -200,43 +193,29 @@ function movementClick(event){
 	const y = (isNaN(event.clientY)?event.touches[0].screenY:event.clientY) + window.pageYOffset;
 	const tilex = Math.floor((x-board.offsetx)/board.tilew)+1;
 	const tiley = Math.floor((y-board.offsety)/board.tileh)+1;
-	var divInfoCharacter = document.getElementById("info_character");
-	if (divInfoCharacter.style.display != "grid"){
-	if (movement.token == null){	// Select token (first click)
-		movement.token = getTokenByTile(tilex, tiley);
-		if (movement.token!=null) {
-			movement.opacityDivName = movement.token.divName.style.opacity;
-			movement.token.divName.style.opacity = 1;
-			movement.token.divName.style.color = "white";
-			svgOver.addEventListener('mousemove', drawMovementLine, true);
-		}
-	} else {	// Second click
-		movement.token.divName.style.color = "yellow";
-		var destToken = getTokenByTile(tilex,tiley);
-		if (destToken==null){	// Destination is empty, you can move
-			var pathString = "p";
-			for (var i=0; i<movement.pathTiles.length; i++){
-				pathString+=movement.pathTiles[i][0]+","+movement.pathTiles[i][1]+",";
+	if (document.getElementById("info_character").style.display != "grid"){
+		if (!movement.isSelected()){	// Select token (first click)
+			var selectedToken = getTokenByTile(tilex, tiley);
+			if (selectedToken!=null) {
+				movement.select(selectedToken);
+				movement.highlightName(true);
+				svgOver.addEventListener('mousemove', listenerPathLine, true);
 			}
-			sendCommand("@"+movement.token.name+" "+pathString.substring(0,pathString.length-1));
-		} else {	// There is a token in destination cell. Run guidelines
-			if (destToken.name != movement.token.name && isEnabled(movement.token)){
-				var d = distanceFromTokenToToken(movement.token, getTokenByTile(tilex, tiley));
-				var target = getTokenByTile(d.p2.x, d.p2.y);
-				runGuideline(encodeURI("@"+movement.token.name+" t"+target.name));
-			} else {	// Click over the movement.token
-				if (movement.line!=null){
-					svgRemoveAllChildren();
-					movement.line = null;
-					movement.pathTiles = null;
+		} else {	// Second click
+			var target = getTokenByTile(tilex,tiley);
+			if (target==null){	// Destination is empty, you can move
+				sendCommand("@"+movement.token.name+" "+movement.pathTilesString);
+			} else { // There is a token in destination cell. Run guidelines
+				if (target.name != movement.token.name && isEnabled(movement.token)){
+					runGuideline(encodeURI("@"+movement.token.name+" t"+target.name));
+				} else {
+
 				}
 			}
+			svgOver.removeEventListener('mousemove', listenerPathLine, true);
+			movement.reset();
 		}
-		movement.token.divName.style.color="yellow";
-		movement.token.divName.style.opacity = movement.opacityDivName;
-		movement.token = null;
-		svgOver.removeEventListener('mousemove', drawMovementLine, true);
-	}
+			
 	}	// close: if (divInfoCharacter.display != block)
 }
 
@@ -283,10 +262,11 @@ window.addEventListener("DOMContentLoaded", function() {
 async function main(){
 	//document.getElementById("body").mozRequestFullScreen();
 
-	getBoard(1);	/* Number of board */
+	await getBoard(1);	/* Number of board */
 	while(board==undefined)	{
 		await sleep(T_PRECISION);
 	}
+	movement = new Movement(board);
 	drawCellCoordinates();
 	if (remoteLastAction != undefined){
 		board.lastActionId = remoteLastAction.id;

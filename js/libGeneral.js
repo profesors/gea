@@ -42,6 +42,7 @@ function getTokenByTile(tilex,tiley){
 	return null;
 }
 
+/*
 function isInPathTiles(tilex, tiley){
 	if (movement.pathTiles != null){
 		for (var i=0; i<movement.pathTiles.length; i++){
@@ -51,7 +52,7 @@ function isInPathTiles(tilex, tiley){
 		}
 	}
 	return false;
-}
+}*/
 
 function getDistanceTiles(tilex1, tiley1, tilex2, tiley2){
 	return Math.sqrt(((tilex2-tilex1)**2+(tiley2-tiley1)**2));
@@ -305,9 +306,8 @@ function drawCellCoordinates(){
 	}
 }
 
-async function removeToken(name){
+async function removeToken(token){
 	await sleep(1000);
-	var token = getTokenByName(name);
 	var t0 = (new Date).getTime();
 	var tf = t0+2000;
 	var tt = tf-t0;
@@ -318,7 +318,7 @@ async function removeToken(name){
 		await sleep(T_PRECISION);
 		t = (new Date).getTime()-t0;
 	}
-	sendCommand("@"+name+" p"+(board.ntilesw+1)+","+(board.ntilesh+1)+" aout");
+	sendCommand("@"+(token.name)+" p"+(token.x)+","+(token.y)+","+(board.ntilesw+1)+","+(board.ntilesh+1)+" aout");
 	token.div.style.left = (board.ntilesw*board.tilew)+"px";
 	token.div.style.top = (board.ntilesh*board.tilesh)+"px";
 }

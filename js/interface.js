@@ -514,6 +514,42 @@ document.addEventListener('DOMContentLoaded', function(){
 
 }, false);
 
+/* listenerPathLine */
+function listenerPathLine(e){
+	if (movement.isSelected()){
+		if (!movement.line){
+			movement.createPathLine();
+			svg.appendChild(movement.line);
+		}
+		const tilex = Math.floor(e.offsetX/board.tilew)+1;
+		const tiley = Math.floor(e.offsetY/board.tileh)+1;
+
+		// Is there other token in the cell
+		var tokenInCell = getTokenByTile(tilex, tiley);
+		if (tokenInCell!=null){
+			var tokenInCellColor = tokenInCell.img.style.border.split(' ')[2];
+			if (tokenInCellColor != movement.color){
+				// Exit: Hide movement line and exit. Can not pass over enemy
+				movement.highlightName(false);
+				svgOver.removeEventListener('mousemove', listenerPathLine, true);
+				//movement.removeLine();
+				return;
+			}
+		}
+
+		// Build the path data structure
+		var dcx = e.offsetX-((tilex-0.5)*board.tilew);
+		var dcy = e.offsetY-((tiley-0.5)*board.tileh);
+		var distToCenterOfTile = Math.round(Math.sqrt(dcx**2+dcy**2));
+		if (!movement.isInPathTiles(tilex, tiley) && distToCenterOfTile<board.tilew/2){	// Check is a new tiles not a return
+			movement.pathTiles.push([tilex, tiley]);
+			movement.line.setAttribute("d", movement.pathPixels());
+			// Distance
+			movement.drawPathSteps();
+		}
+	}
+}
+
 function closeInfoCharacter(){
 	event.stopPropagation();
 	var divInfo = document.getElementById("info_character");
@@ -527,75 +563,43 @@ function showDefaultGuidelineInSheet(name, id){
 	getSheetCharacter(name, board.id, divInfo);
 }
 
+/*
 async function drawMovementLine(e){
 	// New line and new path
-	var tokenColor = movement.token.img.style.border.split(' ')[2];
-	if (movement.token != null){
-		if (movement.line==null){
-			movement.line = document.createElementNS("http://www.w3.org/2000/svg", "path");
-			movement.line.setAttribute("id","movementLine");
-			const tilex = Math.floor(e.offsetX/board.tilew);
-			const tiley = Math.floor(e.offsetY/board.tileh);
-			movement.line.setAttribute("x1", x1);
-			movement.line.setAttribute("y1", y1);
-			movement.line.setAttribute("x2", x1);
-			movement.line.setAttribute("y2", y1);
-			var style = "stroke-width: 2; stroke:"+movement.token.img.style.border.split(' ')[2]+"; ";
-			style+= "stroke-linecap:butt; stroke-dasharray:5,5; opacity:1;";
-			style+= "fill: none;";
-			movement.line.setAttribute("style", style);
+	//var tokenColor = movement.token.img.style.border.split(' ')[2];
+	if (movement.isSelected()){
+		if (!movement.line){
+			movement.createLine();
 			svg.appendChild(movement.line);
-			movement.pathTiles = [[tilex+1,tiley+1]];
 		}
 		const tilex = Math.floor(e.offsetX/board.tilew)+1;
 		const tiley = Math.floor(e.offsetY/board.tileh)+1;
 
-
-		// There is other token in the cell
+		// Is there other token in the cell
 		var tokenInCell = getTokenByTile(tilex, tiley);
-		if (tokenInCell != null && tokenColor != tokenInCell.img.style.border.split(' ')[2]){
-			// Exit: Hide movement line and exit. Can not pass over enemy
-			movement.token.divName.style.color="yellow";
-			movement.token.divName.style.opacity = movement.opacityDivName;
-
-			svgOver.removeEventListener('mousemove', drawMovementLine, true);
-			svgRemoveAllChildren();
-			movement.line = null;
-			movement.pathTiles = null;
-			return;
+		if (tokenInCell!=null){
+			var tokenInCellColor = tokenInCell.img.style.border.split(' ')[2];
+			if (tokenInCellColor != movement.color){
+				// Exit: Hide movement line and exit. Can not pass over enemy
+				movement.highlightName(false);
+				svgOver.removeEventListener('mousemove', drawMovementLine, true);
+				svgRemoveAllChildren();
+				movement.removeLine();
+				return;
+			}
 		}
 
 		// Build the path data structure
-		var cx = e.offsetX-((tilex-0.5)*board.tilew);
-		var cy = e.offsetY-((tiley-0.5)*board.tileh);
-		var distToCenterOfTile = Math.round(Math.sqrt(cx**2+cy**2));
-		if (!isInPathTiles(tilex, tiley) && distToCenterOfTile<board.tilew/2){	// Check is a new tiles not a return
+		var dcx = e.offsetX-((tilex-0.5)*board.tilew);
+		var dcy = e.offsetY-((tiley-0.5)*board.tileh);
+		var distToCenterOfTile = Math.round(Math.sqrt(dcx**2+dcy**2));
+		if (!movement.isInPathTiles(tilex, tiley) && distToCenterOfTile<board.tilew/2){	// Check is a new tiles not a return
 			movement.pathTiles.push([tilex, tiley]);
-			var x1 = getPixel(movement.token.x, board.tilew, board.offsetx+(movement.token.w*board.tilew)/2);
-			var y1 = getPixel(movement.token.y, board.tileh, board.offsety+(movement.token.h*board.tileh)/2);
-			var pathString = "M "+x1+" "+y1;
-			for (var i=1; i<movement.pathTiles.length; i++){
-				var x2 = (movement.pathTiles[i][0]-0.5)*board.tilew+board.offsetx;	// [0] is x   [1] is y
-				var y2 = (movement.pathTiles[i][1]-0.5)*board.tileh+board.offsety;
-				pathString += " L "+x2+" "+y2;
-				//console.log(movement.pathTiles);
-				movement.line.setAttribute("d", pathString);
-			}
+			movement.line.setAttribute("d", movement.pathPixels());
 			// Distance
-			var distanceOfPath = 0;
-			for (var i=0; i<movement.pathTiles.length-1; i++){
-				var tilex1 = movement.pathTiles[i][0];
-				var tiley1 = movement.pathTiles[i][1];
-				var tilex2 = movement.pathTiles[i+1][0];
-				var tiley2 = movement.pathTiles[i+1][1];
-				var x = (tilex2-0.5)*board.tilew+board.offsetx;
-				var y = (tiley2-0.1)*board.tileh+board.offsety;
-				distanceOfPath += getDistanceTiles(tilex1, tiley1, tilex2, tiley2);
-				addSvgText('movementLine_number'+i,x,y,tokenColor, null, Math.round(distanceOfPath), 24);
-			}
-			//console.log(Math.round(distanceOfPath));
+			movement.drawPathSteps();
 		}
 	}
 }
-
+*/
 

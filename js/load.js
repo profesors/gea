@@ -1,5 +1,5 @@
 // Load functions of the board
-function getBoard(idBoard){
+async function getBoard(idBoard){
 	const rq = new XMLHttpRequest();
 	rq.open("GET", "rq/getBoard.php?idBoard="+idBoard);
 	rq.send();
@@ -219,11 +219,13 @@ async function getTokens(idBoard, fromActionId=null){
 				showDamage(token, token.attrs.hp-newToken.attrs.hp);
 				token.attrs = newToken.attrs;
 				updateHp(token);
-				removeToken(token.name);
+				removeToken(token);
 			} else if (token.attrs.hp<0){	// Caso 3
 				//console.log("Caso 3: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
 				token.attrs = newToken.attrs;
 				updateHp(token);
+				token.x=newToken.x;
+				token.y=newToken.y;
 				//removeToken(token.name);
 			}
 		}	// for

@@ -7,6 +7,7 @@
 
 ## Versiones
 
+1.26	El movimiento está controlado por una clase de Javascript
 1.25	Indica los pasos dados en el camino
 1.24	Desplazamiento de tokens por esquinas
 1.23	Cuando un token se mueve se ve una línea del camino trazado antes de desplazarse

@@ -33,7 +33,6 @@ while($row = mysqli_fetch_array($result)){
 
 	$path = explode(',',$row['path']);
 	$r->path = null;
-	error_log(sizeof($path));
 	if (sizeof($path)>1){
 		$r->path = array();
 		for ($i=0; $i<sizeof($path); $i+=2){

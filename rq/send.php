@@ -29,7 +29,7 @@
 		# Position and size
 		$x=null; $y=null; $w=1; $h=1;
 		$arr_path = array();
-		//if (preg_match("/\sp((\d+),)+/", $command, $arrTmp)){
+		# Receive a Path
 		if (preg_match("/\sp([^ ]+)/", $command, $arrTmp)){
 			$arrTmp = explode(',', $arrTmp[1]);
 			for($i=0; $i<sizeof($arrTmp); $i+=2){
@@ -37,10 +37,6 @@
 				$y = $arrTmp[$i+1];
 				array_push($arr_path, array('x'=>$x, 'y'=>$y));
 			}
-			#$x = array_key_exists(1, $arrTmp)?$arrTmp[1]:'';
-			#$y = array_key_exists(2, $arrTmp)?$arrTmp[2]:'';
-			//$w = array_key_exists(4, $arrTmp)?$arrTmp[4]:'1';
-			//$h = array_key_exists(6, $arrTmp)?$arrTmp[6]:'1';
 		}
 
 		# imagen.png
@@ -54,6 +50,11 @@
 		# Animation
 		preg_match("/\sa([^ ]*)/", $command, $arrTmp);
 		$animation = array_key_exists(1, $arrTmp)?$arrTmp[1]:null;
+		if ($animation=='out'){
+			$token = get_token($idBoard, $name);
+			move_token($idBoard, $token, $arr_path[1]['x'], $arr_path[1]['y'], false);
+			die();
+		}
 
 		# INSERCIÓN COMPLETA DE TOKEN
 		if ($name!=null && $x!=null && $y!=null && $img_src!=null && $border!=null){
@@ -62,16 +63,12 @@
 		} else if ($name!=null && $x!=null && $y!=null){
 			# SOLO MOVIMIENTO DE TOKEN
 			$token = get_token($idBoard, $name);
-			if ($animation == 'out'){
-				move_token($idBoard, $token, $x, $y, false);
-			} else {
-				$im = imagecreatefrompng("../img/bg/010bg_walls.png");
-				move_token_by_path($idBoard, $token, $arr_path, $im);
-				if ($token['pc']==1){
-					show_visible_npc($idBoard, $name);
-				}
-				insert_action($idBoard, "<span class='name_text'>$name</span> "._("MOVES TO")." $x,$y");
+			$im = imagecreatefrompng("../img/bg/010bg_walls.png");
+			move_token_by_path($idBoard, $token, $arr_path, $im);
+			if ($token['pc']==1){
+				show_visible_npc($idBoard, $name);
 			}
+			insert_action($idBoard, "<span class='name_text'>$name</span> "._("MOVES TO")." $x,$y");
 		}
 
 		# tiles

@@ -61,11 +61,12 @@ async function moveTokenByPath(token, path){
 		token.x = path[path.length-1].x;
 		token.y = path[path.length-1].y;
 
+		/*
 		if (movement.line!=null){
 			svgRemoveAllChildren();
 			movement.line = null;
 			movement.pathTiles = null;
-		}
+		}*/
 	}
 }
 

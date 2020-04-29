@@ -72,6 +72,13 @@
 			"x": 11,
 			"y": 17,
 			"default_guideline_id":1
+		},
+		{
+			"file": "goblin",
+			"name": "g5",
+			"x": 13,
+			"y": 21,
+			"default_guideline_id":1
 		}
 	]
 }
