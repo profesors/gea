@@ -168,36 +168,39 @@ function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border, $o
 	increase_last_actionId($idBoard, 1);
 }
 
+
 function move_token($idBoard, &$token, $x, $y, $im){
-	#$token = get_token($idBoard, $name);
 	$board = get_board($idBoard);
-	$can_move = true;
-	if ($im){
-		$can_move = can_move_to_tile($board, $im, $token, $x, $y);
-	}
-	if ($can_move) {
-		$name = ($token['name']=='')?'NULL':$token['name'];
-		$nextActionId = intval(read_last_actionId($idBoard))+1;
-		$query = "UPDATE `tokens` SET x=$x, y=$y, actionId=$nextActionId WHERE idBoard=$idBoard AND ";
-		$query.= " name='".$token['name']."'";
-		run_sql($query) or die();
-		increase_last_actionId($idBoard, 1);
-		$token['x'] = $x;
-		$token['y'] = $y;
-	} else {
-		error_log("CAN NOT MOVE");
-	}
+	$name = ($token['name']=='')?'NULL':$token['name'];
+	$nextActionId = intval(read_last_actionId($idBoard))+1;
+	$query = "UPDATE `tokens` SET x=$x, y=$y, actionId=$nextActionId WHERE idBoard=$idBoard AND ";
+	$query.= " name='".$token['name']."'";
+	run_sql($query) or die();
+	increase_last_actionId($idBoard, 1);
+	$token['x'] = $x;
+	$token['y'] = $y;
 }
 
 function move_token_by_path($idBoard, &$token, $arrPath_tiles, $im){
 	$board = get_board($idBoard);
 	$path = '';
-	for ($i=0; $i<sizeof($arrPath_tiles); $i++){
-		$can_move = can_move_to_tile($board, $im, $token, $arrPath_tiles[$i]['x'], $arrPath_tiles[$i]['y']);
-		if ($can_move){
-			move_token($idBoard, $token, $arrPath_tiles[$i]['x'], $arrPath_tiles[$i]['y'], false);
-			$path.=$arrPath_tiles[$i]['x'].','.$arrPath_tiles[$i]['y'].',';
+	for ($i=1; $i<sizeof($arrPath_tiles); $i++){
+		$x = $arrPath_tiles[$i]['x'];
+		$y = $arrPath_tiles[$i]['y'];
+		$is_visible = isVisible_between_tiles($board, $im, $token, $x, $y);
+		if ($is_visible){
+			$is_free = free_from_enemy_in_tile($idBoard, $token, $x, $y);
+			if ($is_free){
+				move_token($idBoard, $token, $arrPath_tiles[$i]['x'], $arrPath_tiles[$i]['y'], false);
+				$path.=$arrPath_tiles[$i]['x'].','.$arrPath_tiles[$i]['y'].',';
+			} else {
+				# @TODO Hacer que muestre un mensaje al personaje cuando suceda este caso
+				error_log("Casilla ocupada");
+				break;
+			}
 		} else {
+			# @TODO Hacer que muestre un mensaje al personaje cuando suceda este caso
+			error_log("Casilla bloqueada");
 			break;
 		}
 	}
@@ -277,8 +280,14 @@ function remove_token($idBoard, $name){
 }
 
 function get_token($idBoard, $name){
-	global $db;
 	$query = "SELECT * FROM tokens WHERE idBoard=$idBoard AND name='$name' LIMIT 1";
+	$result = run_sql($query) or die();
+	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+	return $row;
+}
+
+function get_token_by_tile($idBoard, $tilex, $tiley){
+	$query = "SELECT * FROM tokens WHERE idBoard=$idBoard AND x=$tilex AND y=$tiley LIMIT 1";
 	$result = run_sql($query) or die();
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	return $row;

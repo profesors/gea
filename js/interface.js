@@ -528,11 +528,12 @@ function listenerPathLine(e){
 		var tokenInCell = getTokenByTile(tilex, tiley);
 		if (tokenInCell!=null){
 			var tokenInCellColor = tokenInCell.img.style.border.split(' ')[2];
-			if (tokenInCellColor != movement.color){
+			if (tokenInCellColor!=movement.color && tokenInCell.div.style.opacity!=0){
 				// Exit: Hide movement line and exit. Can not pass over enemy
 				movement.highlightName(false);
 				svgOver.removeEventListener('mousemove', listenerPathLine, true);
-				//movement.removeLine();
+				movement.removeLine();
+				movement.reset();
 				return;
 			}
 		}
@@ -562,44 +563,3 @@ function showDefaultGuidelineInSheet(name, id){
 	divInfo.style.display = "grid";
 	getSheetCharacter(name, board.id, divInfo);
 }
-
-/*
-async function drawMovementLine(e){
-	// New line and new path
-	//var tokenColor = movement.token.img.style.border.split(' ')[2];
-	if (movement.isSelected()){
-		if (!movement.line){
-			movement.createLine();
-			svg.appendChild(movement.line);
-		}
-		const tilex = Math.floor(e.offsetX/board.tilew)+1;
-		const tiley = Math.floor(e.offsetY/board.tileh)+1;
-
-		// Is there other token in the cell
-		var tokenInCell = getTokenByTile(tilex, tiley);
-		if (tokenInCell!=null){
-			var tokenInCellColor = tokenInCell.img.style.border.split(' ')[2];
-			if (tokenInCellColor != movement.color){
-				// Exit: Hide movement line and exit. Can not pass over enemy
-				movement.highlightName(false);
-				svgOver.removeEventListener('mousemove', drawMovementLine, true);
-				svgRemoveAllChildren();
-				movement.removeLine();
-				return;
-			}
-		}
-
-		// Build the path data structure
-		var dcx = e.offsetX-((tilex-0.5)*board.tilew);
-		var dcy = e.offsetY-((tiley-0.5)*board.tileh);
-		var distToCenterOfTile = Math.round(Math.sqrt(dcx**2+dcy**2));
-		if (!movement.isInPathTiles(tilex, tiley) && distToCenterOfTile<board.tilew/2){	// Check is a new tiles not a return
-			movement.pathTiles.push([tilex, tiley]);
-			movement.line.setAttribute("d", movement.pathPixels());
-			// Distance
-			movement.drawPathSteps();
-		}
-	}
-}
-*/
-

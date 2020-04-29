@@ -197,7 +197,16 @@ function isVisible_between_pixels($im, $x1, $y1, $x2, $y2){
 	return $visible;
 }
 
-function can_move_to_tile(&$board, $im, &$token, $toX, $toY){
+function free_from_enemy_in_tile($idBoard, &$token, $x, $y){
+	$tokenInCell = get_token_by_tile($idBoard, $x, $y);
+	$ret = true;
+	if ($tokenInCell!=null && $tokenInCell['pc']!=$token['pc']){
+		$ret = false;
+	}
+	return $ret;
+}
+
+function isVisible_between_tiles(&$board, $im, &$token, $toX, $toY){
 	$x1 = ($token['x']-1)*$board->tilew+$board->offsetx+0.5*$board->tilew;
 	$y1 = ($token['y']-1)*$board->tileh+$board->offsety+0.5*$board->tileh;
 	$x2 = ($toX-1)*$board->tilew+$board->offsetx+0.5*$board->tilew;
