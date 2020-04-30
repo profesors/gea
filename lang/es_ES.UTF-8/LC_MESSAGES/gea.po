@@ -9,14 +9,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "STR"
-msgstr "fue"
-
-msgid "DEX"
-msgstr "des"
-
 msgid "ACTIONS"
 msgstr "acciones"
+
+msgid "AMMUNITION"
+msgstr "munición"
 
 msgid "ATTACKS"
 msgstr "ataca"
@@ -27,6 +24,9 @@ msgstr "ataque"
 msgid "ATTACKS TO"
 msgstr "ataca a"
 
+msgid "BLOCKED SPACE"
+msgstr "bloqueado"
+
 msgid "COVERTURE"
 msgstr "cobertura"
 
@@ -35,6 +35,9 @@ msgstr "crítico"
 
 msgid "DAMAGE"
 msgstr "daño"
+
+msgid "DEX"
+msgstr "des"
 
 msgid "DISTANCE"
 msgstr "distancia"
@@ -51,17 +54,17 @@ msgstr "sin munición"
 msgid "MOVES TO"
 msgstr "se mueve a"
 
+msgid "NO SPELLS"
+msgstr "sin conjuros"
+
+msgid "OCCUPIED SPACE"
+msgstr "ocupado"
+
 msgid "OUT OF RANGE"
 msgstr "fuera de rango"
 
-msgid "WITH"
-msgstr "con"
-
 msgid "REMAINS"
 msgstr "restantes"
-
-msgid "AMMUNITION"
-msgstr "munición"
 
 msgid "MISSILES"
 msgstr "proyectiles"
@@ -72,8 +75,11 @@ msgstr "Gac0"
 msgid "SPELLS"
 msgstr "conjura"
 
+msgid "STR"
+msgstr "fue"
+
 msgid "TARGET"
 msgstr "objetivo"
 
-msgid "NO SPELLS"
-msgstr "sin conjuros"
+msgid "WITH"
+msgstr "con"

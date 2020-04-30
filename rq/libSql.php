@@ -155,10 +155,10 @@ function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border, $o
 	$name = ($name=='')?'NULL':$name;
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
 	$query = "INSERT INTO `tokens` (`idBoard`,`name`,file,pc,`x`,`y`,`z`,`w`,`h`,`step`,`img`,`border`,";
-	$query.= " opacity, `actionId`, `dice_result`, ";
+	$query.= " opacity, `actionId`, ";
 	$query.= " defaultGuideline)";
 	$query.= " VALUES ('$idBoard', '$name', '$file',$pc, $x, $y, $z, $w, $h, 1, ";
-	$query.= "'$img_src', '$border', $opacity,$nextActionId, NULL, $default_guideline_id) ";
+	$query.= "'$img_src', '$border', $opacity,$nextActionId, $default_guideline_id) ";
 	$query.= " ON DUPLICATE KEY UPDATE x=$x, y=$y";
 	if ($img_src != ''){
 		$query.= ", img='$img_src'";
@@ -186,7 +186,7 @@ function move_token($idBoard, &$token, $x, $y, $im){
 function move_token_by_path($idBoard, &$token, $arrPath_tiles, $im){
 	$board = get_board($idBoard);
 	$path = '';
-	for ($i=1; $i<sizeof($arrPath_tiles); $i++){
+	for ($i=0; $i<sizeof($arrPath_tiles); $i++){
 		$x = $arrPath_tiles[$i]['x'];
 		$y = $arrPath_tiles[$i]['y'];
 		$is_visible = isVisible_between_tiles($board, $im, $token, $x, $y);
@@ -196,13 +196,11 @@ function move_token_by_path($idBoard, &$token, $arrPath_tiles, $im){
 				move_token($idBoard, $token, $arrPath_tiles[$i]['x'], $arrPath_tiles[$i]['y'], false);
 				$path.=$arrPath_tiles[$i]['x'].','.$arrPath_tiles[$i]['y'].',';
 			} else {
-				# @TODO Hacer que muestre un mensaje al personaje cuando suceda este caso
-				error_log("Casilla ocupada");
+				set_output($idBoard, $token['name'], _('OCCUPIED SPACE'));
 				break;
 			}
 		} else {
-			# @TODO Hacer que muestre un mensaje al personaje cuando suceda este caso
-			error_log("Casilla bloqueada");
+			set_output($idBoard, $token['name'], _('BLOCKED SPACE'));
 			break;
 		}
 	}

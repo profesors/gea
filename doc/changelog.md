@@ -1,5 +1,4 @@
 # Changelog Gea
-
 ## Ideas
 - Iniciativa automática: Reordena la lista de retratos que hay a la derecha
 - Contador de acciones, se resetea cuando todos hayan realizado todas
@@ -7,6 +6,7 @@
 
 ## Versiones
 
+1.30	Resuelto problema que no movía los tokens por el path correctamente
 1.29	En lugar de llamrlo *dice* para a llamarse *output*
 1.28	Aplica penalizaciones al disparar a distancia cuando el objetivo tiene cobertura
 1.27	Tokens no pueden pasar sobre enemigos aunque estos sean invisibles
