@@ -260,7 +260,7 @@ function get_bg_filename($idBoard){
 function get_bg_ts($idBoard){
 	global $db;
 	$bg_file_name = get_bg_filename($idBoard);
-	$bg_ts = filemtime('../img/bg/'.$bg_file_name);
+	$bg_ts = filemtime('../img/bg/'.$bg_file_name.'.jpg');
 	return $bg_ts;
 }
 

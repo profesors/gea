@@ -10,7 +10,7 @@ async function getBoard(idBoard){
 
 			// BG
 			var canvasBg = document.getElementById("canvas_bg");
-			canvasBg.style.backgroundImage = "url(img/bg/"+board.bg+")";
+			canvasBg.style.backgroundImage = "url(img/bg/"+board.bg+".jpg)";
 			canvasBg.style.backgroundRepeat = "no-repeat";
 			canvasBg.style.opacity=1;
 			canvasBg.style.zIndex=1;

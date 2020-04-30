@@ -123,7 +123,6 @@ function get_number_of_corners_in_token(&$token){
 
 # Returns min number of hidden corners
 function min_hidden_corners_visible($im_bg_wall, &$token1, &$token2, &$board){
-	//global $img_bg_wall;
 	$min_hidden_corners = PHP_INT_MAX;
 	for($a=0; $a<=1; $a++){		# Origin corner
 		for ($b=0; $b<=1; $b++){

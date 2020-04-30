@@ -79,6 +79,8 @@ function lmde_attack($idBoard, $token1, $token2, $guideline){
 # Ranged Attack
 function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
 	#print_r($token1); print_r($guideline); die();
+	$board = get_board($idBoard);
+	$im_bg_wall = imagecreatefrompng("../img/bg/".$board->bg."_walls.png");
 	# Ammunition
 	if ($guideline['n']!=0){
 		$arrDist = distanceTokens($token1, $token2);
@@ -89,6 +91,20 @@ function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
 			if ($arrDist['d']<=$guideline['guideAction']['range'][1])	$distance_mod=0;
 			if ($arrDist['d']<=$guideline['guideAction']['range'][0])	$distance_mod=1;
 			add_mod_attack($guideline, $distance_mod, _('DISTANCE'));
+			# Coverture
+			$n = get_number_of_corners_in_token($token2);
+			$hidden_corners = min_hidden_corners_visible($im_bg_wall, $token1, $token2, $board);
+			$percent_cover = round($hidden_corners/$n*100);
+			error_log("COVER: $percent_cover");
+			if ($percent_cover>0 && $percent_cover<=25){
+				add_mod_attack($guideline, -2, _('COVERTURE').' '.$percent_cover.'%');
+			} else if ($percent_cover>25 && $percent_cover<=50){
+				add_mod_attack($guideline, -4, _('COVERTURE').' '.$percent_cover.'%');
+			} else if ($percent_cover>50 && $percent_cover<=75){
+				add_mod_attack($guideline, -7, _('COVERTURE').' '.$percent_cover.'%');
+			} else if ($percent_cover>75 && $percent_cover<=90){
+				add_mod_attack($guideline, -10, _('COVERTURE').' '.$percent_cover.'%');
+			} 
 			# Attack
 			guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
 			lmde_generic_attack($idBoard, $token1, $token2, $guideline);

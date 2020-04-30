@@ -27,6 +27,9 @@ msgstr "ataque"
 msgid "ATTACKS TO"
 msgstr "ataca a"
 
+msgid "COVERTURE"
+msgstr "cobertura"
+
 msgid "CRITICAL HIT"
 msgstr "crítico"
 

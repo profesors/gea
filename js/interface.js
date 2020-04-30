@@ -531,9 +531,9 @@ function listenerPathLine(e){
 			if (tokenInCellColor!=movement.color && tokenInCell.div.style.opacity!=0){
 				// Exit: Hide movement line and exit. Can not pass over enemy
 				movement.highlightName(false);
-				svgOver.removeEventListener('mousemove', listenerPathLine, true);
+				//svgOver.removeEventListener('mousemove', listenerPathLine, true);
 				movement.removeLine();
-				movement.reset();
+				//movement.reset();
 				return;
 			}
 		}
