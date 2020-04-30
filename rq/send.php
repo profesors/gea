@@ -127,6 +127,7 @@
 				$diceResult .= $dice[$i]['result'];
 			}
 			set_dice($idBoard, $name, $diceResult);
+			set_output($idBoard, $name, $diceResult);
 			insert_action($idBoard, "$name ".trim($sDesc));
 		}
 	

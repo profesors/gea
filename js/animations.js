@@ -21,11 +21,13 @@ async function showDamage(token, damage){
 	token.divIndicator.style.top = (board.tileh/2)+"px";
 	token.divIndicator.style.color = "red";
 	var hpbar = document.getElementById("hpbar_"+token.name)
+	/*
 	if (hpbar != null){
 		token.divDice.innerHTML = -damage;
 	} else {
 		token.divDice.innerHTML = -damage;//(-token2.attrs.maxhp+token2.attrs.hp);
 	}
+	*/
 	setTimeout(function (){
 		token.divIndicator.style.opacity=0;
 	},2000);

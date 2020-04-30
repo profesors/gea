@@ -110,19 +110,19 @@ async function getTokens(idBoard, fromActionId=null){
 				token.divName.style.opacity = 0;
 				token.div.appendChild(token.divName);
 
-				// Div with DICE results NEW token
-				token.divDice = document.createElement("div");
-				token.divDice.id = "divDice_"+newToken.name;
-				token.divDice.style.color = "white";
-				token.divDice.style.position = "absolute";
-				token.divDice.style.fontWeight = "bold";
-				token.divDice.style.top = -0.2*board.tileh+"px";
-				token.divDice.style.width = board.tilew+"px";
-				token.divDice.style.textShadow = "-2px 0 black, 0 2px black, 2px 0 black, 0 -2px black";
-				token.divDice.style.fontSize = "1.4rem";
-				token.divDice.style.zIndex = 12;
-				token.divDice.style.opacity = 0;
-				token.div.appendChild(token.divDice);
+				// Div with OUTPUT results NEW token
+				token.divOutput = document.createElement("div");
+				token.divOutput.id = "divOutput_"+newToken.name;
+				token.divOutput.style.color = "white";
+				token.divOutput.style.position = "absolute";
+				token.divOutput.style.fontWeight = "bold";
+				token.divOutput.style.top = -0.2*board.tileh+"px";
+				token.divOutput.style.width = board.tilew+"px";
+				token.divOutput.style.textShadow = "-2px 0 black, 0 2px black, 2px 0 black, 0 -2px black";
+				token.divOutput.style.fontSize = "1.4rem";
+				token.divOutput.style.zIndex = 12;
+				token.divOutput.style.opacity = 0;
+				token.div.appendChild(token.divOutput);
 
 				// Div with Indicator results token
 				token.divIndicator = document.createElement("div");
@@ -200,17 +200,10 @@ async function getTokens(idBoard, fromActionId=null){
 					}
 				} 
 
-				// This token has pending actions to show
-				if (token.diceActionId < newToken.diceActionId){	
-					token.diceActionId = newToken.diceActionId;
-					token.diceResult = newToken.diceResult;
-					showDiceResult(token.name);
-					/*
-					var token2 = getTokenByName(newToken.diceActionTargets);
-					var returnedData = parseInt((token.diceResult.split(' '))[0]);
-					if (token2 != null && Number.isInteger(returnedData)){	// A roll dice without target has not token2
-						runAnimation(token);
-					}*/
+				// OUTPUT
+				if (newToken.output!= null && board.lastActionId < newToken.output.actionId){
+					token.output = newToken.output;
+					showOutput(token);
 				}
 			} else
 			// Case 2: Token is death in this action

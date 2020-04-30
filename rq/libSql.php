@@ -33,7 +33,9 @@ function reset_db(){
 	$query = "TRUNCATE tokens;";
 	run_sql($query) or die();
 	$query = "TRUNCATE animations;";
-	run_sql($query);
+	run_sql($query) or die();
+	$query = "TRUNCATE output;";
+	run_sql($query) or die();
 }
 
 function secure_param($name){
@@ -235,18 +237,16 @@ function reset_board($idBoard){
 	run_sql($query);
 }
 
-# Updates the dice column of a token
-function set_dice($idBoard, $name, $value, $targets=''){
-	global $db;
+function set_output($idBoard, $tokenName, $text){
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
-	$dice_action_targets = trim($targets,',');
-	$query = "UPDATE tokens SET dice_result = '$value', dice_actionId=$nextActionId, ";
-	$query.= "dice_action_targets = '$dice_action_targets', actionId=$nextActionId  ";
-    $query.= " WHERE idBoard = $idBoard AND name = '$name';";
-	run_sql($query) or die();
+	$q = 'INSERT INTO output (idBoard, tokenName, action_id, text)';
+	$q.= " VALUES ($idBoard, '$tokenName', $nextActionId, '$text')";
+	$q.= " ON DUPLICATE KEY UPDATE action_id=$nextActionId, text='$text'";
+	run_sql($q) or die();
+	$q = "UPDATE tokens SET actionId=$nextActionId WHERE idBoard = $idBoard AND name = '$tokenName';";
+	run_sql($q) or die();
 	increase_last_actionId($idBoard, 1);
 }
-
 
 function get_bg_filename($idBoard){
 	global $db;

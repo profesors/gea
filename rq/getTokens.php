@@ -26,9 +26,6 @@ while($row = mysqli_fetch_array($result)){
 	$r->border = $row['border'];
 	$r->opacity = $row['opacity'];
 	$r->actionId = $row['actionId'];
-	$r->diceResult = trim($row['dice_result']);
-	$r->diceActionId = $row['dice_actionId'];
-	$r->diceActionTargets= $row['dice_action_targets'];
 	$r->pc = $row['pc'];
 
 	$path = explode(',',$row['path']);
@@ -55,6 +52,16 @@ while($row = mysqli_fetch_array($result)){
 		$animation->target_x = $row_animation['target_x'];
 		$animation->target_y = $row_animation['target_y'];
 		array_push($r->animation, $animation);
+	}
+	# **
+	# Output
+	$q = "SELECT * FROM output WHERE idBoard=$idBoard AND tokenName='".$row['name']."' AND action_id>=$fromActionId";
+	$result_output = run_sql($q);
+	if ($row_output = mysqli_fetch_array($result_output)){
+		$r->output = new stdClass();
+		$r->output->actionId = $row_output['action_id'];
+		$r->output->text = $row_output['text'];
+		$r->output->sound = $row_output['sound'];
 	}
 	# **
 	$r->defaultGuideline = new stdClass();

@@ -89,7 +89,66 @@ function setOpacityDivDice(name, newVal){
 	}
 }
 
+function setOpacityDivOutput(tokenName, newVal){
+	var el = document.getElementById("divOutput_"+tokenName);
+	if (el!=null){
+		el.style.opacity = newVal;
+	}
+}
+
+// ShowOutput
+async function showOutput(token){
+	setOpacityDivOutput(token.name, 0);
+	var divOutput = document.getElementById("divOutput_"+token.name);
+	if (divOutput!=null){
+		divOutput.innerHTML = token.output.text;
+		try{
+			if (token.output.sound!=null){
+				document.getElementById("aDado").play();
+			}
+		} catch(e){
+			console.log("Sonido de lanzamiento de dados. Audio no habilitado");
+		}
+		var y = 2*board.tileh/3;
+		var y0 = y;
+		divOutput.style.top = y+"px";
+		divOutput.style.color = "white";
+		var t0 = (new Date).getTime();
+		var tf = t0+2000;
+		var t = 0.0;
+		var tt = tf-t0;
+		var k = Math.PI/(tt*2);
+		var a = board.tileh/2;
+		while(t<(tf-t0)){
+			var p = Math.sin(t*k);
+			y = y0 - a*p;
+			divOutput.style.top=y+"px";
+			setOpacityDivOutput(token.name, p);
+			await sleep(T_PRECISION);
+			t = (new Date).getTime()-t0;
+		}
+		await sleep(2000);	// Wait for a time to show result
+		t0 = (new Date).getTime();
+		tf = t0+2000;
+		t = 0.0;
+		tt = tf-t0;
+		k = Math.PI/(tt*2);
+		a = board.tileh/2;
+		y0 = y;
+		while(t<(tf-t0)){
+			var p = Math.cos(t*k);
+			y = y0 - a*(1-p);
+			divOutput.style.top=y+"px";
+			setOpacityDivOutput(token.name, p);
+			await sleep(T_PRECISION);
+			t = (new Date).getTime()-t0;
+		}
+		divOutput.style.opacity = 0;
+	}
+}
+
 // It shows the result of the dice fadeIn and then fadoOut
+/*
 async function showDiceResult(name){
 	setOpacityDivDice(name, 0);
 	var dice = document.getElementById("divDice_"+name);
@@ -137,7 +196,7 @@ async function showDiceResult(name){
 	}
 	dice.style.opacity = 0;
 }
-
+*/
 
 async function updateHp(token){
 	if (Number.isInteger(parseInt(token.attrs.hp)) && Number.isInteger(parseInt(token.attrs.maxhp))){

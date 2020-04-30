@@ -7,6 +7,7 @@
 
 ## Versiones
 
+1.29	En lugar de llamrlo *dice* para a llamarse *output*
 1.28	Aplica penalizaciones al disparar a distancia cuando el objetivo tiene cobertura
 1.27	Tokens no pueden pasar sobre enemigos aunque estos sean invisibles
 1.26	El movimiento está controlado por una clase de Javascript
