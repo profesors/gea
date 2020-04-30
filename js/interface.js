@@ -526,17 +526,18 @@ function listenerPathLine(e){
 
 		// Is there other token in the cell
 		var tokenInCell = getTokenByTile(tilex, tiley);
+		/*
 		if (tokenInCell!=null){
 			var tokenInCellColor = tokenInCell.img.style.border.split(' ')[2];
 			if (tokenInCellColor!=movement.color && tokenInCell.div.style.opacity!=0){
 				// Exit: Hide movement line and exit. Can not pass over enemy
-				movement.highlightName(false);
+				//movement.highlightName(false);
 				//svgOver.removeEventListener('mousemove', listenerPathLine, true);
-				movement.removeLine();
+				//movement.removeLine();
 				//movement.reset();
 				return;
 			}
-		}
+		}*/
 
 		// Build the path data structure
 		var dcx = e.offsetX-((tilex-0.5)*board.tilew);

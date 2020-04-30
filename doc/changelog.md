@@ -6,6 +6,7 @@
 
 ## Versiones
 
+1.31	BUG que permite mover a través de un enemigo
 1.30	Resuelto problema que no movía los tokens por el path correctamente
 1.29	En lugar de llamrlo *dice* para a llamarse *output*
 1.28	Aplica penalizaciones al disparar a distancia cuando el objetivo tiene cobertura

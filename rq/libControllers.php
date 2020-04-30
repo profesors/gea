@@ -197,12 +197,19 @@ function isVisible_between_pixels($im, $x1, $y1, $x2, $y2){
 }
 
 function free_from_enemy_in_tile($idBoard, &$token, $x, $y){
-	$tokenInCell = get_token_by_tile($idBoard, $x, $y);
-	$ret = true;
-	if ($tokenInCell!=null && $tokenInCell['pc']!=$token['pc']){
-		$ret = false;
+	$token2 = get_token_by_tile($idBoard, $x, $y);
+	if ($token2!=null && $token['pc']!=$token2['pc']){
+		return false;
+	} 
+	$rs_big_enemy = get_tokens_big_enemy($idBoard, $token['pc']);
+	while ($tokenNpc = mysqli_fetch_array($rs_big_enemy, MYSQLI_ASSOC)){
+		for ($a=0; $a<$tokenNpc['w']; $a++){
+			for ($b=0; $b<$tokenNpc['h']; $b++){
+				if ($x==$tokenNpc['x']+$a && $y==$tokenNpc['y']+$b) return false;
+			}
+		}
 	}
-	return $ret;
+	return true;
 }
 
 function isVisible_between_tiles(&$board, $im, &$token, $toX, $toY){
@@ -215,8 +222,8 @@ function isVisible_between_tiles(&$board, $im, &$token, $toX, $toY){
 }
 
 function show_visible_npc($idBoard, $tokenName){
-	$im_bg_wall = imagecreatefrompng("../img/bg/010bg_walls.png");
 	$board = get_board($idBoard);
+	$im_bg_wall = imagecreatefrompng("../img/bg/010bg_walls.png");
 	$rsTokens = get_npc_hidden_tokens($idBoard);
 	$tokenPc = get_token($idBoard, $tokenName);
 	$arrTokens = array();

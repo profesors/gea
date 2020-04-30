@@ -291,6 +291,25 @@ function get_token_by_tile($idBoard, $tilex, $tiley){
 	return $row;
 }
 
+function get_tokens_by_board($idBoard){
+	$query = "SELECT * FROM tokens WHERE idBoard=$idBoard";
+	$result = run_sql($query) or die();
+	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+	return $row;
+}
+
+function get_tokens_enemy($idBoard, $pc){
+	$query = "SELECT * FROM tokens WHERE idBoard=$idBoard AND pc!=$pc";
+	$result = run_sql($query) or die();
+	return $result;
+}
+
+function get_tokens_big_enemy($idBoard, $pc){
+	$q = "SELECT * FROM tokens WHERE idBoard=$idBoard AND pc!=$pc AND (w>1 OR h>1)";
+	$result = run_sql($q) or die();
+	return $result;
+}
+
 function get_npc_hidden_tokens($idBoard){
 	global $db;
 	$query = "SELECT * FROM tokens WHERE idBoard=$idBoard AND pc=0 AND opacity=0";
