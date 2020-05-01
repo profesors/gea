@@ -358,7 +358,7 @@ function drawCellCoordinates(){
 			txt.style.top = getPixel(y, board.tileh, board.offsety)+"px";
 			txt.style.position = "absolute";
 			txt.style.color = "#aaaaaa";//"white";
-			txt.style.zIndex = 10;
+			txt.style.zIndex = 11;
 			txt.style.textShadow = "1px 1px black";
 			txt.style.opacity = "0";
 			txt.setAttribute("class", "coordinates");

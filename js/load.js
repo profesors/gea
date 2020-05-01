@@ -103,7 +103,8 @@ async function getTokens(idBoard, fromActionId=null){
 				token.divName.style.color = "yellow";
 				token.divName.style.position = "absolute";
 				token.divName.style.fontWeight = "bold";
-				token.divName.style.top = 0.75*board.tileh*token.h+"px";
+				//token.divName.style.top = 0.75*board.tileh*token.h+"px";
+				token.divName.style.bottom = 0;
 				token.divName.style.width = board.tilew*token.w+"px";
 				token.divName.style.textShadow = "2px 2px black";
 				token.divName.style.zIndex = 11;
@@ -120,7 +121,7 @@ async function getTokens(idBoard, fromActionId=null){
 				token.divOutput.style.width = board.tilew+"px";
 				token.divOutput.style.textShadow = "-2px 0 black, 0 2px black, 2px 0 black, 0 -2px black";
 				token.divOutput.style.fontSize = "1.4rem";
-				token.divOutput.style.zIndex = 12;
+				token.divOutput.style.zIndex = 14;
 				token.divOutput.style.opacity = 0;
 				token.div.appendChild(token.divOutput);
 
@@ -137,7 +138,7 @@ async function getTokens(idBoard, fromActionId=null){
 				//token.divIndicator.style.width = "140px";
 				token.divIndicator.style.textShadow = "-2px 0 black, 0 2px black, 2px 0 black, 0 -2px black";
 				token.divIndicator.style.fontSize = "1rem";
-				token.divIndicator.style.zIndex = 14;
+				token.divIndicator.style.zIndex = 12;
 				token.divIndicator.style.opacity = 0;
 				token.div.appendChild(token.divIndicator);
 
@@ -147,7 +148,8 @@ async function getTokens(idBoard, fromActionId=null){
 				token.divGuideline.id = "divGuideline_"+newToken.name;
 				token.divGuideline.style.color = "white";
 				token.divGuideline.style.position = "absolute";
-				token.divGuideline.style.top = (board.tileh*newToken.h-iconSize)+"px";
+				//token.divGuideline.style.top = (board.tileh*newToken.h-iconSize)+"px";
+				token.divGuideline.style.bottom = "1rem";
 				token.divGuideline.style.right = 0;
 				token.divGuideline.style.width = iconSize+"px";
 

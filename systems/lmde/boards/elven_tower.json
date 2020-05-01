@@ -12,7 +12,7 @@
 	"tokens": [
 		{
 			"file": "bar",
-			"name": "bar",
+			"name": "Minsc",
 			"x": 14,
 			"y": 23,
 			"default_guideline_id":1
@@ -33,28 +33,28 @@
 		},
 		{
 			"file": "goblin",
-			"name": "g1",
+			"name": "Drihkard",
 			"x": 16,
 			"y": 9,
 			"default_guideline_id":2
 		},
 		{
 			"file": "goblin",
-			"name": "g2",
+			"name": "Braaldirx",
 			"x": 8,
 			"y": 14,
 			"default_guideline_id":1
 		},
 		{
 			"file": "goblin",
-			"name": "g3",
+			"name": "Fax",
 			"x": 17,
 			"y": 8,
 			"default_guideline_id":1
 		},
 		{
 			"file": "goblin",
-			"name": "g4",
+			"name": "Prekt",
 			"x": 19,
 			"y": 18,
 			"default_guideline_id":2
@@ -75,10 +75,31 @@
 		},
 		{
 			"file": "goblin",
-			"name": "g5",
-			"x": 13,
-			"y": 21,
+			"name": "Vrozz",
+			"x": 6,
+			"y": 20,
 			"default_guideline_id":1
+		},
+		{
+			"file": "goblin",
+			"name": "Prurd",
+			"x": 5,
+			"y": 20,
+			"default_guideline_id":1
+		},
+		{
+			"file": "goblin",
+			"name": "Gnut",
+			"x": 2,
+			"y": 20,
+			"default_guideline_id":2
+		},
+		{
+			"file": "goblin",
+			"name": "Roisreq",
+			"x": 2,
+			"y": 24,
+			"default_guideline_id":2
 		}
 	]
 }

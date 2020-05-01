@@ -56,10 +56,24 @@ async function showIndicator(token, text, color, preWait, postWait, top){
 	}
 }
 
-async function hideIndicator(token){
+function hideIndicator(token){
 	clearTimeout(token.timeOutIndicator);
 	token.divIndicator.style.opacity = 0;
 	token.divIndicator.innerHTML = "";
+}
+
+function hideAllIndicators(){
+	for (var i=0; i<arrTokens.length; i++){
+		hideIndicator(arrTokens[i]);
+	}
+}
+
+function hideAllIndicatorsBut(token){
+	for (var i=0; i<arrTokens.length; i++){
+		if (arrTokens[i].name!=token.name){
+			hideIndicator(arrTokens[i]);
+		}
+	}
 }
 
 async function moveTokenByPath(token, path){

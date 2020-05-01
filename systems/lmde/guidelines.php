@@ -104,7 +104,7 @@ function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
 				add_mod_attack($guideline, -4, _('COVERTURE').' '.$percent_cover.'%');
 			} else if ($percent_cover>50 && $percent_cover<=75){
 				add_mod_attack($guideline, -7, _('COVERTURE').' '.$percent_cover.'%');
-			} else if ($percent_cover>75 && $percent_cover<=90){
+			} else if ($percent_cover>75 && $percent_cover<=100){
 				add_mod_attack($guideline, -10, _('COVERTURE').' '.$percent_cover.'%');
 			} 
 			# Attack

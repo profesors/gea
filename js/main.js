@@ -214,6 +214,7 @@ function movementClick(event){
 				}
 			}
 			svgOver.removeEventListener('mousemove', listenerPathLine, true);
+			hideAllIndicators();
 			movement.reset();
 		}
 			
