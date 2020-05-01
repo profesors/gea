@@ -14,7 +14,7 @@
 	"guidelines":[
 		{
 		"number":1,
-		"icon":"sword.png",
+		"icon":"sword",
 		"name":"espada",
 		"short_desc":"1d6",
 		"action": "flmde_attack r1 d1d6 ba1"

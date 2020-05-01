@@ -9,6 +9,7 @@ class Movement{
 	pathLong=null;
 	pathTiles=null;
 	board=null;
+	tokenTarget=null;
 
 	constructor(board){
 		this.opacityDivName=0;
@@ -26,7 +27,8 @@ class Movement{
 	async reset(){
 		if (this.token!=null) {
 			this.highlightName(false);
-			this.removeLine();
+			svg.removeChild(this.line);
+			this.hidePath();
 			this.pathTiles=null;
 			this.line=null;
 			this.token=null;
@@ -73,6 +75,7 @@ class Movement{
 		return pathString.substring(0, pathString.length-1);
 	}
 
+	/*
 	pathPixels(){
 		var x1 = getPixel(this.token.x, this.board.tilew, this.board.offsetx+(this.token.w*this.board.tilew)/2);
 		var y1 = getPixel(this.token.y, this.board.tileh, this.board.offsety+(this.token.h*this.board.tileh)/2);
@@ -84,7 +87,7 @@ class Movement{
 			//this.line.setAttribute("d", pathString);
 		}
 		return pathString;
-	}
+	}*/
 
 	createPathLine(){
 		this.line = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -98,18 +101,18 @@ class Movement{
 		style+= "fill: none;";
 		this.line.setAttribute("style", style);
 		this.pathTiles = [[this.token.x,this.token.y]];
+		svg.appendChild(this.line);
 	}
 
-	removeLine(){
+	hidePath(){
 		if (this.pathTiles!=null){
 			for (var i=0; i<this.pathTiles.length; i++){
 				var el = document.getElementById(ID_MOVEMENT_LINE_NUMBER+i);
 				if (el!=null) svg.removeChild(el);
 			}
 		}
-		if (this.line!=null)	svg.removeChild(this.line);
-		movement.line = null;
-		movement.pathTiles = null;
+		var line = document.getElementById(ID_MOVEMENT_LINE);
+		if (line!=null) this.line.style.opacity= 0;
 	}
 
 	isInPathTiles(tilex, tiley){
@@ -122,7 +125,7 @@ class Movement{
 		}
 		return false;
 	}
-
+/*
 	drawPathSteps(){
 		var distanceOfPath = 0;
 		for (var i=0; i<this.pathTiles.length-1; i++){
@@ -138,6 +141,32 @@ class Movement{
 			}
 		}
 		this.pathLong = distanceOfPath;
+	}
+	*/
+	drawPath(){
+		var distanceOfPath = 0;
+		var x1 = getPixel(this.token.x, this.board.tilew, this.board.offsetx+(this.token.w*this.board.tilew)/2);
+		var y1 = getPixel(this.token.y, this.board.tileh, this.board.offsety+(this.token.h*this.board.tileh)/2);
+		var pathString = "M "+x1+" "+y1;
+		for (var i=0; i<this.pathTiles.length-1; i++){
+			var tilex1 = this.pathTiles[i][0];
+			var tiley1 = this.pathTiles[i][1];
+			var tilex2 = this.pathTiles[i+1][0];
+			var tiley2 = this.pathTiles[i+1][1];
+			var x = (tilex2-0.5)*this.board.tilew+this.board.offsetx;
+			var y = (tiley2-0.1)*this.board.tileh+this.board.offsety;
+			var x2 = (this.pathTiles[i+1][0]-0.5)*this.board.tilew+this.board.offsetx;	// [0] is x   [1] is y
+			var y2 = (this.pathTiles[i+1][1]-0.5)*this.board.tileh+this.board.offsety;
+			distanceOfPath += getDistanceTiles(tilex1, tiley1, tilex2, tiley2);
+			pathString += " L "+x2+" "+y2;
+			if (document.getElementById(ID_MOVEMENT_LINE_NUMBER+i) == null){
+				addSvgText(ID_MOVEMENT_LINE_NUMBER+i,x,y,this.color, null, Math.round(distanceOfPath), 24);
+			}
+		}
+		this.pathLong = distanceOfPath;
+		//pathString += " L "+x2+" "+y2;
+		this.line.style.opacity=1;
+		this.line.setAttribute("d", pathString);
 	}
 }
 

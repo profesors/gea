@@ -125,16 +125,19 @@ async function getTokens(idBoard, fromActionId=null){
 				token.div.appendChild(token.divOutput);
 
 				// Div with Indicator results token
+				token.timeOutIndicator = null;
 				token.divIndicator = document.createElement("div");
 				token.divIndicator.id = "divIndicator_"+newToken.name;
 				token.divIndicator.style.color = "white";
+				token.divIndicator.style.textAlign = "center";
 				token.divIndicator.style.position = "absolute";
 				token.divIndicator.style.fontWeight = "bold";
-				token.divIndicator.style.top = -0.2*board.tileh+"px";
-				token.divIndicator.style.width = board.tilew+"px";
+				token.divIndicator.style.top = 0;//board.tileh+"px";
+				//token.divIndicator.style.left = -0.5*board.tilew+"px";//board.tileh+"px";
+				//token.divIndicator.style.width = "140px";
 				token.divIndicator.style.textShadow = "-2px 0 black, 0 2px black, 2px 0 black, 0 -2px black";
-				token.divIndicator.style.fontSize = "1.4rem";
-				token.divIndicator.style.zIndex = 13;
+				token.divIndicator.style.fontSize = "1rem";
+				token.divIndicator.style.zIndex = 14;
 				token.divIndicator.style.opacity = 0;
 				token.div.appendChild(token.divIndicator);
 
@@ -171,7 +174,9 @@ async function getTokens(idBoard, fromActionId=null){
 				}
 				// Lose HP
 				if (token.attrs.hp > newToken.attrs.hp){	// Lose HP
-					showDamage(token, token.attrs.hp-newToken.attrs.hp);
+					var damage = newToken.attrs.hp-token.attrs.hp;
+					showIndicator(token, damage, "red", 2000, 2000, (board.tileh/2)+"px");
+					//showDamage(token, token.attrs.hp-newToken.attrs.hp);
 					token.attrs.hp = newToken.attrs.hp;
 					updateHp(token);
 				} 
@@ -180,7 +185,7 @@ async function getTokens(idBoard, fromActionId=null){
 				token.defaultGuideline.n = newToken.defaultGuideline.n;
 				token.defaultGuideline.icon = newToken.defaultGuideline.icon;
 				if (newToken.defaultGuideline.icon != null){
-					document.getElementById("divGuideline_"+token.name).src = 'img/icons/'+token.defaultGuideline.icon;
+					document.getElementById("divGuideline_"+token.name).src = 'img/icons/'+token.defaultGuideline.icon+'.png';
 				}
 				// Movement
 				var eq = pathEqual(token.path, newToken.path);
@@ -209,7 +214,9 @@ async function getTokens(idBoard, fromActionId=null){
 			// Case 2: Token is death in this action
 			if (token.attrs.hp > 0 && newToken.attrs.hp<=0){
 				//console.log("Caso 2: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
-				showDamage(token, token.attrs.hp-newToken.attrs.hp);
+				var damage = newToken.attrs.hp-token.attrs.hp;
+				showIndicator(token, damage, "red", 2000, 2000, (board.tileh/2)+"px");
+				//showDamage(token, token.attrs.hp-newToken.attrs.hp);
 				token.attrs = newToken.attrs;
 				updateHp(token);
 				removeToken(token);

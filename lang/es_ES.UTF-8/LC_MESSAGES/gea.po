@@ -27,6 +27,9 @@ msgstr "ataca a"
 msgid "BLOCKED SPACE"
 msgstr "bloqueado"
 
+msgid "CAN NOT PASS"
+msgstr "no puedo pasar"
+
 msgid "COVERTURE"
 msgstr "cobertura"
 

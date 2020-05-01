@@ -15,7 +15,7 @@
 	"guidelines":[
 		{
 		"number":1,
-		"icon":"sword.png",
+		"icon":"sword",
 		"name":"garrote",
 		"short_desc":"1d12+2",
 		"action": "flmde_attack r2 d1d12 ba1 bd1"

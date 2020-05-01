@@ -22,14 +22,14 @@
 	"guidelines":[
 		{
 		"number":1,
-		"icon":"axe.png",
+		"icon":"axe",
 		"name":"hacha 2 manos",
 		"short_desc": "1d12",
 		"action": "flmde_attack r1 d1d12 ba1,2 bd1"
 		},
 		{
 		"number":2,
-		"icon":"bow.png",
+		"icon":"bow",
 		"name":"hacha arrojadiza",
 		"short_desc":"Alcance 1/2/3 1d8",
 		"action": "flmde_rangedAttack r1,2,3 d1d8 ba1,3 bd1",

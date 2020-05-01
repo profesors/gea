@@ -12,6 +12,7 @@ function runAnimation(token, i){
 	}	// Switch case
 }
 
+/*
 async function showDamage(token, damage){
 	token.divIndicator.style.opacity = 0;
 	token.divIndicator.innerHTML = "";
@@ -21,16 +22,44 @@ async function showDamage(token, damage){
 	token.divIndicator.style.top = (board.tileh/2)+"px";
 	token.divIndicator.style.color = "red";
 	var hpbar = document.getElementById("hpbar_"+token.name)
-	/*
 	if (hpbar != null){
 		token.divDice.innerHTML = -damage;
 	} else {
 		token.divDice.innerHTML = -damage;//(-token2.attrs.maxhp+token2.attrs.hp);
 	}
-	*/
 	setTimeout(function (){
 		token.divIndicator.style.opacity=0;
 	},2000);
+}
+*/
+async function showIndicator(token, text, color, preWait, postWait, top){
+	if (token.divIndicator.style.opacity!=0){
+		clearTimeout(token.timeOutIndicator);
+	}
+	//token.divIndicator.style.opacity = 0;
+	//token.divIndicator.innerHTML = "";
+	await sleep(preWait);
+	token.divIndicator.style.opacity=1;
+	token.divIndicator.innerHTML = text;
+	token.divIndicator.style.top = top;
+	if (token.w==1){
+		token.divIndicator.style.width = (board.tilew*2)+"px";
+		token.divIndicator.style.left = -0.5*board.tilew+"px";//board.tileh+"px";
+	} else {
+		token.divIndicator.style.width = board.tilew*token.w+"px";
+	}
+	token.divIndicator.style.color = color;
+	if (postWait!=null){
+		token.timeOutIndicator = setTimeout(function (){
+			token.divIndicator.style.opacity=0;
+		},postWait);
+	}
+}
+
+async function hideIndicator(token){
+	clearTimeout(token.timeOutIndicator);
+	token.divIndicator.style.opacity = 0;
+	token.divIndicator.innerHTML = "";
 }
 
 async function moveTokenByPath(token, path){

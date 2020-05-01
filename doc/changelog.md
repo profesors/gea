@@ -6,6 +6,7 @@
 
 ## Versiones
 
+1.32	Interface muestra icono de acción de combate sobre enemigo
 1.31	BUG que permite mover a través de un enemigo
 1.30	Resuelto problema que no movía los tokens por el path correctamente
 1.29	En lugar de llamrlo *dice* para a llamarse *output*

@@ -239,6 +239,8 @@ function addSvgCanvas(){
 	var w = board.ntilesw*board.tilew;
 	var h = board.ntilesh*board.tileh;
 	svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+	svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+	svg.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
 	svg.setAttribute("id", "svgCanvas");
 	svg.setAttribute("width", w);
 	svg.setAttribute("height", h);
@@ -366,7 +368,7 @@ function drawCellCoordinates(){
 }
 
 async function removeToken(token){
-	await sleep(1000);
+	await sleep(2000);
 	var t0 = (new Date).getTime();
 	var tf = t0+2000;
 	var tt = tf-t0;

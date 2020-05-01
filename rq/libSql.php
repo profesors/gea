@@ -193,10 +193,16 @@ function move_token_by_path($idBoard, &$token, $arrPath_tiles, $im){
 		if ($is_visible){
 			$is_free = free_from_enemy_in_tile($idBoard, $token, $x, $y);
 			if ($is_free){
-				move_token($idBoard, $token, $arrPath_tiles[$i]['x'], $arrPath_tiles[$i]['y'], false);
-				$path.=$arrPath_tiles[$i]['x'].','.$arrPath_tiles[$i]['y'].',';
+				$current_d = floor(distanceTiles($token['x'], $token['y'], $x, $y));
+				if ($current_d<=1){
+					move_token($idBoard, $token, $arrPath_tiles[$i]['x'], $arrPath_tiles[$i]['y'], false);
+					$path.=$arrPath_tiles[$i]['x'].','.$arrPath_tiles[$i]['y'].',';
+				} else {
+					set_output($idBoard, $token['name'], _('CAN NOT PASS'));
+					break;
+				}
 			} else {
-				set_output($idBoard, $token['name'], _('OCCUPIED SPACE'));
+				set_output($idBoard, $token['name'], _('CAN NOT PASS'));
 				break;
 			}
 		} else {

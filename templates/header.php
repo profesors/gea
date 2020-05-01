@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="css/main.css?t=1">
     <link rel="stylesheet" type="text/css" href="css/sheet.css?t=1">
 
-	<script src='js/classes.js?t=1'></script>
+	<script src='js/Movement.js?t=1'></script>
 	<script src='js/cookie.js'></script>
 	<script src='js/libGeneral.js?t=1'></script>
 	<script src='js/main.js?t=1'></script>
