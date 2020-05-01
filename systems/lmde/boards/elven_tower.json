@@ -12,7 +12,7 @@
 	"tokens": [
 		{
 			"file": "bar",
-			"name": "Minsc",
+			"name": "bar",
 			"x": 14,
 			"y": 23,
 			"default_guideline_id":1
