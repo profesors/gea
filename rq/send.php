@@ -64,7 +64,7 @@
 			# SOLO MOVIMIENTO DE TOKEN
 			$token = get_token($idBoard, $name);
 			$board = get_board($idBoard);
-			$im = imagecreatefrompng("../img/bg/$board->bg_walls.png");
+			$im = imagecreatefrompng("../img/bg/".$board->bg."_walls.png");
 			move_token_by_path($idBoard, $token, $arr_path, $im);
 			if ($token['pc']==1){
 				show_visible_npc($idBoard, $name);

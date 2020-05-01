@@ -305,7 +305,7 @@ async function runAnimation_magicMissile(token, i){
 async function changeBackground(newBg){
 	const tsNow = (new Date()).getTime();
 	var canvasOver = document.getElementById("canvas_over");
-	canvasOver.style.backgroundImage = "url('"+newBg+"?cache="+tsNow+"')";
+	canvasOver.style.backgroundImage = "url('"+newBg+"')";
 	var t0 = (new Date).getTime();
 	var tf = t0+1000;
 	var tt = tf-t0;
@@ -321,9 +321,9 @@ async function changeBackground(newBg){
 	var definitiveBg = new Image();
 	definitiveBg.onload = function(){
 		canvasOver.style.opacity=0;
-		document.getElementById("canvas_bg").style.backgroundImage = "url('"+newBg+"?cache="+tsNow+"')";
+		document.getElementById("canvas_bg").style.backgroundImage = "url('"+newBg+"')";
 	}
-	definitiveBg.src = "img/bg/"+board.bg+"?cache="+tsNow;
+	definitiveBg.src = "img/bg/"+board.bg+".jpg";
 }
 
 async function changeTokenOpacity(token, newVal){

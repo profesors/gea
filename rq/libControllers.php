@@ -223,7 +223,7 @@ function isVisible_between_tiles(&$board, $im, &$token, $toX, $toY){
 
 function show_visible_npc($idBoard, $tokenName){
 	$board = get_board($idBoard);
-	$im_bg_wall = imagecreatefrompng("../img/bg/$board->bg_walls.png");
+	$im_bg_wall = imagecreatefrompng("../img/bg/".$board->bg."_walls.png");
 	$rsTokens = get_npc_hidden_tokens($idBoard);
 	$tokenPc = get_token($idBoard, $tokenName);
 	$arrTokens = array();

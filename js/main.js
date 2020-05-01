@@ -166,7 +166,7 @@ function checkUpdates(){
 				var canvasOver = document.getElementById("canvas_over");
 				var newBg = new Image();
 				newBg.onload = function(){changeBackground(newBg.src);}
-				newBg.src = "img/bg/"+board.bg+".jpg?cache="+tsNow+"')";
+				newBg.src = "img/bg/"+board.bg+".jpg?cache="+tsNow;
 				//console.log("UPDATE BG "+newBg.src);
 
 				//canvas.style.backgroundImage = "url('img/bg/"+board.bg+"?cache="+tsNow+"')";
