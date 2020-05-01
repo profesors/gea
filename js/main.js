@@ -166,7 +166,7 @@ function checkUpdates(){
 				var canvasOver = document.getElementById("canvas_over");
 				var newBg = new Image();
 				newBg.onload = function(){changeBackground(newBg.src);}
-				newBg.src = "img/bg/"+board.bg+"?cache="+tsNow+"')";
+				newBg.src = "img/bg/"+board.bg+".jpg?cache="+tsNow+"')";
 				//console.log("UPDATE BG "+newBg.src);
 
 				//canvas.style.backgroundImage = "url('img/bg/"+board.bg+"?cache="+tsNow+"')";
@@ -207,6 +207,7 @@ function movementClick(event){
 				sendCommand("@"+movement.token.name+" "+movement.pathTilesString);
 			} else { // There is a token in destination cell. Run guidelines
 				if (target.name != movement.token.name && isEnabled(movement.token)){
+					hideIndicator(target);
 					runGuideline(encodeURI("@"+movement.token.name+" t"+target.name));
 				} else {
 
