@@ -27,7 +27,7 @@ class Movement{
 	async reset(){
 		if (this.token!=null) {
 			this.highlightName(false);
-			svg.removeChild(this.line);
+			if (this.line!=null)	svg.removeChild(this.line);
 			this.hidePath();
 			this.pathTiles=null;
 			this.line=null;

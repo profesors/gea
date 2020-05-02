@@ -147,65 +147,23 @@ async function showOutput(token){
 	}
 }
 
-// It shows the result of the dice fadeIn and then fadoOut
-/*
-async function showDiceResult(name){
-	setOpacityDivDice(name, 0);
-	var dice = document.getElementById("divDice_"+name);
-	dice.innerHTML = getTokenByName(name).diceResult;
-	try{
-		if (Number.isInteger(parseInt(getTokenByName(name).diceResult.split(' ')[0]))){
-			document.getElementById("aDado").play();
+
+function updateAllHpBar(){
+	for (var i=0; i<arrTokens.length; i++){
+		if (arrTokens[i].pc == 1){
+			updateHp(arrTokens[i]);
 		}
-	} catch(e){
-		console.log("Sonido de lanzamiento de dados. Audio no habilitado");
 	}
-	var y = 2*board.tileh/3;
-	var y0 = y;
-	dice.style.top = y+"px";
-	dice.style.color = "white";
-	var t0 = (new Date).getTime();
-	var tf = t0+2000;
-	var t = 0.0;
-	var tt = tf-t0;
-	var k = Math.PI/(tt*2);
-	var a = board.tileh/2;
-	while(t<(tf-t0)){
-		var p = Math.sin(t*k);
-		y = y0 - a*p;
-		dice.style.top=y+"px";
-		setOpacityDivDice(name, p);
-		await sleep(T_PRECISION);
-		t = (new Date).getTime()-t0;
-	}
-	await sleep(2000);	// Wait for a time to show result
-	t0 = (new Date).getTime();
-	tf = t0+2000;
-	t = 0.0;
-	tt = tf-t0;
-	k = Math.PI/(tt*2);
-	a = board.tileh/2;
-	y0 = y;
-	while(t<(tf-t0)){
-		var p = Math.cos(t*k);
-		y = y0 - a*(1-p);
-		dice.style.top=y+"px";
-		setOpacityDivDice(name, p);
-		await sleep(T_PRECISION);
-		t = (new Date).getTime()-t0;
-	}
-	dice.style.opacity = 0;
 }
-*/
 
 async function updateHp(token){
 	if (Number.isInteger(parseInt(token.attrs.hp)) && Number.isInteger(parseInt(token.attrs.maxhp))){
 		var p = parseFloat(token.attrs.hp)/token.attrs.maxhp*100;	// Porcentaje
-		var hpbar = document.getElementById("hpbar_"+token.name)
+		var hpbar = document.getElementById("PCHealthBar_"+token.name)
 		if (hpbar != null) {	// Some tokens does not have hp bar
 			//console.log("DENTRO "+token.name+" "+token.attrs.hp+" "+(new Date).getTime());
 			//console.log(token.name+" "+token.attrs.hp);
-			var hpnum = document.getElementById("hpnum_"+token.name)
+			var hpnum = document.getElementById("PCHealthNum_"+token.name)
 			hpbar.setAttribute("y",101-p);
 			hpbar.setAttribute("height",p-1);
 			// Number div with HP
@@ -215,7 +173,7 @@ async function updateHp(token){
 			hpnum.setAttribute("y",npy);
 			hpnum.innerHTML = token.attrs.hp;
 			if (token.attrs.hp<=0){
-				document.getElementById("b"+token.name).style.opacity = DISABLED_OPACITY;
+				document.getElementById("panel_"+token.name).style.opacity = DISABLED_OPACITY;
 			}
 		}
 	}
@@ -257,7 +215,78 @@ function addSvgCanvas(){
 	svgOver.setAttribute("style", "z-index: 21; position: absolute;");
 	svgOver.setAttribute("version", "1.1");
 	canvas.appendChild(svgOver);
+
+	var svgPanelPC = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+	svgPanelPC.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+	svgPanelPC.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+	svgPanelPC.setAttribute("id", "svgPanelPC");
+	svgPanelPC.setAttribute("width", 128);
+	svgPanelPC.setAttribute("height", 128);
+	svgPanelPC.setAttribute("style", "z-index: 20; position: fixed; top:0; right:0; background-color:black;");
+	svgPanelPC.setAttribute("version", "1.1");
+	canvas.appendChild(svgPanelPC);
 }
+
+function drawPCPortraits(){
+	var nPCs = 0;
+	for(var i=0; i<arrTokens.length; i++){
+		if (arrTokens[i].pc==1){
+			nPCs++;
+			if (!document.getElementById("panel_"+arrTokens[i].name)){
+				svgPanelPC = document.getElementById("svgPanelPC");
+				svgPanelPC.setAttribute("height", 128*nPCs);
+
+				var svgPC = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+				svgPC.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+				svgPC.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+				svgPC.setAttribute("id", "panel_"+arrTokens[i].name);
+				svgPC.setAttribute('weight', 128);
+				svgPC.setAttribute('height', 140);
+				svgPC.setAttribute('y', 128*(nPCs-1));
+
+				var im = document.createElementNS('http://www.w3.org/2000/svg','image');
+				im.setAttribute('height', '100');
+				im.setAttribute('weight', '100');
+				im.setAttributeNS('http://www.w3.org/1999/xlink','href', 'img/tokens/'+arrTokens[i].imgSrc);
+				im.setAttribute('x', '28');
+				im.setAttribute('y', '0');
+				im.setAttribute('visibility', 'visible');
+				svgPC.appendChild(im);
+
+				var recBgWhite = document.createElementNS('http://www.w3.org/2000/svg','rect');
+				recBgWhite.setAttribute("x",17);
+				recBgWhite.setAttribute("y",0);
+				recBgWhite.setAttribute("width",8);
+				recBgWhite.setAttribute("height",100);
+				recBgWhite.setAttribute("fill", "white");
+				recBgWhite.setAttribute("stroke-width",1);
+				recBgWhite.setAttribute("stroke","white");
+				svgPC.appendChild(recBgWhite);
+
+				var recBar = document.createElementNS('http://www.w3.org/2000/svg','rect');
+				recBar.setAttribute("id","PCHealthBar_"+arrTokens[i].name);
+				recBar.setAttribute("x",18);
+				recBar.setAttribute("y",50);
+				recBar.setAttribute("width",6);
+				recBar.setAttribute("height",50);
+				recBar.setAttribute("fill", "lime");
+				svgPC.appendChild(recBar);
+
+				var num = document.createElementNS('http://www.w3.org/2000/svg','text');
+				num.setAttribute("id","PCHealthNum_"+arrTokens[i].name);
+				num.setAttribute("x",0);
+				num.setAttribute("y",60);
+				num.setAttribute("font-size","0.7rem");
+				num.setAttribute("font-weight","bold");
+				num.setAttribute("fill", "white");
+				svgPC.appendChild(num);
+
+				svgPanelPC.appendChild(svgPC);
+			}
+		}
+	}
+}
+
 
 function addSvgCircle(id, x, y, r, fill, extraStyle=null){
 	var el = document.createElementNS("http://www.w3.org/2000/svg", "circle");

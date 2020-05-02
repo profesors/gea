@@ -264,12 +264,14 @@ window.addEventListener("DOMContentLoaded", function() {
 async function main(){
 	//document.getElementById("body").mozRequestFullScreen();
 
-	await getBoard(1);	/* Number of board */
-	while(board==undefined)	{
+	var BOARD = 1;
+	await getBoard(BOARD);	/* Number of board */
+	while(board==null)	{
 		await sleep(T_PRECISION);
 	}
 	movement = new Movement(board);
 	drawCellCoordinates();
+
 	if (remoteLastAction != undefined){
 		board.lastActionId = remoteLastAction.id;
 	}

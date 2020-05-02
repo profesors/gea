@@ -159,7 +159,13 @@ async function getTokens(idBoard, fromActionId=null){
 
 				arrTokens.push(token);
 				canvas.appendChild(token.div);
-				updateHp(token);
+
+				// A new PC token
+				if (token.pc == 1){
+					//var w = board.ntilesw*board.tilew;
+					//var h = board.ntilesh*board.tileh;
+				}
+
 				var bPj= document.getElementById("b"+token.name);
 				if (bPj!=null){
 					bPj.style.opacity=1;
@@ -231,10 +237,11 @@ async function getTokens(idBoard, fromActionId=null){
 				//removeToken(token.name);
 			}
 		}	// for
-
-		if (remoteLastAction != undefined){
+		if (remoteLastAction != null){
 			board.lastActionId = remoteLastAction.id;
 		}
+		drawPCPortraits();
+		updateAllHpBar();
 
 	} // if STATUS 200
 	} // onReadyStateChange

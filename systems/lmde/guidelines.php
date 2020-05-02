@@ -104,16 +104,28 @@ function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
 				add_mod_attack($guideline, -4, _('COVERTURE').' '.$percent_cover.'%');
 			} else if ($percent_cover>50 && $percent_cover<=75){
 				add_mod_attack($guideline, -7, _('COVERTURE').' '.$percent_cover.'%');
-			} else if ($percent_cover>75 && $percent_cover<=100){
+			} else if ($percent_cover>75 && $percent_cover<=90){
 				add_mod_attack($guideline, -10, _('COVERTURE').' '.$percent_cover.'%');
-			} 
+			} else if ($percent_cover>90){
+				$action_string = '<span class="name_text">'.$token1['name'].'</span> '._('ATTACKS TO').' ';
+				$action_string.= '<span class="name_text">'.$token2['name'].'</span> '._('WITH').' '.$guideline['name'];
+				//$action_string.= '<p>'._('COVERTURE').' '.$percent_cover.'% '._('FAIL').'</p>';
+				$action_string.= '<span class="dmg_text">';
+				$action_string.= ' <span class="red">'._('FAIL').'</span>&nbsp;'._('COVERTURE').' '.$percent_cover.'%';
+				$action_string.= '</span>';
+				$action_string.= _('AMMUNITION').' '.$guideline['name'].' '.($guideline['n']-1);
+				guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
+				//set_animation($idBoard, $token1['name'], 1, 0, 2, $token1['x'], $token1['y'], $arrDist['x2'], $arrDist['y2']);
+				set_output($idBoard, $token1['name'], _('FAIL'));
+				insert_action($idBoard, $action_string);
+				return;
+			}
 			# Attack
 			guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
 			lmde_generic_attack($idBoard, $token1, $token2, $guideline);
 			set_animation($idBoard, $token1['name'], 1, 0, 2, $token1['x'], $token1['y'], $arrDist['x2'], $arrDist['y2']);
 		} else {
 			$action_string = _('OUT OF RANGE');
-			#set_dice($idBoard, $token1['name'], $action_string, $token2['name']);
 			set_output($idBoard, $token1['name'], $action_string);
 			insert_action($idBoard, $action_string);
 		}

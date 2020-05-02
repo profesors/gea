@@ -37,7 +37,7 @@ svg{
 	opacity: 0.7;
 }
 
-#panelD{
+#panelPC{
 	background-color: black;
 	width: 130px;
 	height: 100%;
@@ -48,7 +48,7 @@ svg{
 	text-align: right;
 }
 
-#panelD .portrait{
+#panelPC .portrait{
 	width: 100px;
 	cursor: pointer;
 }

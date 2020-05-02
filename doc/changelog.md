@@ -6,6 +6,7 @@
 
 ## Versiones
 
+1.34	PanelD generado por javascript
 1.33	Resuelto problema de carga de fondo
 1.32	Interface muestra icono de acción de combate sobre enemigo
 1.31	BUG que permite mover a través de un enemigo

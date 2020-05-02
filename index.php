@@ -36,7 +36,7 @@
 		</div>
 		<div id="canvas_bg"></div>
 		<div id="info_character"><img src="img/loading.gif"></div>
-		<?php include('templates/panelD.php'); ?>
+		<?php //include('templates/panelD.php'); ?>
 	</div>
 	</main>
 	<footer>

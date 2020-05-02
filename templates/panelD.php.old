@@ -1,4 +1,4 @@
-<div id="panelD">
+<div id="panelPC">
 <style>
 svg circle, svg text{
 	cursor: pointer;
