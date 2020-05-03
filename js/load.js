@@ -104,7 +104,7 @@ async function getTokens(idBoard, fromActionId=null){
 				token.divName.style.position = "absolute";
 				token.divName.style.fontWeight = "bold";
 				//token.divName.style.top = 0.75*board.tileh*token.h+"px";
-				token.divName.style.bottom = 0;
+				token.divName.style.top = 0;
 				token.divName.style.width = board.tilew*token.w+"px";
 				token.divName.style.textShadow = "2px 2px black";
 				token.divName.style.zIndex = 11;
@@ -149,7 +149,7 @@ async function getTokens(idBoard, fromActionId=null){
 				token.divGuideline.style.color = "white";
 				token.divGuideline.style.position = "absolute";
 				//token.divGuideline.style.top = (board.tileh*newToken.h-iconSize)+"px";
-				token.divGuideline.style.bottom = "1rem";
+				token.divGuideline.style.bottom = 0;
 				token.divGuideline.style.right = 0;
 				token.divGuideline.style.width = iconSize+"px";
 
@@ -216,7 +216,7 @@ async function getTokens(idBoard, fromActionId=null){
 				// OUTPUT
 				if (newToken.output!= null && board.lastActionId < newToken.output.actionId){
 					token.output = newToken.output;
-					showOutput(token);
+					showTokenOutput(token);
 				}
 			} else
 			// Case 2: Token is death in this action

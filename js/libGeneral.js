@@ -97,7 +97,7 @@ function setOpacityDivOutput(tokenName, newVal){
 }
 
 // ShowOutput
-async function showOutput(token){
+async function showTokenOutput(token){
 	setOpacityDivOutput(token.name, 0);
 	var divOutput = document.getElementById("divOutput_"+token.name);
 	if (divOutput!=null){
@@ -147,6 +147,13 @@ async function showOutput(token){
 	}
 }
 
+async function showMasterOutput(text, preTime, postTime){
+	if (preTime!=null){
+		await sleep(preTime);
+	}
+	//svgMaster = document.getElementById("svgMaster");
+
+}
 
 function updateAllHpBar(){
 	for (var i=0; i<arrTokens.length; i++){
@@ -222,9 +229,41 @@ function addSvgCanvas(){
 	svgPanelPC.setAttribute("id", "svgPanelPC");
 	svgPanelPC.setAttribute("width", 128);
 	svgPanelPC.setAttribute("height", 128);
-	svgPanelPC.setAttribute("style", "z-index: 20; position: fixed; top:0; right:0; background-color:black;");
+	svgPanelPC.setAttribute("style", "z-index: 22; position: fixed; top:0; right:0; background-color:black;");
 	svgPanelPC.setAttribute("version", "1.1");
 	canvas.appendChild(svgPanelPC);
+	/*
+	var buttonNewTurn =document.createElementNS("http://www.w3.org/2000/svg", "circle");
+	buttonNewTurn.setAttribute("cx",50);
+	buttonNewTurn.setAttribute("cy",50);
+	buttonNewTurn.setAttribute("r",40);
+	buttonNewTurn.setAttribute("fill", "white");
+	buttonNewTurn.setAttribute("stroke-width",1);
+	buttonNewTurn.setAttribute("stroke","blue");
+	svgPanelPC.appendChild(buttonNewTurn);
+*/
+
+	/*
+	var svgMaster = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+	svgMaster.setAttribute("id", "svgMaster");
+	svgMaster.setAttribute("width", 512);
+	svgMaster.setAttribute("height", 64);
+	svgMaster.setAttribute("fill", "white");
+	svgMaster.setAttribute("style", "z-index: 22; position: fixed; top:0; left:0;");
+	svgMaster.setAttribute("version", "1.1");
+	canvas.appendChild(svgMaster);
+	*/
+}
+
+function newTurn(){
+	console.log("COMIENZA TURNO "+board.turn);
+	for(var i=0; i<=arrTokens.length; i++){
+		if (arrTokens[i]!=null){
+			for (var key in arrTokens[i].steps){
+				arrTokens[i].steps[key].current = arrTokens[i].steps[key].max;
+			}
+		}
+	}
 }
 
 function drawPCPortraits(){
@@ -247,10 +286,13 @@ function drawPCPortraits(){
 				var im = document.createElementNS('http://www.w3.org/2000/svg','image');
 				im.setAttribute('height', '100');
 				im.setAttribute('weight', '100');
+				im.setAttribute('id', 'portrait_'+arrTokens[i].name);
+				im.setAttribute("class", "portrait");
 				im.setAttributeNS('http://www.w3.org/1999/xlink','href', 'img/tokens/'+arrTokens[i].imgSrc);
 				im.setAttribute('x', '28');
 				im.setAttribute('y', '0');
-				im.setAttribute('visibility', 'visible');
+				im.setAttribute('onclick','openSheet(this);');
+				im.setAttribute('onmousemove',"this.style.cursor='pointer'");
 				svgPC.appendChild(im);
 
 				var recBgWhite = document.createElementNS('http://www.w3.org/2000/svg','rect');
@@ -281,12 +323,25 @@ function drawPCPortraits(){
 				num.setAttribute("fill", "white");
 				svgPC.appendChild(num);
 
+
 				svgPanelPC.appendChild(svgPC);
 			}
 		}
 	}
 }
 
+function openSheet(item){
+	if (movement.token!=null){
+		movement.token.divName.style.color="yellow";
+		movement.token.divName.style.opacity = movement.opacityDivName;
+		movement.token = null;
+	}
+	hidePanelI();			
+	var name = item.parentElement.id.substring(6);
+	var divInfo = document.getElementById("info_character");
+	divInfo.style.display = "grid";
+	getSheetCharacter(name, board.id, divInfo);
+}
 
 function addSvgCircle(id, x, y, r, fill, extraStyle=null){
 	var el = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -357,8 +412,6 @@ function getSheetCharacter(name, idBoard, destDiv){
 		}
 	}
 }
-
-
 
 function isEnabled(token){
 	var bRet = true;

@@ -15,8 +15,8 @@ function listenerPathLine(e){
 			if (tokenInCell.name != movement.token.name && tokenInCell.div.style.opacity!=0){
 				overToken = true;
 				movement.tokenTarget = tokenInCell;
-				var pixelx = (tokenInCell.x-1)*board.tilew+board.offsetx;
-				var pixely = (tokenInCell.y-1)*board.tileh+board.offsety;
+				//var pixelx = (tokenInCell.x-1)*board.tilew+board.offsetx;
+				//var pixely = (tokenInCell.y-1)*board.tileh+board.offsety;
 				// Hide movement line
 				var idGuideline = movement.token.defaultGuideline.n;
 				var sIndicator = "Usar "+movement.token.guidelines[idGuideline]+" sobre "+tokenInCell.name;
@@ -30,10 +30,15 @@ function listenerPathLine(e){
 		var dcx = e.offsetX-((tilex-0.5)*board.tilew);
 		var dcy = e.offsetY-((tiley-0.5)*board.tileh);
 		var distToCenterOfTile = Math.round(Math.sqrt(dcx**2+dcy**2));
-		movement.drawPath();
 		if (!movement.isInPathTiles(tilex, tiley) && distToCenterOfTile<board.tilew/2){	
-			movement.pathTiles.push([tilex, tiley]);
+				movement.pathTiles.push([tilex, tiley]);
 		}
+		var d = movement.computePathLong();
+		if (d>movement.token.steps.movement.current){
+			movement.pathTiles.pop();
+		}
+		//console.log(movement.pathTilesString);
+		movement.drawPath();
 		if (overToken) movement.hidePath();
 		
 	}

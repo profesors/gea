@@ -4,8 +4,8 @@ connectDB();
 $idBoard = secure_param('idBoard');
 $fromActionId = secure_param('fromActionId');
 
-#$fromActionId=10;
-#$idBoard = 1;
+$fromActionId=10;
+$idBoard = 1;
 
 # Get tokens from board
 $query = "SELECT * FROM tokens WHERE idBoard = $idBoard AND actionId>$fromActionId;";
@@ -19,7 +19,6 @@ while($row = mysqli_fetch_array($result)){
 	$r->z = $row['z'];
 	$r->w = $row['w'];
 	$r->h = $row['h'];
-	$r->step = $row['step'];
 	$r->imgSrc = $row['img'];
 	$r->name = $row['name'];
 	$r->file = $row['file'];
@@ -56,7 +55,7 @@ while($row = mysqli_fetch_array($result)){
 	# **
 	# Output
 	$q = "SELECT * FROM output WHERE idBoard=$idBoard AND tokenName='".$row['name']."' AND action_id>=$fromActionId";
-	$result_output = run_sql($q);
+	$result_output = run_sql($q) or die();
 	if ($row_output = mysqli_fetch_array($result_output)){
 		$r->output = new stdClass();
 		$r->output->actionId = $row_output['action_id'];
@@ -64,6 +63,20 @@ while($row = mysqli_fetch_array($result)){
 		$r->output->sound = $row_output['sound'];
 	}
 	# **
+	# Steps
+	$q = "SELECT * FROM steps WHERE idBoard=$idBoard AND tokenName='".$row['name']."'";
+	$result_steps = run_sql($q) or die();
+	$r->steps = array();
+	while($row_steps = mysqli_fetch_array($result_steps)){
+		$step = new stdClass();
+		//$step->type = $row_steps['type'];
+		$step->current = $row_steps['current'];
+		$step->max = $row_steps['max'];
+		//array_push($r->steps, $step);
+		$r->steps[$row_steps['type']] = $step;
+	}
+	# end Steps
+
 	$r->defaultGuideline = new stdClass();
 	$r->defaultGuideline->n = $row['defaultGuideline'];
 	# Attrs

@@ -5,6 +5,10 @@
 	"h": 1,
 	"type":"humanoid",
 	"pc":0,
+	"steps": {
+		"movement":4,
+		"action": 1
+		},
 	"tags":["goblinoid"],
 	"attrs":{
 		"maxhp": 8,

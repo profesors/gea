@@ -13,6 +13,7 @@ $query = "SELECT * FROM (SELECT * FROM actions WHERE idBoard = $idBoard ";
 $query.= 'AND idUser = 1 ORDER BY ts DESC LIMIT 5) AS var ORDER BY ts ASC';
 $result = run_sql($query) or die();
 
+header('Content-Type: text/html; charset=utf-8');
 while ($row = mysqli_fetch_array($result)){
 	if (($op=='player' && strpos($row['action'],'!')) || strlen($row['action'])==0){
 		// No mostrar al jugador esta acción	

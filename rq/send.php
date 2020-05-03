@@ -3,7 +3,7 @@
 	include_once('libControllers.php');
 	connectDB();
 	setup_lang();
-	#$_GET['m'] = "@bar p10,21,9,21,8,21,8,22";
+	#$_GET['m'] = "@bar p14,23,14,22";
 	#$_GET['m'] = "@bar p8,22,9,22,10,22,10,21";
 	#$_GET['idBoard'] = 1;
 
@@ -63,6 +63,7 @@
 		} else if ($name!=null && $x!=null && $y!=null){
 			# SOLO MOVIMIENTO DE TOKEN
 			$token = get_token($idBoard, $name);
+			print_r($token);
 			$board = get_board($idBoard);
 			$im = imagecreatefrompng("../img/bg/".$board->bg."_walls.png");
 			move_token_by_path($idBoard, $token, $arr_path, $im);
@@ -109,6 +110,12 @@
 			$guide_id = $arrTmp[2][0];
 			set_default_guideline_id($idBoard, $name, $guide_id);
 		}
+
+		# New turn
+		if(preg_match_all("/:t/", $command, $arrTmp)){
+			new_turn($idBoard);
+		}
+
 
 		# Dice command
 		if(preg_match("/\s#([^ ]*)/", $command, $arrTmp)){

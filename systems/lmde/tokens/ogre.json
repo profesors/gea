@@ -5,6 +5,10 @@
 	"h": 2,
 	"type":"giant",
 	"pc":0,
+	"steps": {
+		"movement":4,
+		"action": 1
+		},
 	"attrs":{
 		"maxhp": 21,
 		"hp":21,

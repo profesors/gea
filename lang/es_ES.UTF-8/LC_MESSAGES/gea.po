@@ -54,11 +54,17 @@ msgstr "fallo"
 msgid "FAVORED ENEMY"
 msgstr "enemigo predilecto"
 
+msgid "NO ACTIONS"
+msgstr "sin acciones"
+
 msgid "NO AMMO"
 msgstr "sin munición"
 
 msgid "MOVES TO"
 msgstr "se mueve a"
+
+msgid "NO MOVEMENT"
+msgstr "sin movimiento"
 
 msgid "NO SPELLS"
 msgstr "sin conjuros"

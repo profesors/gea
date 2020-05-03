@@ -12,32 +12,10 @@ function runAnimation(token, i){
 	}	// Switch case
 }
 
-/*
-async function showDamage(token, damage){
-	token.divIndicator.style.opacity = 0;
-	token.divIndicator.innerHTML = "";
-	await sleep(2000);
-	token.divIndicator.style.opacity=1;
-	token.divIndicator.innerHTML = -damage;
-	token.divIndicator.style.top = (board.tileh/2)+"px";
-	token.divIndicator.style.color = "red";
-	var hpbar = document.getElementById("hpbar_"+token.name)
-	if (hpbar != null){
-		token.divDice.innerHTML = -damage;
-	} else {
-		token.divDice.innerHTML = -damage;//(-token2.attrs.maxhp+token2.attrs.hp);
-	}
-	setTimeout(function (){
-		token.divIndicator.style.opacity=0;
-	},2000);
-}
-*/
 async function showIndicator(token, text, color, preWait, postWait, top){
 	if (token.divIndicator.style.opacity!=0){
 		clearTimeout(token.timeOutIndicator);
 	}
-	//token.divIndicator.style.opacity = 0;
-	//token.divIndicator.innerHTML = "";
 	await sleep(preWait);
 	token.divIndicator.style.opacity=1;
 	token.divIndicator.innerHTML = text;
@@ -55,7 +33,6 @@ async function showIndicator(token, text, color, preWait, postWait, top){
 		},postWait);
 	}
 }
-
 function hideIndicator(token){
 	clearTimeout(token.timeOutIndicator);
 	token.divIndicator.style.opacity = 0;
@@ -78,6 +55,7 @@ function hideAllIndicatorsBut(token){
 
 async function moveTokenByPath(token, path){
 	if (path != null){
+		var d = 0;
 		var ox = getPixel(token.x, board.tilew, board.offsetx);
 		var oy = getPixel(token.y, board.tileh, board.offsety);
 		for (var i=1; i<path.length; i++){
@@ -96,6 +74,7 @@ async function moveTokenByPath(token, path){
 				await sleep(T_PRECISION);
 				t = (new Date).getTime() - t0;
 			}
+			d += getDistanceTiles(path[i-1].x, path[i-1].y, path[i].x, path[i].y);
 			ox = getPixel(path[i].x, board.tilew, board.offsetx);
 			oy = getPixel(path[i].y, board.tileh, board.offsety);
 		}
@@ -105,13 +84,7 @@ async function moveTokenByPath(token, path){
 			board.tileh, board.offsety)+"px";
 		token.x = path[path.length-1].x;
 		token.y = path[path.length-1].y;
-
-		/*
-		if (movement.line!=null){
-			svgRemoveAllChildren();
-			movement.line = null;
-			movement.pathTiles = null;
-		}*/
+		token.steps.movement.current-=d;
 	}
 }
 

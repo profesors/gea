@@ -5,6 +5,10 @@
 	"h": 1,
 	"type":"undead",
 	"pc":0,
+	"steps": {
+		"movement":3,
+		"action": 1
+		},
 	"attrs":{
 		"maxhp": 8,
 		"hp":8000,

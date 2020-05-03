@@ -7,6 +7,10 @@
 	"border": "5px+solid+lime",
 	"type":"humanoid",
 	"pc":1,
+	"steps": {
+		"movement":4,
+		"action": 1
+		},
 	"attrs":{
 		"maxhp": 10,
 		"hp":10,

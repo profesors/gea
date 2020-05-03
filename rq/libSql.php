@@ -21,7 +21,6 @@ function connectDB(){
 }
 
 function reset_db(){
-	global $db;
 	$query = "TRUNCATE actions;";
 	run_sql($query) or die();
 	$query = "TRUNCATE attrs;";
@@ -36,6 +35,8 @@ function reset_db(){
 	run_sql($query) or die();
 	$query = "TRUNCATE output;";
 	run_sql($query) or die();
+	$query = "TRUNCATE steps;";
+	run_sql($query) or die();
 }
 
 function secure_param($name){
@@ -46,6 +47,7 @@ function run_sql($query){
 	global $db;
 	$result = mysqli_query($db, $query);
 	if ($result == false){
+		error_log("ERROR DB: $query");
 		error_mysqli($query);
 	}
 	return $result;
@@ -62,20 +64,17 @@ function getTime(){
 }
 
 function write_last_actionId($idBoard, $actionId){
-	global $db;
 	$query = "UPDATE boards SET lastActionId=$actionId WHERE id=$idBoard;";
 	run_sql($query) or die();
 }
 
 function increase_last_actionId($idBoard, $ammount){
-	global $db;
 	$query = "UPDATE boards SET lastActionId = lastActionId + $ammount WHERE id=$idBoard;";
 	run_sql($query) or die();
 }
 function read_last_actionId($idBoard){
-	global $db;
 	$query = "SELECT lastActionId FROM boards WHERE id=$idBoard LIMIT 1;";
-	$result = mysqli_query($db, $query) or die();
+	$result = run_sql($query) or die();
 	$lastId=0;
 	if ($result->num_rows > 0){
 		$arr = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -101,6 +100,7 @@ function get_board($idBoard){
 	$ret->bgTs = get_bg_ts($idBoard);
 	$ret->drawGrid = $row['drawGrid'];
 	$ret->lastActionId = $row['lastActionId'];
+	$ret->turn = $row['turn'];
 	return $ret;
 }
 
@@ -117,7 +117,6 @@ function insert_action($idBoard, $m){
 }
 
 function set_guideline($idBoard, $tokenName, $guideline){
-	global $db;
 	if (!property_exists($guideline, 'n')) $guideline->n = -1;
 	if (!property_exists($guideline, 'maxn')) $guideline->maxn = -1;
 	$query = "INSERT INTO `guidelines` (idBoard, tokenName, guideNumber, name, icon, guideAction, n, maxn) ";
@@ -134,14 +133,12 @@ function set_guideline($idBoard, $tokenName, $guideline){
 }
 
 function guideline_remove_counter($idBoard, $tokenName, $guideNumber){
-	global $db;
 	$query = "UPDATE guidelines SET n=n-1 WHERE idBoard=$idBoard AND tokenName='$tokenName' AND guideNumber=$guideNumber";
 	run_sql($query) or die();
 	increase_last_actionId($idBoard, 1);
 }
 
 function guideline_get_n($idBoard, $tokenName, $guideNumber){
-	global $db;
 	$query = "SELECT n FROM guidelines WHERE idBoard=$idBoard AND tokenName='$tokenName' AND guideNumber=$guideNumber";
 	$result = run_sql($query) or die();
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -151,7 +148,6 @@ function guideline_get_n($idBoard, $tokenName, $guideNumber){
 # Insert token in database, if there is not $img_src or $border ignore it
 # If the token id is duplicate, just update it
 function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border, $opacity, $file, $pc, $default_guideline_id){
-	global $db;
 	$name = ($name=='')?'NULL':$name;
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
 	$query = "INSERT INTO `tokens` (`idBoard`,`name`,file,pc,`x`,`y`,`z`,`w`,`h`,`step`,`img`,`border`,";
@@ -189,14 +185,22 @@ function move_token_by_path($idBoard, &$token, $arrPath_tiles, $im){
 	for ($i=0; $i<sizeof($arrPath_tiles); $i++){
 		$x = $arrPath_tiles[$i]['x'];
 		$y = $arrPath_tiles[$i]['y'];
+		error_log("$x $y");
 		$is_visible = isVisible_between_tiles($board, $im, $token, $x, $y);
 		if ($is_visible){
 			$is_free = free_from_enemy_in_tile($idBoard, $token, $x, $y);
 			if ($is_free){
-				$current_d = floor(distanceTiles($token['x'], $token['y'], $x, $y));
-				if ($current_d<=1){
-					move_token($idBoard, $token, $arrPath_tiles[$i]['x'], $arrPath_tiles[$i]['y'], false);
-					$path.=$arrPath_tiles[$i]['x'].','.$arrPath_tiles[$i]['y'].',';
+				$current_d = distanceTiles($token['x'], $token['y'], $x, $y);
+				if (floor($current_d)<=1){
+					$step = get_step($idBoard, $token['name'], 'movement');
+					if (($step['current']-$current_d)>=0){
+						move_token($idBoard, $token, $arrPath_tiles[$i]['x'], $arrPath_tiles[$i]['y'], false);
+						if ($i>0)	mod_step($idBoard, $token['name'], 'movement', -$current_d);
+						$path.=$arrPath_tiles[$i]['x'].','.$arrPath_tiles[$i]['y'].',';
+					} else {
+						set_output($idBoard, $token['name'], _('NO MOVEMENT'));
+						break;
+					}
 				} else {
 					set_output($idBoard, $token['name'], _('CAN NOT PASS'));
 					break;
@@ -216,7 +220,6 @@ function move_token_by_path($idBoard, &$token, $arrPath_tiles, $im){
 }
 
 function set_attr($idBoard, $name, $attr, $val){
-	global $db;
 	$query = "INSERT INTO attrs (idBoard, tokenName, attr, val) ";
 	$query.= "VALUES ($idBoard,'$name','$attr',$val) ";
 	$query.= " ON DUPLICATE KEY UPDATE val='$val'";
@@ -228,7 +231,6 @@ function set_attr($idBoard, $name, $attr, $val){
 }
 
 function reset_board($idBoard){
-	global $db;
 	$query = "DELETE FROM actions WHERE idBoard = $idBoard;";
 	run_sql($query) or die();
 	$query = "UPDATE boards SET lastActionId = 0;";
@@ -253,7 +255,6 @@ function set_output($idBoard, $tokenName, $text){
 }
 
 function get_bg_filename($idBoard){
-	global $db;
 	$query = "SELECT bg FROM boards WHERE id = $idBoard LIMIT 1;";
 	$result = run_sql($query) or die();
 	$row = mysqli_fetch_array($result);
@@ -262,14 +263,12 @@ function get_bg_filename($idBoard){
 }
 
 function get_bg_ts($idBoard){
-	global $db;
 	$bg_file_name = get_bg_filename($idBoard);
 	$bg_ts = filemtime('../img/bg/'.$bg_file_name.'.jpg');
 	return $bg_ts;
 }
 
 function remove_token($idBoard, $name){
-	global $db;
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
 	$query = "UPDATE boards SET lastActionId = $nextActionId";
 	run_sql($query) or die();
@@ -317,14 +316,12 @@ function get_tokens_big_enemy($idBoard, $pc){
 }
 
 function get_npc_hidden_tokens($idBoard){
-	global $db;
 	$query = "SELECT * FROM tokens WHERE idBoard=$idBoard AND pc=0 AND opacity=0";
 	$result = run_sql($query) or die();
 	return $result;
 }
 
 function get_attrs($idBoard, $name){
-	global $db;
 	$query = "SELECT attr,val FROM attrs WHERE idBoard=$idBoard AND tokenName='$name'";
 	$result = run_sql($query) or die();
 	$arrAttrs = Array();
@@ -335,7 +332,6 @@ function get_attrs($idBoard, $name){
 }
 
 function get_guidelines($idBoard, $name){
-	global $db;
 	$query = "SELECT * FROM guidelines WHERE idBoard=$idBoard AND tokenName='$name'";
 	$result = run_sql($query) or die();
 	#$result = mysqli_query($db, $query);
@@ -348,7 +344,6 @@ function get_guidelines($idBoard, $name){
 }
 
 function get_guideline($idBoard, $tokenName, $guideNumber){
-	global $db;
 	if ($guideNumber == 0){
 		$guideNumber = get_default_guideline_id($idBoard, $tokenName);
 	}
@@ -359,15 +354,14 @@ function get_guideline($idBoard, $tokenName, $guideNumber){
 
 function insert_board($board){
 	global $db;
-	$query = 'INSERT INTO boards (id, name, tilew, tileh, ntilesw, ntilesh, offsetx, offsety, bg, drawGrid, lastActionId)';
+	$query = 'INSERT INTO boards (id, name, tilew, tileh, ntilesw, ntilesh, offsetx, offsety, bg, drawGrid, lastActionId, turn)';
 	$query.= " VALUES (null, '$board->name', $board->tilew, $board->tileh, $board->ntilesw, $board->ntilesh, ";
-	$query.= " $board->offsetx, $board->offsety, '$board->bg', $board->drawGrid, 0) ";
+	$query.= " $board->offsetx, $board->offsety, '$board->bg', $board->drawGrid, 0, 1) ";
 	$result = run_sql($query) or die();
 	return mysqli_insert_id($db);
 }
 
 function set_default_guideline_id($idBoard, $tokenName, $guide_id){
-	global $db;
 	$query = "UPDATE tokens SET defaultGuideline=$guide_id WHERE idBoard=$idBoard AND name='$tokenName'";
 	$result = run_sql($query) or die();
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
@@ -378,14 +372,12 @@ function set_default_guideline_id($idBoard, $tokenName, $guide_id){
 }
 
 function get_default_guideline_id($idBoard, $tokenName){
-	global $db;
 	$query= "SELECT defaultGuideline FROM tokens WHERE idBoard=$idBoard AND name='$tokenName' LIMIT 1";
 	$result = run_sql($query) or die();
 	return (mysqli_fetch_array($result))[0];
 }
 
 function set_animation($idBoard, $tokenName, $step, $delay_after_step, $type_id, $src_x, $src_y, $target_x, $target_y){
-	global $db;
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
 	$query = "DELETE FROM animations WHERE idBoard=$idBoard AND tokenName='$tokenName'";
 	$result = run_sql($query) or die();
@@ -397,12 +389,42 @@ function set_animation($idBoard, $tokenName, $step, $delay_after_step, $type_id,
 	increase_last_actionId($idBoard, 1);
 }
 
+function insert_steps($idBoard, $tokenName, $type, $val){
+	$q = "INSERT INTO steps (idBoard, tokenName, type, `max`, current) ";
+	$q.= " VALUES ($idBoard, '$tokenName', '$type', $val, $val)";
+	$q.= " ON DUPLICATE KEY UPDATE type='$type', max=$val, current=$val";
+	run_sql($q) or die();
+}
 
 function set_token_opacity_by_name($idBoard, $tokenName, $opacity){
-	global $db;
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
 	$query = "UPDATE tokens SET opacity=$opacity, actionId=$nextActionId WHERE idBoard=$idBoard AND name='$tokenName'";
 	run_sql($query) or die();
 	increase_last_actionId($idBoard, 1);
+}
+
+function new_turn($idBoard){
+	$q = "UPDATE boards SET turn=turn+1 WHERE id=$idBoard";
+	run_sql($q) or die();
+	$q = "UPDATE steps SET current=max WHERE idBoard=1";
+	run_sql($q) or die();
+}
+
+# Modify a step from data base
+function mod_step($idBoard, $tokenName, $type, $val){
+	$q = "UPDATE steps SET current=current+$val WHERE idBoard=$idBoard AND tokenName='$tokenName' AND type='$type'";
+	run_sql($q) or die();
+}
+
+function get_steps($idBoard, $tokenName){
+	$q = "SELECT * FROM steps WHERE idBoard=$idBoard AND tokenName='$tokenName'";
+	$result = run_sql($q) or die();
+	return $result;
+}
+
+function get_step($idBoard, $tokenName, $type){
+	$q = "SELECT * FROM steps WHERE idBoard=$idBoard AND tokenName='$tokenName' AND type='$type'";
+	$result = run_sql($q) or die();
+	return mysqli_fetch_array($result);
 }
 ?>

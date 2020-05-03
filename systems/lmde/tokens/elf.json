@@ -8,6 +8,10 @@
 	"type":"humanoid",
 	"tags":["elf"],
 	"pc":1,
+	"steps": {
+		"movement":5,
+		"action": 1
+		},
 	"attrs":{
 		"maxhp": 8,
 		"hp":8,

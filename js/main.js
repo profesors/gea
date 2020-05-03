@@ -1,5 +1,5 @@
 var canvas, canvasOver, panelI, input, output;
-var svg, svgOver;
+var svg, svgOver, svgMaster;
 var arrTokens = [];						// Tokens in the board
 var arrCommands = [], iCommands = 0;	// Commands sended. Array and index to ArrowUp and ArrowDown recover
 var timerUpdates;						// Timer to check each second for updates from the server
@@ -177,6 +177,10 @@ function checkUpdates(){
 			if (board.lastActionId < remoteLastAction.id){	// Update tokens
 				getTokens(board.id, board.lastActionId);
 				if (panelI.style.display == 'block')	updateActionsPanel(board.id);
+			}
+			if (board.turn < remoteLastAction.turn){
+				board.turn = remoteLastAction.turn
+				newTurn();
 			}
 			if (board.lastActionId > remoteLastAction.id){	// Remove all tokens and update all of them
 				removeAllLoadedTokens();	

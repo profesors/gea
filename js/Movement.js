@@ -31,6 +31,7 @@ class Movement{
 			this.hidePath();
 			this.pathTiles=null;
 			this.line=null;
+			this.pathLong = 0;
 			this.token=null;
 		}
 	}
@@ -75,19 +76,19 @@ class Movement{
 		return pathString.substring(0, pathString.length-1);
 	}
 
-	/*
-	pathPixels(){
-		var x1 = getPixel(this.token.x, this.board.tilew, this.board.offsetx+(this.token.w*this.board.tilew)/2);
-		var y1 = getPixel(this.token.y, this.board.tileh, this.board.offsety+(this.token.h*this.board.tileh)/2);
-		var pathString = "M "+x1+" "+y1;
-		for (var i=1; i<this.pathTiles.length; i++){
-			var x2 = (this.pathTiles[i][0]-0.5)*this.board.tilew+this.board.offsetx;	// [0] is x   [1] is y
-			var y2 = (this.pathTiles[i][1]-0.5)*this.board.tileh+this.board.offsety;
-			pathString += " L "+x2+" "+y2;
-			//this.line.setAttribute("d", pathString);
+	computePathLong(){
+		var d = 0;
+		if (this.pathTiles!=null){
+			for (var i=0; i<this.pathTiles.length-1; i++){
+				var tilex1 = this.pathTiles[i][0];
+				var tiley1 = this.pathTiles[i][1];
+				var tilex2 = this.pathTiles[i+1][0];
+				var tiley2 = this.pathTiles[i+1][1];
+				d+=getDistanceTiles(tilex1, tiley1, tilex2, tiley2);
+			}
 		}
-		return pathString;
-	}*/
+		return d;
+	}
 
 	createPathLine(){
 		this.line = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -125,26 +126,12 @@ class Movement{
 		}
 		return false;
 	}
-/*
-	drawPathSteps(){
-		var distanceOfPath = 0;
-		for (var i=0; i<this.pathTiles.length-1; i++){
-			var tilex1 = this.pathTiles[i][0];
-			var tiley1 = this.pathTiles[i][1];
-			var tilex2 = this.pathTiles[i+1][0];
-			var tiley2 = this.pathTiles[i+1][1];
-			var x = (tilex2-0.5)*this.board.tilew+this.board.offsetx;
-			var y = (tiley2-0.1)*this.board.tileh+this.board.offsety;
-			distanceOfPath += getDistanceTiles(tilex1, tiley1, tilex2, tiley2);
-			if (document.getElementById(ID_MOVEMENT_LINE_NUMBER+i) == null){
-				addSvgText(ID_MOVEMENT_LINE_NUMBER+i,x,y,this.color, null, Math.round(distanceOfPath), 24);
-			}
-		}
-		this.pathLong = distanceOfPath;
-	}
-	*/
+
 	drawPath(){
+		//this.full = false;
 		var distanceOfPath = 0;
+		this.pathLong = 0;
+		this.oldPathLong = null;
 		var x1 = getPixel(this.token.x, this.board.tilew, this.board.offsetx+(this.token.w*this.board.tilew)/2);
 		var y1 = getPixel(this.token.y, this.board.tileh, this.board.offsety+(this.token.h*this.board.tileh)/2);
 		var pathString = "M "+x1+" "+y1;
@@ -153,20 +140,25 @@ class Movement{
 			var tiley1 = this.pathTiles[i][1];
 			var tilex2 = this.pathTiles[i+1][0];
 			var tiley2 = this.pathTiles[i+1][1];
-			var x = (tilex2-0.5)*this.board.tilew+this.board.offsetx;
-			var y = (tiley2-0.1)*this.board.tileh+this.board.offsety;
+			//var x = (tilex2-0.5)*this.board.tilew+this.board.offsetx;
+			//var y = (tiley2-0.1)*this.board.tileh+this.board.offsety;
 			var x2 = (this.pathTiles[i+1][0]-0.5)*this.board.tilew+this.board.offsetx;	// [0] is x   [1] is y
 			var y2 = (this.pathTiles[i+1][1]-0.5)*this.board.tileh+this.board.offsety;
-			distanceOfPath += getDistanceTiles(tilex1, tiley1, tilex2, tiley2);
-			pathString += " L "+x2+" "+y2;
-			if (document.getElementById(ID_MOVEMENT_LINE_NUMBER+i) == null){
-				addSvgText(ID_MOVEMENT_LINE_NUMBER+i,x,y,this.color, null, Math.round(distanceOfPath), 24);
-			}
+			//distanceOfPath += getDistanceTiles(tilex1, tiley1, tilex2, tiley2);
+			//console.log(distanceOfPath+" ("+this.pathTiles.length+") to "+tilex2+" "+tiley2);
+			//if (Math.round(distanceOfPath)<=this.token.steps.movement.current){
+				//this.oldPathLong = this.pathLong;
+				//this.pathLong = distanceOfPath;
+				pathString += " L "+x2+" "+y2;
+				/*
+				if (document.getElementById(ID_MOVEMENT_LINE_NUMBER+i) == null){
+					addSvgText(ID_MOVEMENT_LINE_NUMBER+i,x,y,this.color, null, Math.round(distanceOfPath), 24);
+				}*/
+			//} 
 		}
-		this.pathLong = distanceOfPath;
-		//pathString += " L "+x2+" "+y2;
 		this.line.style.opacity=1;
 		this.line.setAttribute("d", pathString);
 	}
+
 }
 
