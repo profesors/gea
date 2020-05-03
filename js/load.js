@@ -213,6 +213,12 @@ async function getTokens(idBoard, fromActionId=null){
 					}
 				} 
 
+				/* Steps */
+				token.steps = newToken.steps;
+				if (token.steps.action.current<=0){
+					token.divGuideline.style.filter = "invert(1)";
+				}
+
 				// OUTPUT
 				if (newToken.output!= null && board.lastActionId < newToken.output.actionId){
 					token.output = newToken.output;

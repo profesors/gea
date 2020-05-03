@@ -262,6 +262,7 @@ function newTurn(){
 			for (var key in arrTokens[i].steps){
 				arrTokens[i].steps[key].current = arrTokens[i].steps[key].max;
 			}
+			arrTokens[i].divGuideline.style.filter = "initial";
 		}
 	}
 }
