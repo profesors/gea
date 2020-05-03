@@ -10,6 +10,8 @@ class Movement{
 	pathTiles=null;
 	board=null;
 	tokenTarget=null;
+	offsetSelectX=0;
+	offsetSelectY=0;
 
 	constructor(board){
 		this.opacityDivName=0;
@@ -36,10 +38,12 @@ class Movement{
 		}
 	}
 
-	select(token){
+	select(token, offsetSelectX, offsetSelectY){
 		if (token!=null){
 			this.token = token;
 			this.color = this.token.img.style.border.split(' ')[2];
+			this.offsetSelectX = offsetSelectX;
+			this.offsetSelectY = offsetSelectY;
 		} else {
 			this.reset();
 		}
@@ -144,11 +148,6 @@ class Movement{
 			//var y = (tiley2-0.1)*this.board.tileh+this.board.offsety;
 			var x2 = (this.pathTiles[i+1][0]-0.5)*this.board.tilew+this.board.offsetx;	// [0] is x   [1] is y
 			var y2 = (this.pathTiles[i+1][1]-0.5)*this.board.tileh+this.board.offsety;
-			//distanceOfPath += getDistanceTiles(tilex1, tiley1, tilex2, tiley2);
-			//console.log(distanceOfPath+" ("+this.pathTiles.length+") to "+tilex2+" "+tiley2);
-			//if (Math.round(distanceOfPath)<=this.token.steps.movement.current){
-				//this.oldPathLong = this.pathLong;
-				//this.pathLong = distanceOfPath;
 				pathString += " L "+x2+" "+y2;
 				/*
 				if (document.getElementById(ID_MOVEMENT_LINE_NUMBER+i) == null){

@@ -201,7 +201,7 @@ function movementClick(event){
 		if (!movement.isSelected()){	// Select token (first click)
 			var selectedToken = getTokenByTile(tilex, tiley);
 			if (selectedToken!=null) {
-				movement.select(selectedToken);
+				movement.select(selectedToken, tilex-selectedToken.x, tiley-selectedToken.y);
 				movement.highlightName(true);
 				svgOver.addEventListener('mousemove', listenerPathLine, true);
 			}

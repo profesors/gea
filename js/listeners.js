@@ -30,8 +30,9 @@ function listenerPathLine(e){
 		var dcx = e.offsetX-((tilex-0.5)*board.tilew);
 		var dcy = e.offsetY-((tiley-0.5)*board.tileh);
 		var distToCenterOfTile = Math.round(Math.sqrt(dcx**2+dcy**2));
-		if (!movement.isInPathTiles(tilex, tiley) && distToCenterOfTile<board.tilew/2){	
-				movement.pathTiles.push([tilex, tiley]);
+		if (!movement.isInPathTiles(tilex-movement.offsetSelectX, tiley-movement.offsetSelectY) 
+				&& distToCenterOfTile<board.tilew/2){	
+				movement.pathTiles.push([tilex-movement.offsetSelectX, tiley-movement.offsetSelectY]);
 		}
 		var d = movement.computePathLong();
 		if (d>movement.token.steps.movement.current){
