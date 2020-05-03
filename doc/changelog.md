@@ -6,6 +6,7 @@
 
 ## Versiones
 
+1.36	Resuelto problema al mover token grande a una casilla ocupada por sí mismo
 1.35	Turnos limitan el movimiento y el ataque
 1.34	PanelD generado por javascript
 1.33	Resuelto problema de carga de fondo
