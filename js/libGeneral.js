@@ -98,8 +98,11 @@ function setOpacityDivOutput(tokenName, newVal){
 
 // ShowOutput
 async function showTokenOutput(token){
-	setOpacityDivOutput(token.name, 0);
 	var divOutput = document.getElementById("divOutput_"+token.name);
+	while(divOutput.style.opacity!=0){
+		await sleep(T_PRECISION);
+	}
+	//setOpacityDivOutput(token.name, 0);
 	if (divOutput!=null){
 		divOutput.innerHTML = token.output.text;
 		try{
@@ -274,15 +277,16 @@ function drawPCPortraits(){
 			nPCs++;
 			if (!document.getElementById("panel_"+arrTokens[i].name)){
 				svgPanelPC = document.getElementById("svgPanelPC");
-				svgPanelPC.setAttribute("height", 128*nPCs);
+				svgPanelPC.setAttribute("height", 64+128*nPCs);
 
+				// Container
 				var svgPC = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 				svgPC.setAttribute("xmlns", "http://www.w3.org/2000/svg");
 				svgPC.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
 				svgPC.setAttribute("id", "panel_"+arrTokens[i].name);
 				svgPC.setAttribute('weight', 128);
 				svgPC.setAttribute('height', 140);
-				svgPC.setAttribute('y', 128*(nPCs-1));
+				svgPC.setAttribute('y', 64+128*(nPCs-1));
 
 				var im = document.createElementNS('http://www.w3.org/2000/svg','image');
 				im.setAttribute('height', '100');
@@ -329,7 +333,22 @@ function drawPCPortraits(){
 			}
 		}
 	}
+	// Icon dice
+	/*
+	var iconDice = document.createElementNS('http://www.w3.org/2000/svg','circle');
+	iconDice.setAttribute("cx",16);
+	iconDice.setAttribute("cy",16);
+	iconDice.setAttribute("r",16);
+	iconDice.setAttribute("fill", "white");
+	iconDice.setAttribute("stroke-width",1);
+	iconDice.setAttribute("stroke","white");
+	iconDice.setAttribute("onclick","showPanelDice()");
+	svgPanelPC.appendChild(iconDice);
+	*/
 }
+/*
+function showPanelDice(){
+}*/
 
 function openSheet(item){
 	if (movement.token!=null){
@@ -404,7 +423,7 @@ function runGuideline(guideline){
 
 function getSheetCharacter(name, idBoard, destDiv){
 	var rq = new XMLHttpRequest();
-	rq.open("GET", "rq/getSheet.php?idBoard="+board.id+"&name="+name);
+	rq.open("GET", "systems/lmde/getSheet.php?idBoard="+board.id+"&name="+name);
 	rq.send();
 	rq.onreadystatechange = function(e) {
 		if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){

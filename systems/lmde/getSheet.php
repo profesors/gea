@@ -1,6 +1,7 @@
 <?php
-include_once('libSql.php');
-include_once('libControllers.php');
+include_once('../../rq/libSql.php');
+include_once('../../rq/libControllers.php');
+include_once('guidelines.php');
 
 connectDB();
 setup_lang();
@@ -15,11 +16,11 @@ $token = get_token($idBoard, $name);
 $token['attrs'] = get_attrs($idBoard, $name);
 $token['guidelines'] = get_guidelines($idBoard, $name);
 
-$token_json = file_get_contents("../systems/lmde/tokens/$name.json");
+$token_json = file_get_contents("tokens/$name.json");
 $token_json = json_decode($token_json);
 
-$sheet = file_get_contents("../systems/lmde/sheet.html");
-preg_match_all("/%([tamgfGSr]):([^%]*)%/", $sheet, $arrExp);
+$sheet = file_get_contents("sheet.html");
+preg_match_all("/%([tamgfGSc]):([^%]*)%/", $sheet, $arrExp);
 #print_r($token_json);die();
 #print_r($token);die();
 #print_r($arrExp);die();
@@ -35,7 +36,8 @@ for($i=0; $i<sizeof($arrExp[0]); $i++){
 			$with = $token['attrs'][$arrExp[2][$i]];
 			break;
 		case 'm':
-			$with = mod(16);
+			$mod = mod($token['attrs'][$arrExp[2][$i]]);
+			$with = $mod>0?'+'.$mod:$mod;
 			break;
 		case 'g':	# *G*uideline
 			$arrGuide = explode(':',$arrExp[2][$i]);
@@ -64,7 +66,7 @@ for($i=0; $i<sizeof($arrExp[0]); $i++){
 				$with.= '<tr><td>';
 				if ($guideline_id != $default_guide_id){
 					$with.= '<a onclick="javascript:showDefaultGuidelineInSheet(\''.$token['name'].'\','.$guideline_id.');"';
-					$with.= 'class="select_box">&#9744;</a>';
+					$with.= 'class="select_box" style="cursor:pointer;">&#9744;</a>';
 				} else {
 					$with.= '&#9989;';
 				}
@@ -80,16 +82,14 @@ for($i=0; $i<sizeof($arrExp[0]); $i++){
 			$with.= '	</table>';
 			$with.= '</div>';
 			break;
-		case 'r':	# *r*oll a dice
-			/*
-			$arrCheck = explode(':',$arrExp[2][$i]);	// [0] = 1d20, [1] = str
-			$mod = $arrCheck[1];
-			$result = roll_dice_from_line($arrCheck[0], $mod);
-			error_log($mod." ** ".$result[0]['result']);
-			 */
-			//$r = Array('n'=>$n, 'size'=>$size, 'mod'=>$mod, 'natural'=>$natural, 'result'=>$result, 'desc'=>$sDescription);
-
-
+		case 'c':	# *c*heck
+			//$d20 = one_roll(1,20);
+			$mod = mod($token['attrs'][$arrExp[2][$i]]);
+			$mod = $mod>0?'+'.$mod:$mod;
+			$mod = $mod==0?'':$mod;
+			$command = '@'.$token['name'].' #1d20'.$mod;
+			$with = '<a onclick="javascript:sendCommand(\''.$command.'\'); closeInfoCharacter();"';
+			$with.= 'class="select_box" style="cursor:pointer;">&#127922;</a>&nbsp;';
 			break;
 	}
 	$sheet = str_replace($replace, $with, $sheet);

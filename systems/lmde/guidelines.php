@@ -51,11 +51,9 @@ function lmde_generic_attack($idBoard, &$token1, &$token2, &$guideline){
 		$action_string.= $guideline['guideAction']['damage']['n'].'d'.$guideline['guideAction']['damage']['sides'];
 		$action_string.= ')'.$sMod;
 		$action_string.= $critic?' <span class="red">(x2)'._('CRITICAL HIT').'</span>':'';
-		#set_dice($idBoard, $token1['name'], $at_total.' '.$damage_total, $token2['name']);
 		set_output($idBoard, $token1['name'], $at_total.' '.$damage_total, $token2['name']);
 	} else {
 		$action_string.= ' <span class="red">'._('FAIL').'</span>';
-		#set_dice($idBoard, $token1['name'], $at_total.' '._('FAIL'), $token2['name']);
 		set_output($idBoard, $token1['name'], $at_total.' '._('FAIL'));
 	}
 	$action_string.= '</span>';
@@ -80,7 +78,6 @@ function lmde_attack($idBoard, $token1, $token2, $guideline){
 		}
 	} else {
 		$action_string = _('OUT OF RANGE');
-		#set_dice($idBoard, $token1['name'], $action_string, $token2['name']);
 		set_output($idBoard, $token1['name'], $action_string);
 		insert_action($idBoard, $action_string);
 	}
@@ -116,13 +113,11 @@ function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
 			} else if ($percent_cover>90){
 				$action_string = '<span class="name_text">'.$token1['name'].'</span> '._('ATTACKS TO').' ';
 				$action_string.= '<span class="name_text">'.$token2['name'].'</span> '._('WITH').' '.$guideline['name'];
-				//$action_string.= '<p>'._('COVERTURE').' '.$percent_cover.'% '._('FAIL').'</p>';
 				$action_string.= '<span class="dmg_text">';
 				$action_string.= ' <span class="red">'._('FAIL').'</span>&nbsp;'._('COVERTURE').' '.$percent_cover.'%';
 				$action_string.= '</span>';
 				$action_string.= _('AMMUNITION').' '.$guideline['name'].' '.($guideline['n']-1);
 				guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
-				//set_animation($idBoard, $token1['name'], 1, 0, 2, $token1['x'], $token1['y'], $arrDist['x2'], $arrDist['y2']);
 				set_output($idBoard, $token1['name'], _('FAIL'));
 				insert_action($idBoard, $action_string);
 				return;
@@ -130,13 +125,13 @@ function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
 			$step = get_step($idBoard, $token1['name'], 'action');
 			if ($step['current']>0){
 				mod_step($idBoard, $token1['name'], 'action', -1);
+				# Attack
+				guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
+				lmde_generic_attack($idBoard, $token1, $token2, $guideline);
+				set_animation($idBoard, $token1['name'], 1, 0, 2, $token1['x'], $token1['y'], $arrDist['x2'], $arrDist['y2']);
 			} else {
 				set_output($idBoard, $token1['name'], _('NO ACTIONS'));
 			}
-			# Attack
-			guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
-			lmde_generic_attack($idBoard, $token1, $token2, $guideline);
-			set_animation($idBoard, $token1['name'], 1, 0, 2, $token1['x'], $token1['y'], $arrDist['x2'], $arrDist['y2']);
 		} else {
 			$action_string = _('OUT OF RANGE');
 			set_output($idBoard, $token1['name'], $action_string);
@@ -144,7 +139,6 @@ function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
 		}
 	} else {
 		$action_string = _('NO AMMO');
-		#set_dice($idBoard, $token1['name'], $action_string, $token2['name']);
 		set_output($idBoard, $token1['name'], $action_string);
 		insert_action($idBoard, $action_string);
 	}
@@ -154,28 +148,31 @@ function lmde_mm($idBoard, $token1, $token2, $guideline){
 	if ($guideline['n']!=0){
 		$arrDist = distanceTokens($token1, $token2);
 		if (floor($arrDist['d']) <= $guideline['guideAction']['range'][2]){
-			$d6 = one_roll(1,6);
-			$token2['attrs']['hp'] -= $d6+1;
-			$action_string = '<span class="name_text">'.$token1['name'].'</span> '._('ATTACKS TO').' ';
-			$action_string.= '<span class="name_text">'.$token2['name'].'</span> '._('WITH').' '.$guideline['name'];
-			$action_string.= '<span class="dmg_text">'.mb_ucfirst(_('DAMAGE')).'&nbsp;<span class="red">'.($d6+1);
-			$action_string.= '</span>';
-			$action_string.= "=$d6(1d6)+1";
-			guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
-			set_animation($idBoard, $token1['name'], 1, 0, 3, $token1['x'], $token1['y'], $arrDist['x2'], $arrDist['y2']);
-			set_attr($idBoard, $token2['name'], 'hp', $token2['attrs']['hp']);
-			#set_dice($idBoard, $token1['name'], $guideline['name'], $token2['name']);
-			set_output($idBoard, $token1['name'], $guideline['name']);
+			$step = get_step($idBoard, $token1['name'], 'action');
+			if ($step['current']>0){
+				mod_step($idBoard, $token1['name'], 'action', -1);
+				$d6 = one_roll(1,6);
+				$token2['attrs']['hp'] -= $d6+1;
+				$action_string = '<span class="name_text">'.$token1['name'].'</span> '._('ATTACKS TO').' ';
+				$action_string.= '<span class="name_text">'.$token2['name'].'</span> '._('WITH').' '.$guideline['name'];
+				$action_string.= '<span class="dmg_text">'.mb_ucfirst(_('DAMAGE')).'&nbsp;<span class="red">'.($d6+1);
+				$action_string.= '</span>';
+				$action_string.= "=$d6(1d6)+1";
+				guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
+				set_animation($idBoard, $token1['name'], 1, 0, 3, $token1['x'], $token1['y'], $arrDist['x2'], $arrDist['y2']);
+				set_attr($idBoard, $token2['name'], 'hp', $token2['attrs']['hp']);
+				set_output($idBoard, $token1['name'], $guideline['name']);
+			} else {
+				set_output($idBoard, $token1['name'], _('NO ACTIONS'));
+			}
 		} else {
 			$action_string = _('OUT OF RANGE');
-			#set_dice($idBoard, $token1['name'], $action_string, $token2['name']);
 			set_output($idBoard, $token1['name'], $action_string);
 			insert_action($idBoard, $action_string);
 		}
 	} else {
 		$action_string = '<span class="name_text">'.$token1['name'].'</span> ';
 		$action_string.= ' '._('NO SPELLS').' '.$guideline['name'];
-		#set_dice($idBoard, $token1['name'], _('NO SPELLS'), $token2['name']);
 		set_output($idBoard, $token1['name'], _('NO SPELLS'));
 	}
 	insert_action($idBoard, $action_string);

@@ -126,7 +126,7 @@
 			if (array_key_exists('1', $dice)){
 				$sDescription.= $dice[1]['n'].'d'.$dice[1]['size'];
 				$sDescription.= $dice[1]['mod']!=0?$dice[1]['mod']:'';
-				$sDescription.= '=<span class="red">'.$dice[1]['result'].'</span>';
+				$sDescription.= '<span class="red">'.$dice[1]['result'].'</span>';
 			}
 			$sDesc = '';
 			$diceResult = '';
@@ -134,7 +134,7 @@
 				$sDesc.= ' '.trim($dice[$i]['desc']);
 				$diceResult .= $dice[$i]['result'];
 			}
-			set_dice($idBoard, $name, $diceResult);
+			//set_dice($idBoard, $name, $diceResult);
 			set_output($idBoard, $name, $diceResult);
 			insert_action($idBoard, "$name ".trim($sDesc));
 		}
