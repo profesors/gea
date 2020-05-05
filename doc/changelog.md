@@ -1,11 +1,11 @@
 # Changelog Gea
 ## Ideas
 - Iniciativa automática: Reordena la lista de retratos que hay a la derecha
-- Contador de acciones, se resetea cuando todos hayan realizado todas
 - Modos de combate: carga, defensiva...
 
 ## Versiones
 
+1.40	Chequeo de características
 1.39	La ficha de personaje depende del sistema de juego empleado
 1.38	Permite chequeos de caraacteristicas
 1.37	Cuando un token realiza una acción su icono de guideline cambia de color

@@ -106,6 +106,9 @@ function inputKeyPress_allDocument(event){
 	case 78:	// n	Muestra los nombres
 		setOpacityDivNames(1-getOpacityDivNames());
 		break;
+	case 84:
+		newTurn();
+		break;
 	case 190:	// :
 		bShowInput = true;
 		setOpacityDivNames(1);

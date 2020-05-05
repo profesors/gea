@@ -321,14 +321,21 @@ function get_npc_hidden_tokens($idBoard){
 	return $result;
 }
 
-function get_attrs($idBoard, $name){
-	$query = "SELECT attr,val FROM attrs WHERE idBoard=$idBoard AND tokenName='$name'";
-	$result = run_sql($query) or die();
+function get_attrs($idBoard, $tokenName){
+	$q = "SELECT attr,val FROM attrs WHERE idBoard=$idBoard AND tokenName='$tokenName'";
+	$result = run_sql($q) or die();
 	$arrAttrs = Array();
 	while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
 		$arrAttrs[$row['attr']] = $row['val'];
 	}
 	return $arrAttrs;
+}
+
+function get_attr($idBoard, $tokenName, $attrName){
+	$q = "SELECT val FROM attrs WHERE idBoard=$idBoard AND tokenName='$tokenName' AND attr='$attrName'";
+	$result = run_sql($q) or die();
+	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+	return $row['val'];
 }
 
 function get_guidelines($idBoard, $name){
@@ -337,7 +344,6 @@ function get_guidelines($idBoard, $name){
 	#$result = mysqli_query($db, $query);
 	$arrGuidelines = Array();
 	while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
-		#$arrGuidelines[$row['guideNumber']] = Array('name'=>$row['name'], 'n'=>$row['n'], 'maxn'=>$row['maxn']);
 		$arrGuidelines[$row['guideNumber']] = $row;
 	}
 	return $arrGuidelines;

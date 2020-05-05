@@ -36,6 +36,9 @@ msgstr "no puedo pasar"
 msgid "CAR"
 msgstr "car"
 
+msgid "CHECK"
+msgstr "chequeo"
+
 msgid "CON"
 msgstr "con"
 

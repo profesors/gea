@@ -470,20 +470,22 @@ function drawCellCoordinates(){
 }
 
 async function removeToken(token){
-	await sleep(2000);
-	var t0 = (new Date).getTime();
-	var tf = t0+2000;
-	var tt = tf-t0;
-	var t=0.0;
-	const k = Math.PI/(2*tt);
-	while (t<tt){
-		token.div.style.opacity = Math.cos(t*k);
-		await sleep(T_PRECISION);
-		t = (new Date).getTime()-t0;
+	if (token.div!=null){
+		await sleep(2000);
+		var t0 = (new Date).getTime();
+		var tf = t0+2000;
+		var tt = tf-t0;
+		var t=0.0;
+		const k = Math.PI/(2*tt);
+		while (t<tt){
+			token.div.style.opacity = Math.cos(t*k);
+			await sleep(T_PRECISION);
+			t = (new Date).getTime()-t0;
+		}
+		sendCommand("@"+(token.name)+" p"+(token.x)+","+(token.y)+","+(board.ntilesw+1)+","+(board.ntilesh+1)+" aout");
+		token.div.style.left = (board.ntilesw*board.tilew)+"px";
+		token.div.style.top = (board.ntilesh*board.tilesh)+"px";
 	}
-	sendCommand("@"+(token.name)+" p"+(token.x)+","+(token.y)+","+(board.ntilesw+1)+","+(board.ntilesh+1)+" aout");
-	token.div.style.left = (board.ntilesw*board.tilew)+"px";
-	token.div.style.top = (board.ntilesh*board.tilesh)+"px";
 }
 
 // Change opacity of ALL coordinates

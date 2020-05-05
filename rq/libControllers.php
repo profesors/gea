@@ -6,12 +6,6 @@ function setup_lang(){
 	textdomain('gea');
 }
 
-/*
-function roll_dice($str_dice){
-	$arr_dice = split_dice($str_dice);
-}
- */
-
 # Roll one or more dices
 function roll_dice_from_line($strDices, $extraMod=0){
 	$strResults = '';

@@ -39,7 +39,7 @@ $guidelines = get_guidelines($idBoard, $name);
 	<table>
 	<?php	$arr_car = ['str', 'dex', 'con', 'int', 'wis', 'car'];
 	foreach($arr_car as $car){
-		$command = '@'.$token['name'].' #1d20'.$mod;
+		$command = '@'.$token['name'].' c'.$car;
 		echo '<tr><td>';
 		echo '<a onclick="javascript:sendCommand(\''.$command.'\'); closeInfoCharacter();"';
 		echo 'class="select_box" style="cursor:pointer;">&#127922;</a>&nbsp;</td>';

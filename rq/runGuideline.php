@@ -13,6 +13,7 @@ setup_lang();
 $m = str_replace('%20',' ',secure_param('m'));
 $m = preg_replace('/[ ]+/', ' ', $m);
 $idBoard = intval(secure_param('idBoard'));
+error_log("GUIDELINE: $m");
 
 if ($m == '' && $m != NULL && $idBoard <= 0) die("ERROR: Wrong parameters");
 

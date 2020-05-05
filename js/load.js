@@ -227,7 +227,7 @@ async function getTokens(idBoard, fromActionId=null){
 			} else
 			// Case 2: Token is death in this action
 			if (token.attrs.hp > 0 && newToken.attrs.hp<=0){
-				//console.log("Caso 2: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
+				console.log("Caso 2: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
 				var damage = newToken.attrs.hp-token.attrs.hp;
 				showIndicator(token, damage, "red", 2000, 2000, (board.tileh/2)+"px");
 				//showDamage(token, token.attrs.hp-newToken.attrs.hp);
@@ -235,12 +235,12 @@ async function getTokens(idBoard, fromActionId=null){
 				updateHp(token);
 				removeToken(token);
 			} else if (token.attrs.hp<0){	// Caso 3
-				//console.log("Caso 3: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
+				console.log("Caso 3: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
 				token.attrs = newToken.attrs;
 				updateHp(token);
 				token.x=newToken.x;
 				token.y=newToken.y;
-				//removeToken(token.name);
+				removeToken(token.name);
 			}
 		}	// for
 		if (remoteLastAction != null){
