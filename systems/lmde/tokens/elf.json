@@ -22,7 +22,12 @@
 		"int":14,
 		"wis":11,
 		"car":10,
-		"thaco":1
+		"thaco":1,
+		"save1":12,
+		"save2":13,
+		"save3":13,
+		"save4":15,
+		"save5":15
 	},
 	"guidelines":[
 		{

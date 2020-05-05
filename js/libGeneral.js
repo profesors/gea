@@ -423,7 +423,7 @@ function runGuideline(guideline){
 
 function getSheetCharacter(name, idBoard, destDiv){
 	var rq = new XMLHttpRequest();
-	rq.open("GET", "systems/lmde/getSheet.php?idBoard="+board.id+"&name="+name);
+	rq.open("GET", "systems/lmde/sheet.php?idBoard="+board.id+"&name="+name);
 	rq.send();
 	rq.onreadystatechange = function(e) {
 		if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){

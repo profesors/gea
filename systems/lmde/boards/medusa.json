@@ -12,21 +12,21 @@
 	"tokens": [
 		{
 			"file": "bar",
-			"name": "bar",
+			"name": "Groonan",
 			"x": 14,
 			"y": 23,
 			"default_guideline_id":1
 		},
 		{
 			"file": "exp",
-			"name": "exp",
+			"name": "Connor",
 			"x": 14,
 			"y": 24,
 			"default_guideline_id":2
 		},
 		{
 			"file": "elf",
-			"name": "elf",
+			"name": "Varyarel",
 			"x": 14,
 			"y": 25,
 			"default_guideline_id":3

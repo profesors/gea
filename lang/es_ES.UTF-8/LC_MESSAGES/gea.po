@@ -33,6 +33,12 @@ msgstr "no puedo atacar"
 msgid "CAN NOT PASS"
 msgstr "no puedo pasar"
 
+msgid "CAR"
+msgstr "car"
+
+msgid "CON"
+msgstr "con"
+
 msgid "COVERTURE"
 msgstr "cobertura"
 
@@ -53,6 +59,9 @@ msgstr "fallo"
 
 msgid "FAVORED ENEMY"
 msgstr "enemigo predilecto"
+
+msgid "INT"
+msgstr "int"
 
 msgid "NO ACTIONS"
 msgstr "sin acciones"
@@ -84,6 +93,21 @@ msgstr "proyectiles"
 msgid "THACO"
 msgstr "Gac0"
 
+msgid "SAVE1"
+msgstr "Veneno o muerte"
+
+msgid "SAVE2"
+msgstr "Varita mágica"
+
+msgid "SAVE3"
+msgstr "Petrificación o parálisis"
+
+msgid "SAVE4"
+msgstr "Aliento de dragón"
+
+msgid "SAVE5"
+msgstr "Conjuros, varas y cetros"
+
 msgid "SPELLS"
 msgstr "conjura"
 
@@ -92,6 +116,9 @@ msgstr "fue"
 
 msgid "TARGET"
 msgstr "objetivo"
+
+msgid "WIS"
+msgstr "sab"
 
 msgid "WITH"
 msgstr "con"

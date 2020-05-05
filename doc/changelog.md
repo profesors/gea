@@ -6,6 +6,7 @@
 
 ## Versiones
 
+1.39	La ficha de personaje depende del sistema de juego empleado
 1.38	Permite chequeos de caraacteristicas
 1.37	Cuando un token realiza una acción su icono de guideline cambia de color
 1.36	Resuelto problema al mover token grande a una casilla ocupada por sí mismo
