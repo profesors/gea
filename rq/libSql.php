@@ -182,10 +182,10 @@ function move_token($idBoard, &$token, $x, $y, $im){
 function move_token_by_path($idBoard, &$token, $arrPath_tiles, $im){
 	$board = get_board($idBoard);
 	$path = '';
+	$turn = get_turn($idBoard);
 	for ($i=0; $i<sizeof($arrPath_tiles); $i++){
 		$x = $arrPath_tiles[$i]['x'];
 		$y = $arrPath_tiles[$i]['y'];
-		error_log("$x $y");
 		$is_visible = isVisible_between_tiles($board, $im, $token, $x, $y);
 		if ($is_visible){
 			$is_free = free_from_enemy_in_tile($idBoard, $token, $x, $y);
@@ -195,7 +195,9 @@ function move_token_by_path($idBoard, &$token, $arrPath_tiles, $im){
 					$step = get_step($idBoard, $token['name'], 'movement');
 					if (($step['current']-$current_d)>=0){
 						move_token($idBoard, $token, $arrPath_tiles[$i]['x'], $arrPath_tiles[$i]['y'], false);
-						if ($i>0)	mod_step($idBoard, $token['name'], 'movement', -$current_d);
+						if ($i>0 && $turn>0) {
+							mod_step($idBoard, $token['name'], 'movement', -$current_d);
+						}	
 						$path.=$arrPath_tiles[$i]['x'].','.$arrPath_tiles[$i]['y'].',';
 					} else {
 						set_output($idBoard, $token['name'], _('NO MOVEMENT'));
@@ -414,6 +416,18 @@ function new_turn($idBoard){
 	run_sql($q) or die();
 	$q = "UPDATE steps SET current=max WHERE idBoard=1";
 	run_sql($q) or die();
+}
+
+function set_turn($idBoard, $turn){
+	$q = "UPDATE boards SET turn=$turn WHERE id=$idBoard";
+	run_sql($q) or die();
+}
+
+function get_turn($idBoard){
+	$q = "SELECT turn FROM boards WHERE id=$idBoard";
+	$result = run_sql($q) or die();
+	$row = mysqli_fetch_row($result);
+	return $row[0];
 }
 
 # Modify a step from data base

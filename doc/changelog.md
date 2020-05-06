@@ -5,6 +5,7 @@
 
 ## Versiones
 
+1.41	Turno 0 que no limita el movimiento
 1.40	Chequeo de características
 1.39	La ficha de personaje depende del sistema de juego empleado
 1.38	Permite chequeos de caraacteristicas

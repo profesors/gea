@@ -84,7 +84,7 @@ async function moveTokenByPath(token, path){
 			board.tileh, board.offsety)+"px";
 		token.x = path[path.length-1].x;
 		token.y = path[path.length-1].y;
-		token.steps.movement.current-=d;
+		//token.steps.movement.current-=d;
 	}
 }
 

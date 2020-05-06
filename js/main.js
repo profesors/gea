@@ -106,8 +106,8 @@ function inputKeyPress_allDocument(event){
 	case 78:	// n	Muestra los nombres
 		setOpacityDivNames(1-getOpacityDivNames());
 		break;
-	case 84:
-		newTurn();
+	case 84:	// t
+		//newTurn();
 		break;
 	case 190:	// :
 		bShowInput = true;
@@ -181,7 +181,7 @@ function checkUpdates(){
 				getTokens(board.id, board.lastActionId);
 				if (panelI.style.display == 'block')	updateActionsPanel(board.id);
 			}
-			if (board.turn < remoteLastAction.turn){
+			if (board.turn != remoteLastAction.turn){
 				board.turn = remoteLastAction.turn
 				newTurn();
 			}

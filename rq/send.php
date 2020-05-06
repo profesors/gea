@@ -68,11 +68,12 @@
 		}
 
 		# INSERCIÓN COMPLETA DE TOKEN
-		if ($name!=null && $x!=null && $y!=null && $img_src!=null && $border!=null){
-			insert_token($idBoard, $name, $x, $y, 1, $w, $h, $img_src, $border);
+		//if ($name!=null && $x!=null && $y!=null && $img_src!=null && $border!=null){
+			//insert_token($idBoard, $name, $x, $y, 1, $w, $h, $img_src, $border);
 			#insert_action($idBoard, "$name p$x,$y,$w,$h !img_src _$border");
-		} else if ($name!=null && $x!=null && $y!=null){
+		//} else if ($name!=null && $x!=null && $y!=null){
 			# SOLO MOVIMIENTO DE TOKEN
+		if ($name!=null && $x!=null && $y!=null){
 			$token = get_token($idBoard, $name);
 			$board = get_board($idBoard);
 			$im = imagecreatefrompng("../img/bg/".$board->bg."_walls.png");
@@ -126,8 +127,13 @@
 		}
 
 		# New turn
-		if(preg_match_all("/:t/", $command, $arrParams)){
-			new_turn($idBoard);
+		if(preg_match_all("/:t(\d*)/", $command, $arrParams)){
+			$turn = $arrParams[1][0];
+			if ($turn==''){
+				new_turn($idBoard);
+			} else {
+				set_turn($idBoard, $turn);
+			}
 		}
 
 
