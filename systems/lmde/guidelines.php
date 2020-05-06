@@ -13,7 +13,6 @@ function lmde_generic_attack($idBoard, &$token1, &$token2, &$guideline){
 	$ac = $token2['attrs']['ac'];
 	$sMod = '';
 	$at_total = $d20;
-	$rs_mods = get_mods_by_attr_type($idBoard, $token1['name'], 'thaco', 'charge');
 /*
 Array(
     [idBoard] => 1
@@ -24,8 +23,9 @@ Array(
     [mod] => 2
     [last_turn] => 3
 )*/
-	while($row_mod = mysqli_fetch_array($rs_mods, MYSQLI_ASSOC)){
-		add_mod_attack($guideline, $row_mod['mod'], _('CHARGE'));
+	$rs_mods = get_mods_by_attr_type($idBoard, $token1['name'], 'thaco', 'charge');
+	while($mod_thaco = mysqli_fetch_array($rs_mods, MYSQLI_ASSOC)){
+		add_mod_attack($guideline, $mod_thaco['mod'], _('CHARGE'));
 	}
 	
 	if (!array_key_exists('at_mod', $guideline['guideAction'])){
@@ -37,6 +37,12 @@ Array(
 		if ($mod_val>0) $sMod.= ' +'.abs($mod_val).'('.strtolower(_($mod_desc)).')';
 		if ($mod_val<0) $sMod.= ' -'.abs($mod_val).'('.strtolower(_($mod_desc)).')';
 		$at_total += $mod_val;
+	}
+
+	# AC defense
+	$rs_mods_ac = get_mods_by_attr_type($idBoard, $token2['name'], 'ac', 'charge');
+	while($mod_ac = mysqli_fetch_array($rs_mods_ac, MYSQLI_ASSOC)){
+		$ac += $mod_ac['mod'];
 	}
 
 	$action_string = '<span class="name_text">'.$token1['name'].'</span> '._('ATTACKS TO').' ';
@@ -249,7 +255,6 @@ function add_mod_damage(&$guideline, $mod, $desc){
 	$arrMod = array('desc'=>$desc, 'mod'=>$mod);
 	array_push($guideline['guideAction']['dmg_mod'], $arrMod);
 }
-
 
 function mod($car){
 	switch($car){

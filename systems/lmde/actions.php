@@ -23,6 +23,7 @@ function lmde_charge($idBoard, $token){
 		set_step($idBoard, $token['name'], 'movement', $new_mov);
 		set_output($idBoard, $token['name'], _('READY TO CHARGE'));
 		set_mod($idBoard, $token['name'], 'thaco', 'charge', _('CHARGE'), 2, $turn);
+		set_mod($idBoard, $token['name'], 'ac', 'charge', _('CHARGE'), -4, $turn);
 	} else {
 		set_output($idBoard, $token['name'], _('CAN NOT CHARGE'));
 	}
