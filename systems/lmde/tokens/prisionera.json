@@ -1,0 +1,40 @@
+{
+	"pc_name": "Prisonera",
+	"short_description": "Prisionera",
+	"w": 1,
+	"h": 1,
+	"img": "011.png",
+	"border": "5px+dashed+lime",
+	"type":"humanoid",
+	"pc":0,
+	"steps": {
+		"movement":4,
+		"action": 1
+		},
+	"attrs":{
+		"maxhp": 4,
+		"hp":4,
+		"ac":12,
+		"str":12,
+		"dex":12,
+		"con":12,
+		"int":18,
+		"wis":12,
+		"car":12,
+		"thaco":1,
+		"save1":12,
+		"save2":13,
+		"save3":13,
+		"save4":15,
+		"save5":15
+	},
+	"guidelines":[
+		{
+		"number":1,
+		"icon":"sword",
+		"name":"sin arma",
+		"short_desc": "1d2",
+		"action": "flmde_attack r1 d1d2 ba1,2 bd1"
+		}
+	]
+}

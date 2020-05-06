@@ -1,0 +1,49 @@
+{
+	"pc_name": "Meladius",
+	"short_description": "Hechicero del terror",
+	"w": 1,
+	"h": 1,
+	"img": "d.jpg",
+	"border": "5px+solid+red",
+	"type":"humanoid",
+	"pc":0,
+	"steps": {
+		"movement":4,
+		"action": 1
+		},
+	"attrs":{
+		"maxhp": 4,
+		"hp":4,
+		"ac":12,
+		"str":12,
+		"dex":12,
+		"con":12,
+		"int":18,
+		"wis":12,
+		"car":12,
+		"thaco":1,
+		"save1":12,
+		"save2":13,
+		"save3":13,
+		"save4":15,
+		"save5":15
+	},
+	"guidelines":[
+		{
+		"number":1,
+		"icon":"sword",
+		"name":"bastón",
+		"short_desc": "1d8",
+		"action": "flmde_attack r1 d1d8 ba1,2 bd1"
+		},
+		{
+		"number":2,
+		"icon":"energy-arrow",
+		"name":"proyectil mágico",
+		"short_desc":"Alcance 13 1d6",
+		"action": "flmde_mm r13,13,13 d1d6",
+		"maxn": 5,
+		"n": 5
+		}
+	]
+}
