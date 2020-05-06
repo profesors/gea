@@ -30,11 +30,17 @@ msgstr "bloqueado"
 msgid "CAN NOT ATTACK"
 msgstr "no puedo atacar"
 
+msgid "CAN NOT CHARGE"
+msgstr "no puedo cargar"
+
 msgid "CAN NOT PASS"
 msgstr "no puedo pasar"
 
 msgid "CAR"
 msgstr "car"
+
+msgid "CHARGE"
+msgstr "carga"
 
 msgid "CHECK"
 msgstr "chequeo"
@@ -86,6 +92,9 @@ msgstr "ocupado"
 
 msgid "OUT OF RANGE"
 msgstr "fuera de rango"
+
+msgid "READY TO CHARGE"
+msgstr "preparado para cargar"
 
 msgid "REMAINS"
 msgstr "restantes"

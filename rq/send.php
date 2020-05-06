@@ -5,9 +5,8 @@
 	include_once('../systems/lmde/guidelines.php');
 	connectDB();
 	setup_lang();
-	//$_GET['m'] = "@Groonan cstr";
-	#$_GET['m'] = "@bar p8,22,9,22,10,22,10,21";
-	//$_GET['idBoard'] = 1;
+	#$_GET['m'] = "@Groonan tVrozz";
+	#$_GET['idBoard'] = 1;
 
 	# Multiple spaces into just one
 	$m = str_replace('%20',' ',secure_param('m'));
@@ -22,7 +21,7 @@
 		$command = trim($command);
 		$manual_command = '';
 	
-		# Name
+		# Name ****************************************************
 		$name = null;
 		if (preg_match("/@([^ ]*)/", $command, $arrParams)){
 			$name = array_key_exists(1, $arrParams)?$arrParams[1]:'';
@@ -31,7 +30,7 @@
 		# Position and size
 		$x=null; $y=null; $w=1; $h=1;
 		$arr_path = array();
-		# Receive a Path
+		# Receive a Path ********************************************
 		if (preg_match("/\sp([^ ]+)/", $command, $arrParams)){
 			$arrParams = explode(',', $arrParams[1]);
 			for($i=0; $i<sizeof($arrParams); $i+=2){
@@ -41,11 +40,19 @@
 			}
 		}
 
-		# Check
+		# Check ******************************************
 		if (preg_match("/\sc([^ ]+)/", $command, $arrParams)){
 			$token = get_token($idBoard, $name);
 			$attr = explode(',',$arrParams[1]);
 			lmde_check($idBoard, $token, $attr[0]);
+		}
+		# Maneuvers ******************************************
+		if (preg_match("/\sm([^ ]+)/", $command, $arrParams)){
+			$token = get_token($idBoard, $name);
+			$maneuver = explode(',',$arrParams[1]);
+			if ($maneuver[0] == 'charge'){
+				lmde_charge($idBoard, $token);
+			}
 		}
 
 
@@ -58,7 +65,7 @@
 		preg_match("/_([^ ]*)/", $command, $arrParams);
 		$border = array_key_exists(1, $arrParams)?$arrParams[1]:null;
 		 */
-		# Animation
+		# Animation *****************************************
 		preg_match("/\sa([^ ]*)/", $command, $arrParams);
 		$animation = array_key_exists(1, $arrParams)?$arrParams[1]:null;
 		if ($animation=='out'){

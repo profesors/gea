@@ -7,6 +7,10 @@ setup_lang();
 	
 $idBoard = secure_param('idBoard');
 $name = secure_param('name');
+
+#$name = '@Groonan';
+#$idBoard = 1;
+
 $token = get_token($idBoard, $name);
 $token_file = json_decode(file_get_contents('tokens/'.$token['file'].'.json'));
 $attrs = get_attrs($idBoard, $name);
@@ -22,6 +26,7 @@ $guidelines = get_guidelines($idBoard, $name);
 <a class="close" onclick="closeInfoCharacter();">Cerrar</a>
 
 <div class="section">
+<span class="half">
 <h2>Habilidades generales</h2>
 <table>
 	<tr><td><strong>Iniciativa</strong></td><td>+1</td></tr>
@@ -31,6 +36,25 @@ $guidelines = get_guidelines($idBoard, $name);
 	<tr><td><strong>Moverse en silencio</strong></td><td>35%</td></tr>
 	<tr><td><strong>Trepar paredes</strong></td><td>90%</td></tr>
 </table>
+</span>
+<span class="half">
+<h2>Maniobras</h2>
+<table>
+<?php	
+	$bCharge = is_status($idBoard, $token['name'], 'charge');	
+?>
+	<tr><td>
+	<?php if ($bCharge){
+		echo '<a class="select_box" style="cursor:pointer;">&#9989;</a>';
+	} else {
+		echo '<a class="select_box" style="cursor:pointer;"';
+		echo ' onclick="sendCommand(\'@'.$token['name'].' mcharge\'); closeInfoCharacter();">&#9744;</a>';
+	}?>
+	</td><td><strong>Cargar</strong></td></tr>
+	<tr><td><a class="select_box" style="cursor:pointer;" onclick="javascript:;">&#9744;</a></td>
+		<td><strong>Defensiva total</strong></td></tr>
+</table>
+</span>
 </div>
 
 <div class="section">

@@ -5,9 +5,8 @@ include_once('../systems/lmde/guidelines.php');
 connectDB();
 setup_lang();
 
-#$_GET['m'] = "@elf tg1";
+#$_GET['m'] = "@Groonan tPrurd";
 #$_GET['idBoard'] = 1;
-# select * from attrs where idBoard = 4 AND tokenName in ('bar', 'gw1')
 
 # Multiple spaces into just one
 $m = str_replace('%20',' ',secure_param('m'));

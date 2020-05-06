@@ -11,3 +11,20 @@ function lmde_check($idBoard, $token, $attr){
 	$action_string.= "&nbsp;$mod("._(strtoupper($attr)).")</span>";
 	insert_action($idBoard, $action_string);
 }
+
+
+function lmde_charge($idBoard, $token){
+	$turn = get_turn($idBoard);
+	error_log("TURN $turn");
+	$step_movement = get_step($idBoard, $token['name'], 'movement');
+	$step_action = get_step($idBoard, $token['name'], 'action');
+	if (floor($step_movement['current'])==$step_movement['max'] && $step_action['current']>0){
+		$new_mov = $step_movement['max']*2;
+		set_step($idBoard, $token['name'], 'movement', $new_mov);
+		set_output($idBoard, $token['name'], _('READY TO CHARGE'));
+		set_mod($idBoard, $token['name'], 'thaco', 'charge', _('CHARGE'), 2, $turn);
+	} else {
+		set_output($idBoard, $token['name'], _('CAN NOT CHARGE'));
+	}
+
+}

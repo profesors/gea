@@ -37,6 +37,8 @@ function reset_db(){
 	run_sql($query) or die();
 	$query = "TRUNCATE steps;";
 	run_sql($query) or die();
+	$query = "TRUNCATE mods;";
+	run_sql($query) or die();
 }
 
 function secure_param($name){
@@ -412,6 +414,9 @@ function set_token_opacity_by_name($idBoard, $tokenName, $opacity){
 }
 
 function new_turn($idBoard){
+	$new_turn = get_turn($idBoard)+1;
+	$q = "DELETE FROM mods WHERE idBoard = $idBoard AND last_turn<$new_turn;";
+	run_sql($q) or die();
 	$q = "UPDATE boards SET turn=turn+1 WHERE id=$idBoard";
 	run_sql($q) or die();
 	$q = "UPDATE steps SET current=max WHERE idBoard=1";
@@ -436,6 +441,11 @@ function mod_step($idBoard, $tokenName, $type, $val){
 	run_sql($q) or die();
 }
 
+function set_step($idBoard, $tokenName, $type, $val){
+	$q = "UPDATE steps SET current=$val WHERE idBoard=$idBoard AND tokenName='$tokenName' AND type='$type'";
+	run_sql($q) or die();
+}
+
 function get_steps($idBoard, $tokenName){
 	$q = "SELECT * FROM steps WHERE idBoard=$idBoard AND tokenName='$tokenName'";
 	$result = run_sql($q) or die();
@@ -445,6 +455,46 @@ function get_steps($idBoard, $tokenName){
 function get_step($idBoard, $tokenName, $type){
 	$q = "SELECT * FROM steps WHERE idBoard=$idBoard AND tokenName='$tokenName' AND type='$type'";
 	$result = run_sql($q) or die();
-	return mysqli_fetch_array($result);
+	return mysqli_fetch_array($result, MYSQLI_ASSOC);
+}
+
+function set_mod($idBoard, $tokenName, $attr, $type, $desc, $mod, $last_turn){
+	$q = "INSERT INTO mods (idBoard, tokenName, attr, type, `desc`, `mod`, last_turn) ";
+	$q.= " VALUES ($idBoard, '".$tokenName."', '$attr', '$type', '$desc', $mod, $last_turn)";
+	run_sql($q) or die();
+}
+
+function get_mods($idBoard, $tokenName){
+	$q = "SELECT * FROM mods WHERE idBoard=$idBoard AND tokenName='$tokenName'";
+	$result = run_sql($q) or die();
+	return $result;
+}	
+
+function get_mods_by_attr($idBoard, $tokenName, $attr){
+	$q = "SELECT * FROM mods WHERE idBoard=$idBoard AND tokenName='$tokenName' AND attr='$attr'";
+	$result = run_sql($q) or die();
+	return $result;
+}
+
+function get_mods_by_attr_type($idBoard, $tokenName, $attr, $type){
+	$q = "SELECT * FROM mods WHERE idBoard=$idBoard AND tokenName='$tokenName' AND attr='$attr' AND type='$type'";
+	$result = run_sql($q) or die();
+	return $result;
+}
+
+function get_mods_by_type($idBoard, $tokenName, $type){
+	$q = "SELECT * FROM mods WHERE idBoard=$idBoard AND tokenName='$tokenName' AND type='$type'";
+	$result = run_sql($q) or die();
+	return $result;
+}
+
+function is_status($idBoard, $tokenName, $type){
+	$ret = false;
+	$q = "SELECT * FROM mods WHERE idBoard=$idBoard AND tokenName='$tokenName' AND type='$type' LIMIT 1";
+	$rs = run_sql($q) or die();
+	if ($rs->num_rows>0){
+		$ret = true;
+	}
+	return $ret;
 }
 ?>
