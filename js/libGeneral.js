@@ -197,8 +197,15 @@ function updateActionsPanel(idBoard){
 	if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
 		const stdOutput = document.getElementById("stdOutput");
 		var arrMessages = JSON.parse(rq.responseText);
+		stdOutput.innerHTML = '';
+		console.log("arrMSG "+arrMessages.length);
+		try{
 		for(var i=0; i<arrMessages.length; i++){
-			stdOutput.innerHTML+=arrMessages[i].time+arrMessages[i].text;
+			//stdOutput.innerHTML+=arrMessages[i].time+decodeURIComponent(arrMessages[i].text);
+			stdOutput.innerHTML+=arrMessages[i].time + arrMessages[i].text;
+		}
+		} catch(e){
+			//console.log(e);
 		}
 		//stdOutput.innerHTML = JSON.parse(rq.responseText);
 		stdOutput.scrollTop = stdOutput.scrollHeight;

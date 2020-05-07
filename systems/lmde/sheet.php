@@ -68,11 +68,11 @@ $guidelines = get_guidelines($idBoard, $name);
 	<?php if ($bDefensive){
 		echo '<a class="select_box" style="cursor:pointer;"';
 		echo ' onclick="sendCommand(\'@'.$token['name'].' mdefensive\'); ';
-		echo ' refreshSheet('.$idBoard.',\''.$token['name'].'\');">&#9989;</a>';
+		echo ' refreshSheet(\''.$token['name'].'\');">&#9989;</a>';
 	} else {
 		echo '<a class="select_box" style="cursor:pointer;"';
 		echo ' onclick="sendCommand(\'@'.$token['name'].' mdefensive\'); ';
-		echo ' refreshSheet('.$idBoard.',\''.$token['name'].'\');">&#9744;</a>';
+		echo ' refreshSheet(\''.$token['name'].'\');">&#9744;</a>';
 	}?>
 	<td><strong>Lucha defensiva</strong></td></tr>
 </table>

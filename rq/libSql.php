@@ -113,9 +113,9 @@ function insert_action($idBoard, $text){
 	$result = run_sql($query) or die();
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	$next = intval($row['MAX(number)'])+1;
-	$query = "INSERT INTO `actions` (`idUser`, `idBoard`, `number`, `ts`, `action`) VALUES ('1', '$idBoard',";
+	$query = "INSERT INTO `actions` (`idUser`, `idBoard`, `number`, `ts`, `action`) VALUES (1, $idBoard,";
 	#$query.= " $next, CURRENT_TIMESTAMP, '".mysqli_real_escape_string($db, $m)."');";
-	$query.= " $next, CURRENT_TIMESTAMP, '$text');";
+	$query.= " $next, CURRENT_TIMESTAMP, \"".str_replace('"','\'',$text).'")';
 	
 	run_sql($query) or die();
 }

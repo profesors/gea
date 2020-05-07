@@ -82,6 +82,7 @@ Array(
 		$action_string.= ' '._('AMMUNITION').' '.$guideline['name'].' '.($guideline['n']-1);
 	}
 	insert_action($idBoard, $action_string);
+	error_log($action_string);
 }
 
 # Close Combat Attack

@@ -504,13 +504,13 @@ function closeInfoCharacter(){
 	divInfo.style.display = "none";
 }
 
-function showDefaultGuidelineInSheet(name, id){
-	sendCommand(":g"+name+","+id);
-	refreshSheet();
+function showDefaultGuidelineInSheet(tokenName, guideId){
+	sendCommand(":g"+tokenName+","+guideId);
+	refreshSheet(tokenName);
 }
 
-function refreshSheet(idBoard, tokenName){
+function refreshSheet(tokenName){
 	var divInfo = document.getElementById("info_character");
 	divInfo.style.display = "grid";
-	getSheetCharacter(tokenName, idBoard, divInfo);
+	getSheetCharacter(tokenName, board.id, divInfo);
 }
