@@ -8,7 +8,7 @@ setup_lang();
 $idBoard = secure_param('idBoard');
 $name = secure_param('name');
 
-#$name = '@Groonan';
+#$name = 'Groonan';
 #$idBoard = 1;
 
 $token = get_token($idBoard, $name);
@@ -44,8 +44,6 @@ $guidelines = get_guidelines($idBoard, $name);
 	<tr><td><strong>Clase de armadura</strong></td><td><?php echo $ac_desc; ?></td></tr>
 	<tr><td><strong>Puntos de golpe</strong></td><td><?php echo $attrs['hp'].'/'.$attrs['maxhp'];?> PG</td></tr>
 	<tr><td><strong>Movimiento</strong></td><td><?php echo $token_file->steps->movement;?> casillas</td></tr>
-	<tr><td><strong>Moverse en silencio</strong></td><td>35%</td></tr>
-	<tr><td><strong>Trepar paredes</strong></td><td>90%</td></tr>
 </table>
 </span>
 <span class="half">
@@ -74,7 +72,8 @@ $guidelines = get_guidelines($idBoard, $name);
 		echo ' onclick="sendCommand(\'@'.$token['name'].' mdefensive\'); ';
 		echo ' refreshSheet(\''.$token['name'].'\');">&#9744;</a>';
 	}?>
-	<td><strong>Lucha defensiva</strong></td></tr>
+	<td><strong>Lucha defensiva</strong></td>
+	<tr><td></td><td><strong>Moverse en silencio</strong>45%</td></tr>
 </table>
 </span>
 </div>
@@ -113,22 +112,21 @@ $guidelines = get_guidelines($idBoard, $name);
 <table>
 <?php
 	$default_guide_id = get_default_guideline_id($idBoard, $token['name']);
-	foreach($guidelines as $guide_id=>$guideline){
+	foreach($token_file->guidelines as $k=>$guideline_file){
 		echo '<tr><td>';
-		if ($guide_id != $default_guide_id){
-			echo '<a onclick="javascript:showDefaultGuidelineInSheet(\''.$token['name'].'\','.$guide_id.');"';
+		if ($default_guide_id != $guideline_file->number){
+			echo '<a onclick="javascript:showDefaultGuidelineInSheet(\''.$token['name'].'\','.$guideline_file->number.');"';
 			echo ' class="select_box">&#9744;</a>';
 		} else {
 			echo '&#9989;';
 		}
 		echo '</td>';
-		echo '	<td><strong>'.ucfirst($guideline['name']).'</strong>&nbsp;';
-		if ($guideline['n']!=-1){
-			echo '('.$guideline['n'].')';
-		} else {
-			echo '	</td>';
-			echo '	<td>'.ucfirst($token_file->guidelines[$guide_id-1]->short_desc).'</td>';
+		echo '	<td><strong>'.ucfirst($guideline_file->name).'</strong>&nbsp;';
+		$guide_n = $guideline_file->number;
+		if (array_key_exists('n', $guidelines[$guide_n]) && $guidelines[$guide_n]['n']!=-1){
+			echo '('.$guidelines[$guide_n]['n'].')';
 		}
+		echo "	</td><td>$guideline_file->short_desc</td>";
 		echo '</tr>';
 	}	
 ?>
