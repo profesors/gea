@@ -5,6 +5,7 @@
 
 ## Versiones
 
+1.45	Output en servidor correcto con ñ y tilde
 1.44	Modo defensivo
 1.43	Se puede realizar una carga desde la ficha de personaje
 1.42	Tabla *mods* que guardan el *status* del personaje

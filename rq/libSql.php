@@ -107,14 +107,16 @@ function get_board($idBoard){
 }
 
 # Inser action in the DB table
-function insert_action($idBoard, $m){
+function insert_action($idBoard, $text){
 	global $db;
 	$query = "SELECT MAX(number) FROM actions WHERE idBoard=$idBoard AND idUser=1 LIMIT 1";
 	$result = run_sql($query) or die();
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	$next = intval($row['MAX(number)'])+1;
 	$query = "INSERT INTO `actions` (`idUser`, `idBoard`, `number`, `ts`, `action`) VALUES ('1', '$idBoard',";
-	$query.= " $next, CURRENT_TIMESTAMP, '".utf8_decode(mysqli_real_escape_string($db, $m))."');";
+	#$query.= " $next, CURRENT_TIMESTAMP, '".mysqli_real_escape_string($db, $m)."');";
+	$query.= " $next, CURRENT_TIMESTAMP, '$text');";
+	
 	run_sql($query) or die();
 }
 

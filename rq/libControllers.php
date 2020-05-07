@@ -1,8 +1,11 @@
 <?php
 
 function setup_lang(){
+	//putenv("LANGUAGE=es_ES");
+	//putenv("LANG=es_ES");
 	setlocale(LC_MESSAGES, 'es_ES.UTF-8');
 	bindtextdomain('gea',dirname(__FILE__).'/../lang');
+	bind_textdomain_codeset('gea', 'UTF-8');
 	textdomain('gea');
 }
 
