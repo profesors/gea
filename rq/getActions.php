@@ -18,6 +18,14 @@ while ($row = mysqli_fetch_array($result)){
 	if (($op=='player' && strpos($row['action'],'!')) || strlen($row['action'])==0){
 		// No mostrar al jugador esta acción	
 	} else {
-		echo '<time>'.date("H:i", strtotime($row['ts'])).'</time><p>'.utf8_encode($row['action'])."</p>";
+		echo '<time>'.date("H:i", strtotime($row['ts'])).'</time><p>'.$row['action']."</p>";
 	}
 } 
+
+
+function TildesHtml($cadena) 
+    { 
+        return str_replace(array("á","é","í","ó","ú","ñ","Á","É","Í","Ó","Ú","Ñ"),
+                                         array("&aacute;","&eacute;","&iacute;","&oacute;","&uacute;","&ntilde;",
+                                                    "&Aacute;","&Eacute;","&Iacute;","&Oacute;","&Uacute;","&Ntilde;"), $cadena);     
+    }
