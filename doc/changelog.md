@@ -5,7 +5,9 @@
 
 ## Versiones
 
-1.42	Carga
+1.44	Modo defensivo
+1.43	Se puede realizar una carga desde la ficha de personaje
+1.42	Tabla *mods* que guardan el *status* del personaje
 1.41	Turno 0 que no limita el movimiento
 1.40	Chequeo de características
 1.39	La ficha de personaje depende del sistema de juego empleado

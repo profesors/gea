@@ -52,6 +52,8 @@
 			$maneuver = explode(',',$arrParams[1]);
 			if ($maneuver[0] == 'charge'){
 				lmde_charge($idBoard, $token);
+			} else if ($maneuver[0] == 'defensive'){
+				lmde_defensive($idBoard, $token);
 			}
 		}
 

@@ -30,7 +30,18 @@ $guidelines = get_guidelines($idBoard, $name);
 <h2>Habilidades generales</h2>
 <table>
 	<tr><td><strong>Iniciativa</strong></td><td>+1</td></tr>
-	<tr><td><strong>Clase de armadura</strong></td><td><?php echo $attrs['ac']; ?></td></tr>
+<?php
+	$ac = $attrs['ac'];
+	$rs_ac = get_mods_by_attr($idBoard, $token['name'], 'ac');
+	$ac_desc = '';
+	while($row_ac = mysqli_fetch_array($rs_ac, MYSQLI_ASSOC)){
+		$ac+=$row_ac['mod'];
+		$mod = $row_ac['mod']>=0?'+'.$row_ac['mod']:$row_ac['mod'];
+		$ac_desc.=' '.$mod.'('.$row_ac['desc'].')';
+	}
+	$ac_desc = strlen($ac_desc)>0?$ac.'= '.$attrs['ac'].$ac_desc:$ac;
+	?>
+	<tr><td><strong>Clase de armadura</strong></td><td><?php echo $ac_desc; ?></td></tr>
 	<tr><td><strong>Puntos de golpe</strong></td><td><?php echo $attrs['hp'].'/'.$attrs['maxhp'];?> PG</td></tr>
 	<tr><td><strong>Movimiento</strong></td><td><?php echo $token_file->steps->movement;?> casillas</td></tr>
 	<tr><td><strong>Moverse en silencio</strong></td><td>35%</td></tr>
@@ -41,7 +52,8 @@ $guidelines = get_guidelines($idBoard, $name);
 <h2>Maniobras</h2>
 <table>
 <?php	
-	$bCharge = is_status($idBoard, $token['name'], 'charge');	
+	$bCharge = has_status($idBoard, $token['name'], 'charge');	
+	$bDefensive = has_status($idBoard, $token['name'], 'defensive');	
 ?>
 	<tr><td>
 	<?php if ($bCharge){
@@ -51,8 +63,18 @@ $guidelines = get_guidelines($idBoard, $name);
 		echo ' onclick="sendCommand(\'@'.$token['name'].' mcharge\'); closeInfoCharacter();">&#9744;</a>';
 	}?>
 	</td><td><strong>Cargar</strong></td></tr>
-	<tr><td><a class="select_box" style="cursor:pointer;" onclick="javascript:;">&#9744;</a></td>
-		<td><strong>Defensiva total</strong></td></tr>
+
+	<tr><td>
+	<?php if ($bDefensive){
+		echo '<a class="select_box" style="cursor:pointer;"';
+		echo ' onclick="sendCommand(\'@'.$token['name'].' mdefensive\'); ';
+		echo ' refreshSheet('.$idBoard.',\''.$token['name'].'\');">&#9989;</a>';
+	} else {
+		echo '<a class="select_box" style="cursor:pointer;"';
+		echo ' onclick="sendCommand(\'@'.$token['name'].' mdefensive\'); ';
+		echo ' refreshSheet('.$idBoard.',\''.$token['name'].'\');">&#9744;</a>';
+	}?>
+	<td><strong>Lucha defensiva</strong></td></tr>
 </table>
 </span>
 </div>

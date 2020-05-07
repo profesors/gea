@@ -458,13 +458,13 @@ function get_step($idBoard, $tokenName, $type){
 	return mysqli_fetch_array($result, MYSQLI_ASSOC);
 }
 
-function set_mod($idBoard, $tokenName, $attr, $type, $desc, $mod, $last_turn){
-	$q = "INSERT INTO mods (idBoard, tokenName, attr, type, `desc`, `mod`, last_turn) ";
-	$q.= " VALUES ($idBoard, '".$tokenName."', '$attr', '$type', '$desc', $mod, $last_turn)";
+function set_mod($idBoard, $tokenName, $attr, $status, $desc, $mod, $last_turn){
+	$q = "INSERT INTO mods (idBoard, tokenName, attr, status, `desc`, `mod`, last_turn) ";
+	$q.= " VALUES ($idBoard, '".$tokenName."', '$attr', '$status', '$desc', $mod, $last_turn)";
 	run_sql($q) or die();
 }
 
-function get_mods($idBoard, $tokenName){
+function get_mod($idBoard, $tokenName){
 	$q = "SELECT * FROM mods WHERE idBoard=$idBoard AND tokenName='$tokenName'";
 	$result = run_sql($q) or die();
 	return $result;
@@ -476,25 +476,30 @@ function get_mods_by_attr($idBoard, $tokenName, $attr){
 	return $result;
 }
 
-function get_mods_by_attr_type($idBoard, $tokenName, $attr, $type){
-	$q = "SELECT * FROM mods WHERE idBoard=$idBoard AND tokenName='$tokenName' AND attr='$attr' AND type='$type'";
+function get_mods_by_attr_status($idBoard, $tokenName, $attr, $status){
+	$q = "SELECT * FROM mods WHERE idBoard=$idBoard AND tokenName='$tokenName' AND attr='$attr' AND status='$status'";
 	$result = run_sql($q) or die();
 	return $result;
 }
 
-function get_mods_by_type($idBoard, $tokenName, $type){
-	$q = "SELECT * FROM mods WHERE idBoard=$idBoard AND tokenName='$tokenName' AND type='$type'";
+function get_mods_by_status($idBoard, $tokenName, $status){
+	$q = "SELECT * FROM mods WHERE idBoard=$idBoard AND tokenName='$tokenName' AND status='$status'";
 	$result = run_sql($q) or die();
 	return $result;
 }
 
-function is_status($idBoard, $tokenName, $type){
+function has_status($idBoard, $tokenName, $status){
 	$ret = false;
-	$q = "SELECT * FROM mods WHERE idBoard=$idBoard AND tokenName='$tokenName' AND type='$type' LIMIT 1";
+	$q = "SELECT * FROM mods WHERE idBoard=$idBoard AND tokenName='$tokenName' AND status='$status' LIMIT 1";
 	$rs = run_sql($q) or die();
 	if ($rs->num_rows>0){
 		$ret = true;
 	}
 	return $ret;
+}
+
+function remove_status($idBoard, $tokenName, $status){
+	$q = "DELETE FROM mods WHERE idBoard=$idBoard AND tokenName='$tokenName' AND status='$status'";
+	run_sql($q) or die();
 }
 ?>

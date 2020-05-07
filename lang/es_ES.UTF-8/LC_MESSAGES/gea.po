@@ -57,6 +57,9 @@ msgstr "crítico"
 msgid "DAMAGE"
 msgstr "daño"
 
+msgid "DEFENSIVE"
+msgstr "defensiva"
+
 msgid "DEX"
 msgstr "des"
 
@@ -92,6 +95,9 @@ msgstr "ocupado"
 
 msgid "OUT OF RANGE"
 msgstr "fuera de rango"
+
+msgid "READY"
+msgstr "listo"
 
 msgid "READY TO CHARGE"
 msgstr "preparado para cargar"

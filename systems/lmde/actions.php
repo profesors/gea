@@ -15,7 +15,6 @@ function lmde_check($idBoard, $token, $attr){
 
 function lmde_charge($idBoard, $token){
 	$turn = get_turn($idBoard);
-	error_log("TURN $turn");
 	$step_movement = get_step($idBoard, $token['name'], 'movement');
 	$step_action = get_step($idBoard, $token['name'], 'action');
 	if (floor($step_movement['current'])==$step_movement['max'] && $step_action['current']>0){
@@ -27,5 +26,18 @@ function lmde_charge($idBoard, $token){
 	} else {
 		set_output($idBoard, $token['name'], _('CAN NOT CHARGE'));
 	}
+}
 
+function lmde_defensive($idBoard, $token){
+	$turn = get_turn($idBoard);
+	$newTurn = $turn+1;
+	$bDefensive = has_status($idBoard, $token['name'], 'defensive');
+	if ($bDefensive){
+		remove_status($idBoard, $token['name'], 'defensive');
+		set_output($idBoard, $token['name'], _('READY'));
+	} else {
+		set_output($idBoard, $token['name'], _('DEFENSIVE'));
+		set_mod($idBoard, $token['name'], 'thaco', 'defensive', _('DEFENSIVE'), -4, $newTurn);
+		set_mod($idBoard, $token['name'], 'ac', 'defensive', _('DEFENSIVE'), 2, $newTurn);
+	}
 }

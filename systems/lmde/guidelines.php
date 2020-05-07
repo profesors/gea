@@ -23,7 +23,7 @@ Array(
     [mod] => 2
     [last_turn] => 3
 )*/
-	$rs_mods = get_mods_by_attr_type($idBoard, $token1['name'], 'thaco', 'charge');
+	$rs_mods = get_mods_by_attr_status($idBoard, $token1['name'], 'thaco', 'charge');
 	while($mod_thaco = mysqli_fetch_array($rs_mods, MYSQLI_ASSOC)){
 		add_mod_attack($guideline, $mod_thaco['mod'], _('CHARGE'));
 	}
@@ -40,7 +40,7 @@ Array(
 	}
 
 	# AC defense
-	$rs_mods_ac = get_mods_by_attr_type($idBoard, $token2['name'], 'ac', 'charge');
+	$rs_mods_ac = get_mods_by_attr_status($idBoard, $token2['name'], 'ac', 'charge');
 	while($mod_ac = mysqli_fetch_array($rs_mods_ac, MYSQLI_ASSOC)){
 		$ac += $mod_ac['mod'];
 	}

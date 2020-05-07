@@ -506,7 +506,11 @@ function closeInfoCharacter(){
 
 function showDefaultGuidelineInSheet(name, id){
 	sendCommand(":g"+name+","+id);
+	refreshSheet();
+}
+
+function refreshSheet(idBoard, tokenName){
 	var divInfo = document.getElementById("info_character");
 	divInfo.style.display = "grid";
-	getSheetCharacter(name, board.id, divInfo);
+	getSheetCharacter(tokenName, idBoard, divInfo);
 }
