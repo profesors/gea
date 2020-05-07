@@ -269,8 +269,6 @@ window.addEventListener("DOMContentLoaded", function() {
 });
 
 async function main(){
-	//document.getElementById("body").mozRequestFullScreen();
-
 	var BOARD = 1;
 	await getBoard(BOARD);	/* Number of board */
 	while(board==null)	{

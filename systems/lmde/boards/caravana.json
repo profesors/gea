@@ -8,28 +8,28 @@
 	"offsety":0,
 	"bg":"004bg.jpg",
 	"drawGrid":0,
-	"lastActionId":268,
+	"lastActionId":0,
 	"tokens": [
 		{
 			"file": "bar",
-			"name": "bar",
-			"x": 11,
-			"y": 3,
+			"name": "Groonan",
+			"x": 15,
+			"y": 10,
 			"default_guideline_id":1
 		},
 		{
 			"file": "exp",
-			"name": "exp",
-			"x": 13,
-			"y": 4,
+			"name": "Connor",
+			"x": 16,
+			"y": 12,
 			"default_guideline_id":2
 		},
 		{
 			"file": "elf",
-			"name": "elf",
-			"x": 14,
-			"y": 3,
-			"default_guideline_id":3
+			"name": "Varyarel",
+			"x": 13,
+			"y": 13,
+			"default_guideline_id":2
 		},
 		{
 			"file": "goblin",
