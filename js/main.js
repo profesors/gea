@@ -12,6 +12,8 @@ var touch = {
 	x: 0,
 	y: 0
 }
+var reScrollTop = new RegExp(/scrollTop=(\d+)/);
+var reScrollLeft = new RegExp(/scrollLeft=(\d+)/);
 
 var movement;
 
@@ -100,8 +102,10 @@ function inputKeyPress_allDocument(event){
 		setOpacityCoordinates(1-getOpacityCoordinates());
 		break;
 	case 72:	// h
+			/*
 		const panel = document.getElementById("panelI");
 		togglePanelI();
+		*/
 		break
 	case 78:	// n	Muestra los nombres
 		setOpacityDivNames(1-getOpacityDivNames());
@@ -149,8 +153,8 @@ function checkUpdates(){
 	// Save current scroll
 	const scrollTop = window.pageYOffset;
 	const scrollLeft = window.pageXOffset;
-	Cookies.set("scrollTop", scrollTop, 1);
-	Cookies.set("scrollLeft", scrollLeft, 1);
+	document.cookie = "scrollTop="+scrollTop+";samesite=strict";
+	document.cookie = "scrollLeft="+scrollLeft+";samesite=strict";
 
 	// Get Last Action ID
 	var rq = new XMLHttpRequest();
@@ -180,6 +184,7 @@ function checkUpdates(){
 			if (board.lastActionId < remoteLastAction.id){	// Update tokens
 				getTokens(board.id, board.lastActionId);
 				if (panelI.style.display == 'block')	updateActionsPanel(board.id);
+				updateBoardOutput();
 			}
 			if (board.turn != remoteLastAction.turn){
 				board.turn = remoteLastAction.turn

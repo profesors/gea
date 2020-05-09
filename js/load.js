@@ -7,6 +7,7 @@ async function getBoard(idBoard){
 		if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
 			var s = rq.responseText;
 			board = JSON.parse(s);
+			board.output = document.getElementById("board_output");
 
 			// BG
 			var canvasBg = document.getElementById("canvas_bg");
@@ -38,9 +39,10 @@ async function getBoard(idBoard){
 			canvasOver.style.height = (board.tileh*board.ntilesh)+0.5*board.tileh+"px";
 
 			getTokens(board.id, 0);	
-			const scrollTop = Cookies.get("scrollTop");
-			const scrollLeft =Cookies.get("scrollLeft"); 
+			const scrollTop = document.cookie.match(reScrollTop)[1];
+			const scrollLeft = document.cookie.match(reScrollLeft)[1];
 			window.scrollTo(scrollLeft, scrollTop);
+			
 			addSvgCanvas();	
 		}
 	}

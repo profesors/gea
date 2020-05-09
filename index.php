@@ -7,11 +7,11 @@
     <link rel="stylesheet" type="text/css" href="css/reset.css?t=1">
     <link rel="stylesheet" type="text/css" href="css/main.css?t=1">
     <link rel="stylesheet" type="text/css" href="css/sheet.css?t=1">
+    <link rel="stylesheet" type="text/css" href="css/output.css?t=1">
 
 	<script src='js/libGeneral.js?t=1'></script>
 	<script src='js/Movement.js?t=1'></script>
 	<script src='js/listeners.js?t=1'></script>
-	<script src='js/cookie.js'></script>
 	<script src='js/main.js?t=1'></script>
 	<script src='js/load.js?t=1'></script>
 	<script src='js/interface.js?t=1'></script>
@@ -28,6 +28,7 @@
 		<div id="panelI">
 			<div id="stdOutput"><?php echo date("> d/m/Y G:i");?></div>
 		</div>
+		<div id="board_output"></div>
 
 		<div id="input_hidden"></div>
 		<div id="canvas_over"></div>

@@ -47,8 +47,8 @@ Array(
 
 	$action_string = '<span class="name_text">'.$token1['name'].'</span> '._('ATTACKS TO').' ';
 	$action_string.= '<span class="name_text">'.$token2['name'].'</span> '._('WITH').' '.$guideline['name'];
-	$action_string.= '<span class="attack_text">'.mb_ucfirst(_('ATTACK')).'&nbsp;<span class="red">'.$at_total;
-	$action_string.= '</span>='.$d20.'(1d20)'.$sMod.'</span>';
+	$action_string.= '<p>'.mb_ucfirst(_('ATTACK')).'&nbsp;<span class="red">'.$at_total;
+	$action_string.= '</span>='.$d20.'(1d20)'.$sMod.'</p>';
 	if ($at_total >= $ac){	# HIT
 		$sMod='';
 		$damage = one_roll($guideline['guideAction']['damage']['n'], $guideline['guideAction']['damage']['sides']);
@@ -67,19 +67,19 @@ Array(
 		$token2['attrs']['hp']-=$damage_total;
 		set_attr($idBoard, $token2['name'], 'hp', $token2['attrs']['hp']);
 
-		$action_string.= '<span class="dmg_text">'.mb_ucfirst(_('DAMAGE')).'&nbsp;';
+		$action_string.= '<p>'.mb_ucfirst(_('DAMAGE')).'&nbsp;';
 		$action_string.= '<span class="red">'.$damage_total.'</span>='.$damage.'(';
 		$action_string.= $guideline['guideAction']['damage']['n'].'d'.$guideline['guideAction']['damage']['sides'];
 		$action_string.= ')'.$sMod;
 		$action_string.= $critic?' <span class="red">(x2)'._('CRITICAL HIT').'</span>':'';
 		set_output($idBoard, $token1['name'], $at_total.' '.$damage_total, $token2['name']);
 	} else {
-		$action_string.= ' <span class="red">'._('FAIL').'</span>';
+		$action_string.= '<p><span class="red">'._('FAIL').'</span></p>';
 		set_output($idBoard, $token1['name'], $at_total.' '._('FAIL'));
 	}
-	$action_string.= '</span>';
+	$action_string.= '</p>';
 	if ($guideline['n'] != -1) {
-		$action_string.= ' '._('AMMUNITION').' '.$guideline['name'].' '.($guideline['n']-1);
+		$action_string.= '<p>'._('AMMUNITION').' '.$guideline['name'].' '.($guideline['n']-1).'</p>';
 	}
 	insert_action($idBoard, $action_string);
 }
@@ -132,12 +132,12 @@ function lmde_rangedAttack($idBoard, $token1, $token2, $guideline){
 			} else if ($percent_cover>75 && $percent_cover<=90){
 				add_mod_attack($guideline, -10, _('COVERTURE').' '.$percent_cover.'%');
 			} else if ($percent_cover>90){
-				$action_string = '<span class="name_text">'.$token1['name'].'</span> '._('ATTACKS TO').' ';
-				$action_string.= '<span class="name_text">'.$token2['name'].'</span> '._('WITH').' '.$guideline['name'];
-				$action_string.= '<span class="dmg_text">';
+				$action_string = '<p><span class="name_text">'.$token1['name'].'</span> '._('ATTACKS TO').' ';
+				$action_string.= '<span class="name_text">'.$token2['name'].'</span> '._('WITH').' '.$guideline['name'].'</p>';
+				$action_string.= '<p>';
 				$action_string.= ' <span class="red">'._('FAIL').'</span>&nbsp;'._('COVERTURE').' '.$percent_cover.'%';
 				$action_string.= '</span>';
-				$action_string.= _('AMMUNITION').' '.$guideline['name'].' '.($guideline['n']-1);
+				$action_string.= _('AMMUNITION').' '.$guideline['name'].' '.($guideline['n']-1).'</p>';
 				guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
 				set_output($idBoard, $token1['name'], _('FAIL'));
 				insert_action($idBoard, $action_string);
@@ -174,11 +174,11 @@ function lmde_mm($idBoard, $token1, $token2, $guideline){
 				mod_step($idBoard, $token1['name'], 'action', -1);
 				$d6 = one_roll(1,6);
 				$token2['attrs']['hp'] -= $d6+1;
-				$action_string = '<span class="name_text">'.$token1['name'].'</span> '._('ATTACKS TO').' ';
-				$action_string.= '<span class="name_text">'.$token2['name'].'</span> '._('WITH').' '.$guideline['name'];
-				$action_string.= '<span class="dmg_text">'.mb_ucfirst(_('DAMAGE')).'&nbsp;<span class="red">'.($d6+1);
+				$action_string = '<p><span class="name_text">'.$token1['name'].'</span> '._('ATTACKS TO').' ';
+				$action_string.= '<span class="name_text">'.$token2['name'].'</span> '._('WITH').' '.$guideline['name'].'</p>';
+				$action_string.= '<p>'.mb_ucfirst(_('DAMAGE')).'&nbsp;<span class="red">'.($d6+1);
 				$action_string.= '</span>';
-				$action_string.= "=$d6(1d6)+1";
+				$action_string.= "=$d6(1d6)+1</p>";
 				guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
 				set_animation($idBoard, $token1['name'], 1, 0, 3, $token1['x'], $token1['y'], $arrDist['x2'], $arrDist['y2']);
 				set_attr($idBoard, $token2['name'], 'hp', $token2['attrs']['hp']);

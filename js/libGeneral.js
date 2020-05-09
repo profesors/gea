@@ -189,26 +189,44 @@ async function updateHp(token){
 	}
 }
 
+function updateBoardOutput(){
+	const rq = new XMLHttpRequest();
+	rq.open("GET", "rq/getActions.php?idBoard="+board.id+"&n=1");
+	rq.send();
+	rq.onreadystatechange = function(e) {
+	if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
+		var arrMessages = JSON.parse(rq.responseText);
+		board.output.innerHTML = '';
+		//try{
+		for(var i=0; i<arrMessages.length; i++){
+			board.output.innerHTML+=arrMessages[i].time + arrMessages[i].text;
+		}
+			/*
+		} catch(e){
+			//console.log(e);
+		}*/
+	}
+	}
+}
+
 function updateActionsPanel(idBoard){
 	const rq = new XMLHttpRequest();
-	rq.open("GET", "rq/getActions.php?idBoard="+idBoard+"&op=player");
+	rq.open("GET", "rq/getActions.php?idBoard="+idBoard);
 	rq.send();
 	rq.onreadystatechange = function(e) {
 	if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
 		const stdOutput = document.getElementById("stdOutput");
 		var arrMessages = JSON.parse(rq.responseText);
 		stdOutput.innerHTML = '';
-		console.log("arrMSG "+arrMessages.length);
 		try{
 		for(var i=0; i<arrMessages.length; i++){
-			//stdOutput.innerHTML+=arrMessages[i].time+decodeURIComponent(arrMessages[i].text);
-			stdOutput.innerHTML+=arrMessages[i].time + arrMessages[i].text;
+			//stdOutput.innerHTML+=arrMessages[i].time + arrMessages[i].text;
+			board.output+=arrMessages[i].time + arrMessages[i].text;
 		}
 		} catch(e){
 			//console.log(e);
 		}
-		//stdOutput.innerHTML = JSON.parse(rq.responseText);
-		stdOutput.scrollTop = stdOutput.scrollHeight;
+		//stdOutput.scrollTop = stdOutput.scrollHeight;
 	}
 	}
 }

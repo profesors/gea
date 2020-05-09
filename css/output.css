@@ -1,0 +1,64 @@
+#board_output{
+	width: 35rem;
+	height: 5rem;
+	background-color: rgba(255,255,255,0.8);
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 2;
+	border-radius: 0 0 1rem 0;
+	font-size: 0.8rem;
+	z-index:3;
+}
+
+#board_output p{
+	margin: 0.2rem 0.5rem 0 0.5rem;
+}
+
+#board_output time{
+	display: none;
+}
+
+#board_output .name_text{
+	font-weight: bold;
+}
+
+
+
+
+#stdOutput{
+	overflow-x: scroll;
+	background-color: white;
+	height: 5rem;
+	font-size: 90%;
+}
+
+#stdOutput time{
+	width: 80%;
+	display: block;
+	background-color: grey;
+	color: white;
+	font-weight: bold;
+	padding: 0.1rem 1rem 0.1rem 1rem;
+	border-radius: 0 1rem 1rem 0;
+}
+
+#stdOutput p{
+	margin: 0.5rem 0 1rem 1rem;
+}
+
+#stdOutput .name_text{
+	font-weight: bold;
+}
+
+#stdOutput .attack_text{
+	margin: 0.5rem 0 0.5rem 0;
+	display: block;
+}
+
+#stdOutput .dmg_text{
+	margin: 0.5rem 0 0.5rem 0;
+	display: block;
+}
+
+
