@@ -183,18 +183,18 @@ function move_token($idBoard, &$token, $x, $y, $im){
 	$token['y'] = $y;
 }
 
-function move_token_by_path($idBoard, &$token, $arrPath_tiles, $im){
+function move_token_by_path($idBoard, &$token, $arrPath_tiles, $im_walls){
 	$board = get_board($idBoard);
 	$path = '';
 	$turn = get_turn($idBoard);
 	for ($i=0; $i<sizeof($arrPath_tiles); $i++){
 		$x = $arrPath_tiles[$i]['x'];
 		$y = $arrPath_tiles[$i]['y'];
-		$is_visible = isVisible_between_tiles($board, $im, $token, $x, $y);
+		$is_visible = isVisible_between_tiles($board, $im_walls, $token, $x, $y);
 		if ($is_visible){
 			$is_free = free_from_enemy_in_tile($idBoard, $token, $x, $y);
 			if ($is_free){
-				$current_d = distanceTiles($token['x'], $token['y'], $x, $y);
+				$current_d = distance_tiles($token['x'], $token['y'], $x, $y);
 				if (floor($current_d)<=1){
 					$step = get_step($idBoard, $token['name'], 'movement');
 					if (($step['current']-$current_d)>=0){
@@ -223,6 +223,8 @@ function move_token_by_path($idBoard, &$token, $arrPath_tiles, $im){
 	$path = trim($path, ',');
 	$q = "UPDATE tokens SET path='$path' WHERE idBoard=$idBoard AND name='".$token['name']."'";
 	run_sql($q) or die();
+	$im_full = imagecreatefromjpeg("../img/bg/010bg_full.jpg");
+	apply_lights($board, $im_walls, $im_full);
 }
 
 function set_attr($idBoard, $name, $attr, $val){
@@ -307,6 +309,12 @@ function get_tokens_by_board($idBoard){
 	$result = run_sql($query) or die();
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	return $row;
+}
+
+function get_tokens_by_pc($idBoard, $pc){
+	$query = "SELECT * FROM tokens WHERE idBoard=$idBoard AND pc=$pc";
+	$result = run_sql($query) or die();
+	return $result;
 }
 
 function get_tokens_enemy($idBoard, $pc){

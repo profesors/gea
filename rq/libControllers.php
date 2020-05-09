@@ -63,7 +63,7 @@ function getGuideActionFunction($guideline){
 	return $ret;
 }
 
-function distanceTiles($x1, $y1, $x2, $y2){
+function distance_tiles($x1, $y1, $x2, $y2){
 	return sqrt(pow($x2-$x1,2)+pow($y2-$y1,2));
 }
 
@@ -75,7 +75,7 @@ function distanceTokens($token1, $token2){
 		for($b=0; $b<$token1['h'];$b++){
 			for($c=0; $c<$token2['w']; $c++){
 				for($d=0; $d<$token2['h']; $d++){
-					$current_d = distanceTiles($token1['x']+$a, $token1['y']+$b, $token2['x']+$c, $token2['y']+$d);
+					$current_d = distance_tiles($token1['x']+$a, $token1['y']+$b, $token2['x']+$c, $token2['y']+$d);
 					if ($current_d<$min_d){
 						$min_d = $current_d;
 						$x1 = $token1['x']+$a;
@@ -218,6 +218,73 @@ function isVisible_between_tiles(&$board, $im, &$token, $toX, $toY){
 	return $v;
 }
 
+function apply_lights(&$board, $im_walls, $im_full){
+	error_log("APPLY LIGHTS");
+	$arr_lights = array($board->ntilesw,$board->ntilesh);
+	$arr_lights2 = array($board->ntilesw,$board->ntilesh);
+	for ($y=0; $y<=$board->ntilesh+1; $y++) 
+		for($x=0; $x<=$board->ntilesw+1; $x++) {
+			$arr_lights[$x][$y]=0;
+			$arr_lights2[$x][$y]=0;
+		}
+
+	$black = imagecolorallocate($im_full, 0, 0, 0);
+	$arrBlack = array();
+	$max_d = 8;
+	$pi2 = 3.14/2.0;
+	for($d=0; $d<=$max_d; $d++){
+		$arrBlack[$d] = imagecolorallocatealpha($im_full, 0, 0, 0, 127*cos($pi2*(($d/$max_d))));
+	}
+	$rs_pc = get_tokens_by_pc($board->id, 1);
+	while($row_token = mysqli_fetch_array($rs_pc)){
+		for ($y=1; $y<=$board->ntilesh; $y++){
+			for ($x=1; $x<=$board->ntilesw; $x++){
+				$d = floor(distance_tiles($row_token['x'], $row_token['y'], $x, $y));
+				if ($x==3 && $y==22) error_log("D: $d");
+				//error_log("$x $y");
+				if ($d<=$max_d) {
+					$v = isVisible_between_tiles($board, $im_walls, $row_token, $x, $y);
+					if ($v){
+						$light = 127*cos($pi2*(($d/$max_d)));
+						if ($x==3 && $y==22) error_log("L: $light");
+						$arr_lights[$x][$y] = $arr_lights[$x][$y] + $light;
+						$arr_lights2[$x][$y] = $arr_lights[$x][$y] + $light;
+						if ($arr_lights[$x][$y]>127) {
+							$arr_lights[$x][$y] = 127;
+							$arr_lights2[$x][$y] = 127;
+						}	
+					}
+				}
+			}
+		}
+	}
+	# Compute valor promedio de la luz del alrededor
+	for ($y=1; $y<=$board->ntilesh; $y++){
+		for ($x=1; $x<=$board->ntilesw; $x++){
+			if ($arr_lights2[$x][$y]<64){
+				$total = 0;
+				for ($j=-1; $j<2; $j++){
+					for ($i=-1; $i<2; $i++){
+						$total += $arr_lights[$x+$i][$y+$j];
+					}
+				}
+				$arr_lights[$x][$y] = $total/8;
+			}
+		}
+	}
+	for ($y=1; $y<=$board->ntilesh; $y++){
+		for ($x=1; $x<=$board->ntilesw; $x++){
+			$px = ($x-1)*70;
+			$py = ($y-1)*70;
+			$px2 = $x*70;
+			$py2 = $y*70;
+			$color = imagecolorallocatealpha($im_full, 0,0,0,$arr_lights[$x][$y]);
+			imagefilledrectangle($im_full, $px, $py, $px2, $py2, $color);
+		}
+	}
+	imagejpeg($im_full, '../img/bg/010bg.jpg', 90);
+}
+
 function show_visible_npc($idBoard, $tokenName){
 	$board = get_board($idBoard);
 	$im_bg_wall = imagecreatefrompng("../img/bg/".$board->bg."_walls.png");
@@ -225,9 +292,12 @@ function show_visible_npc($idBoard, $tokenName){
 	$tokenPc = get_token($idBoard, $tokenName);
 	$arrTokens = array();
 	while ($tokenNpc = mysqli_fetch_array($rsTokens, MYSQLI_ASSOC)){
-		$v =can_see_tokens($im_bg_wall, $tokenPc, $tokenNpc, $board); 
-		if ($v){
-			set_token_opacity_by_name($idBoard, $tokenNpc['name'], 1);
+		$d = distance_tiles($tokenPc['x'], $tokenPc['y'], $tokenNpc['x'], $tokenNpc['y']);
+		if ($d<=8){
+			$v =can_see_tokens($im_bg_wall, $tokenPc, $tokenNpc, $board); 
+			if ($v){
+				set_token_opacity_by_name($idBoard, $tokenNpc['name'], 1);
+			}
 		}
 	}
 }

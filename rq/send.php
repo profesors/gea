@@ -85,8 +85,8 @@
 		if ($name!=null && $x!=null && $y!=null){
 			$token = get_token($idBoard, $name);
 			$board = get_board($idBoard);
-			$im = imagecreatefrompng("../img/bg/".$board->bg."_walls.png");
-			move_token_by_path($idBoard, $token, $arr_path, $im);
+			$im_walls = imagecreatefrompng("../img/bg/".$board->bg."_walls.png");
+			move_token_by_path($idBoard, $token, $arr_path, $im_walls);
 			if ($token['pc']==1){
 				show_visible_npc($idBoard, $name);
 			}

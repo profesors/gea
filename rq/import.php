@@ -1,15 +1,16 @@
 <?php
 include_once('libSql.php');
+include_once('libControllers.php');
 connectDB();
 
 reset_db();
-$files = array("medusa", "caravana");
+$files = array("medusa");
 
 foreach($files as $file){
 	# Import tokens to database
-	$board = json_decode(file_get_contents('../systems/lmde/boards/'.$file.'.json'));
-	$idBoard = insert_board($board);
-	foreach($board->tokens as $token_in_board){
+	$board_file = json_decode(file_get_contents('../systems/lmde/boards/'.$file.'.json'));
+	$idBoard = insert_board($board_file);
+	foreach($board_file->tokens as $token_in_board){
 		$token_json = json_decode(file_get_contents('../systems/lmde/tokens/'.$token_in_board->file.'.json'));
 		$token_json->x = $token_in_board->x;
 		$token_json->y = $token_in_board->y;
@@ -34,3 +35,7 @@ foreach($files as $file){
 		}
 	}
 }
+$board = get_board($idBoard);
+$im_walls = imagecreatefrompng("../img/bg/".$board->bg."_walls.png");
+$im_full = imagecreatefromjpeg("../img/bg/".$board->bg."_full.jpg");
+apply_lights($board, $im_walls, $im_full);
