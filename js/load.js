@@ -232,7 +232,6 @@ async function getTokens(idBoard, fromActionId=null){
 				console.log("Caso 2: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
 				var damage = newToken.attrs.hp-token.attrs.hp;
 				showIndicator(token, damage, "red", 2000, 2000, (board.tileh/2)+"px");
-				//showDamage(token, token.attrs.hp-newToken.attrs.hp);
 				token.attrs = newToken.attrs;
 				updateHp(token);
 				removeToken(token);

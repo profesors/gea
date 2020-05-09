@@ -288,7 +288,6 @@ function addSvgCanvas(){
 }
 
 function newTurn(){
-	console.log("COMIENZA TURNO "+board.turn);
 	for(var i=0; i<=arrTokens.length; i++){
 		if (arrTokens[i]!=null){
 			for (var key in arrTokens[i].steps){
@@ -296,6 +295,11 @@ function newTurn(){
 			}
 			arrTokens[i].divGuideline.style.filter = "initial";
 		}
+	}
+	if (board.turn==0){
+		board.output.innerHTML = '<p><strong>Turno libre</strong></p>';
+	} else {
+		board.output.innerHTML = '<p><strong>Nuevo turno</strong></p>';
 	}
 }
 
@@ -357,23 +361,10 @@ function drawPCPortraits(){
 				num.setAttribute("fill", "white");
 				svgPC.appendChild(num);
 
-
 				svgPanelPC.appendChild(svgPC);
 			}
 		}
 	}
-	// Icon dice
-	/*
-	var iconDice = document.createElementNS('http://www.w3.org/2000/svg','circle');
-	iconDice.setAttribute("cx",16);
-	iconDice.setAttribute("cy",16);
-	iconDice.setAttribute("r",16);
-	iconDice.setAttribute("fill", "white");
-	iconDice.setAttribute("stroke-width",1);
-	iconDice.setAttribute("stroke","white");
-	iconDice.setAttribute("onclick","showPanelDice()");
-	svgPanelPC.appendChild(iconDice);
-	*/
 }
 /*
 function showPanelDice(){
@@ -473,11 +464,13 @@ function isEnabled(token){
 }
 
 function removeAllLoadedTokens(){
-	while (arrTokens.length > 0){
-		var token = arrTokens.shift();
+	//while (arrTokens.length > 0){
+	for (var i=0; i<arrTokens.length; i++){
+		var token = arrTokens[i];
 		var divToken = document.getElementById("token_"+token.name);
 		canvas.removeChild(divToken);
 	}
+	arrTokens.length = 0;
 }
 
 function drawCellCoordinates(){
@@ -514,6 +507,9 @@ async function removeToken(token){
 		sendCommand("@"+(token.name)+" p"+(token.x)+","+(token.y)+","+(board.ntilesw+1)+","+(board.ntilesh+1)+" aout");
 		token.div.style.left = (board.ntilesw*board.tilew)+"px";
 		token.div.style.top = (board.ntilesh*board.tilesh)+"px";
+		canvas.removeChild(token.div);
+		token.x = board.ntilesw+1;
+		token.y = board.ntilesh+1;
 	}
 }
 
@@ -565,6 +561,7 @@ function togglePanelI(){
 function hidePanelI(){
 	var panel = document.getElementById("panelI");
 	panel.style.display = 'none';
+	board.output.style.display = 'none';
 }
 
 function pathEqual(path1, path2){

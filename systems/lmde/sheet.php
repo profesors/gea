@@ -44,6 +44,7 @@ $guidelines = get_guidelines($idBoard, $name);
 	<tr><td><strong>Clase de armadura</strong></td><td><?php echo $ac_desc; ?></td></tr>
 	<tr><td><strong>Puntos de golpe</strong></td><td><?php echo $attrs['hp'].'/'.$attrs['maxhp'];?> PG</td></tr>
 	<tr><td><strong>Movimiento</strong></td><td><?php echo $token_file->steps->movement;?> casillas</td></tr>
+	<tr><td><strong>Gac0</strong></td><td>+<?php echo $attrs['thaco'];?></td></tr>
 </table>
 </span>
 <span class="half">
