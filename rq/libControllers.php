@@ -258,17 +258,21 @@ function apply_lights(&$board, $im_walls, $im_full){
 			}
 		}
 	}
-	# Compute valor promedio de la luz del alrededor
+	# Compute dispersión de la luz
+	$dispersion = 0.7;
 	for ($y=1; $y<=$board->ntilesh; $y++){
 		for ($x=1; $x<=$board->ntilesw; $x++){
 			if ($arr_lights2[$x][$y]<64){
 				$total = 0;
-				for ($j=-1; $j<2; $j++){
-					for ($i=-1; $i<2; $i++){
-						$total += $arr_lights[$x+$i][$y+$j];
-					}
-				}
-				$arr_lights[$x][$y] = $total/8;
+				$total += $arr_lights[$x-1][$y-1]*$dispersion;
+				$total += $arr_lights[$x+1][$y-1]*$dispersion;
+				$total += $arr_lights[$x+1][$y+1]*$dispersion;
+				$total += $arr_lights[$x-1][$y+1]*$dispersion;
+				$total += $arr_lights[$x][$y-1];
+				$total += $arr_lights[$x][$y+1];
+				$total += $arr_lights[$x+1][$y];
+				$total += $arr_lights[$x-1][$y];
+				$arr_lights[$x][$y] = $arr_lights[$x][$y] + $total/8;
 			}
 		}
 	}
@@ -282,7 +286,7 @@ function apply_lights(&$board, $im_walls, $im_full){
 			imagefilledrectangle($im_full, $px, $py, $px2, $py2, $color);
 		}
 	}
-	imagejpeg($im_full, '../img/bg/010bg.jpg', 90);
+	imagejpeg($im_full, '../img/bg/'.$board->bg.'.jpg', 90);
 }
 
 function show_visible_npc($idBoard, $tokenName){

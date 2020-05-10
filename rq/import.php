@@ -10,6 +10,7 @@ foreach($files as $file){
 	# Import tokens to database
 	$board_file = json_decode(file_get_contents('../systems/lmde/boards/'.$file.'.json'));
 	$idBoard = insert_board($board_file);
+	$i=1;
 	foreach($board_file->tokens as $token_in_board){
 		$token_json = json_decode(file_get_contents('../systems/lmde/tokens/'.$token_in_board->file.'.json'));
 		$token_json->x = $token_in_board->x;
@@ -19,9 +20,10 @@ foreach($files as $file){
 		if (!property_exists($token_in_board, 'default_guideline_id')){
 			$token_in_board->default_guideline_id = 0;
 		}
-		insert_token($idBoard, $token_json->name, $token_json->x, $token_json->y, 1, $token_json->w, 
+		insert_token($i,$idBoard, $token_json->name, $token_json->x, $token_json->y, 1, $token_json->w, 
 			$token_json->h, $token_json->img, $token_json->border, 
 			$token_json->pc, $token_in_board->file, $token_json->pc, $token_in_board->default_guideline_id);
+		$i++;
 		foreach($token_json->attrs as $k => $v){
 			set_attr($idBoard, $token_json->name, $k, $v);
 		}

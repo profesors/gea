@@ -468,7 +468,9 @@ function removeAllLoadedTokens(){
 	for (var i=0; i<arrTokens.length; i++){
 		var token = arrTokens[i];
 		var divToken = document.getElementById("token_"+token.name);
-		canvas.removeChild(divToken);
+		if (divToken!=null) {
+			canvas.removeChild(divToken);
+		}
 	}
 	arrTokens.length = 0;
 }

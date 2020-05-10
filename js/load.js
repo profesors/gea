@@ -39,9 +39,11 @@ async function getBoard(idBoard){
 			canvasOver.style.height = (board.tileh*board.ntilesh)+0.5*board.tileh+"px";
 
 			getTokens(board.id, 0);	
-			const scrollTop = document.cookie.match(reScrollTop)[1];
-			const scrollLeft = document.cookie.match(reScrollLeft)[1];
-			window.scrollTo(scrollLeft, scrollTop);
+			const scrollTop = document.cookie.match(reScrollTop);
+			const scrollLeft = document.cookie.match(reScrollLeft);
+			if (scrollTop!=null && scrollTop!=null){
+				window.scrollTo(scrollLeft[1], scrollTop[1]);
+			}
 			
 			addSvgCanvas();	
 		}

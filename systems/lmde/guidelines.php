@@ -179,6 +179,7 @@ function lmde_mm($idBoard, $token1, $token2, $guideline){
 				$action_string.= '<p>'.mb_ucfirst(_('DAMAGE')).'&nbsp;<span class="red">'.($d6+1);
 				$action_string.= '</span>';
 				$action_string.= "=$d6(1d6)+1</p>";
+				$action_string.= '<p>'._('AMMUNITION').' '.$guideline['name'].' '.($guideline['n']-1).'</p>';
 				guideline_remove_counter($idBoard, $token1['name'], $guideline['guideNumber']);
 				set_animation($idBoard, $token1['name'], 1, 0, 3, $token1['x'], $token1['y'], $arrDist['x2'], $arrDist['y2']);
 				set_attr($idBoard, $token2['name'], 'hp', $token2['attrs']['hp']);

@@ -151,13 +151,13 @@ function guideline_get_n($idBoard, $tokenName, $guideNumber){
 
 # Insert token in database, if there is not $img_src or $border ignore it
 # If the token id is duplicate, just update it
-function insert_token($idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border, $opacity, $file, $pc, $default_guideline_id){
+function insert_token($token_id, $idBoard, $name, $x, $y, $z, $w, $h, $img_src, $border, $opacity, $file, $pc, $default_guideline_id){
 	$name = ($name=='')?'NULL':$name;
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
-	$query = "INSERT INTO `tokens` (`idBoard`,`name`,file,pc,`x`,`y`,`z`,`w`,`h`,`step`,`img`,`border`,";
+	$query = "INSERT INTO `tokens` (token_id, `idBoard`,`name`,file,pc,`x`,`y`,`z`,`w`,`h`,`step`,`img`,`border`,";
 	$query.= " opacity, `actionId`, ";
 	$query.= " defaultGuideline)";
-	$query.= " VALUES ('$idBoard', '$name', '$file',$pc, $x, $y, $z, $w, $h, 1, ";
+	$query.= " VALUES ($token_id, '$idBoard', '$name', '$file',$pc, $x, $y, $z, $w, $h, 1, ";
 	$query.= "'$img_src', '$border', $opacity,$nextActionId, $default_guideline_id) ";
 	$query.= " ON DUPLICATE KEY UPDATE x=$x, y=$y";
 	if ($img_src != ''){
@@ -430,6 +430,7 @@ function new_turn($idBoard){
 	$q = "UPDATE boards SET turn=turn+1 WHERE id=$idBoard";
 	run_sql($q) or die();
 	$q = "UPDATE steps SET current=max WHERE idBoard=1";
+	error_log("Nuevo turno: ".$q);
 	run_sql($q) or die();
 }
 

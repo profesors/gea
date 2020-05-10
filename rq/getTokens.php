@@ -4,8 +4,8 @@ connectDB();
 $idBoard = secure_param('idBoard');
 $fromActionId = secure_param('fromActionId');
 
-$fromActionId=10;
-$idBoard = 1;
+#$fromActionId=10;
+#$idBoard = 1;
 
 # Get tokens from board
 $query = "SELECT * FROM tokens WHERE idBoard = $idBoard AND actionId>$fromActionId;";

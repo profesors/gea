@@ -34,14 +34,14 @@
 		"number":1,
 		"icon":"sword",
 		"name":"espada larga",
-		"short_desc": "1d8",
+		"short_desc": "daño 1d8",
 		"action": "flmde_attack r1 d1d8 ba1,2 bd1"
 		},
 		{
 		"number":2,
 		"icon":"bow",
 		"name":"arco largo",
-		"short_desc":"Alcance 5/10/15 1d8",
+		"short_desc":"Alcance 5/10/15 daño 1d8",
 		"action": "flmde_rangedAttack r5,10,15 d1d8 ba1,3 bd1",
 		"maxn": 20,
 		"n": 20
@@ -50,8 +50,8 @@
 		"number":3,
 		"icon":"energy-arrow",
 		"name":"proyectil mágico",
-		"short_desc":"Alcance 13 1d6",
-		"action": "flmde_mm r13,13,13 d1d6",
+		"short_desc":"Alcance 13 daño 1d6+1",
+		"action": "flmde_mm r13,13,13",
 		"maxn": 5,
 		"n": 5
 		}

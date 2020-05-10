@@ -141,6 +141,7 @@
 			if ($turn==''){
 				new_turn($idBoard);
 			} else {
+				new_turn($idBoard);
 				set_turn($idBoard, $turn);
 			}
 		}
