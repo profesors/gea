@@ -13,6 +13,7 @@ if ($n>0 && $n<=10){
 
 	$query = "SELECT * FROM (SELECT * FROM actions WHERE idBoard = $idBoard ";
 	$query.= "AND idUser = 1 ORDER BY ts DESC LIMIT $n) AS var ORDER BY ts ASC";
+	error_log("ACTION $query");
 	$result = run_sql($query) or die();
 
 	#header('Content-Type: text/html; charset=utf-8');

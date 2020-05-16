@@ -5,7 +5,7 @@
 	include_once('../systems/lmde/guidelines.php');
 	connectDB();
 	setup_lang();
-	#$_GET['m'] = "@Groonan tVrozz";
+	#$_GET['m'] = "@Groonan i1";
 	#$_GET['idBoard'] = 1;
 
 	# Multiple spaces into just one
@@ -45,6 +45,18 @@
 			$token = get_token($idBoard, $name);
 			$attr = explode(',',$arrParams[1]);
 			lmde_check($idBoard, $token, $attr[0]);
+		}
+
+		# Inventory ******************************************
+		if (preg_match("/\si([^ ]+)/", $command, $arrParams)){
+			$token = get_token($idBoard, $name);
+			$inventory_id = $arrParams[1];
+			$inventory = get_inventory_by_id($inventory_id);
+			try{
+				call_user_func($inventory['function'], $token['token_id'], $inventory_id);
+			} catch(Exception $e){
+				error_log("ERROR send.php: No call_user_func\n");
+			}
 		}
 		# Maneuvers ******************************************
 		if (preg_match("/\sm([^ ]+)/", $command, $arrParams)){

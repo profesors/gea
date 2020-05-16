@@ -16,11 +16,30 @@ $token_file = json_decode(file_get_contents('tokens/'.$token['file'].'.json'));
 $attrs = get_attrs($idBoard, $name);
 $guidelines = get_guidelines($idBoard, $name);
 ?>
+<!-- Lado izquiedo -->
 <span class="sheet_left">
 <h1><?php echo $token['name']; ?></h1>
 <p><?php echo $token_file->short_description; ?></p>
-	<img src="img/sheet/human_body2.png">
+	<img src="img/sheet/human_body2.png" style="height:400px">
+<h2>Inventario</h2>
+<table>
+<?php
+$rs_inventory = get_inventory_by_token_id($token['token_id']);
+while($inv = mysqli_fetch_array($rs_inventory, MYSQLI_ASSOC)){
+	if ($inv['n']>0){
+		$command = '@'.$token['name'].' i'.$inv['inventory_id'];
+		echo '<tr><td>';
+		echo '<a onclick="javascript:sendCommand(\''.$command.'\'); closeInfoCharacter();"';
+		echo 'class="select_box" style="cursor:pointer;">&#129514;</a>&nbsp;</td>';
+		echo '<td class="car1"><strong>'.mb_strtoupper(_(mb_strtoupper($inv['name']))).'</strong>';
+		echo ' ('.$inv['n'].')</td></tr>';
+	}
+}	
+?>
+</table>
 </span>
+
+<!-- Lado derecho -->
 
 <span class="sheet_right">
 <a class="close" onclick="closeInfoCharacter();">Cerrar</a>
@@ -73,8 +92,7 @@ $guidelines = get_guidelines($idBoard, $name);
 		echo ' onclick="sendCommand(\'@'.$token['name'].' mdefensive\'); ';
 		echo ' refreshSheet(\''.$token['name'].'\');">&#9744;</a>';
 	}?>
-	<td><strong>Lucha defensiva</strong></td>
-	<tr><td></td><td><strong>Moverse en silencio</strong>45%</td></tr>
+	<td><strong>Lucha defensiva</strong></td></tr>
 </table>
 </span>
 </div>

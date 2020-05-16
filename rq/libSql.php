@@ -39,6 +39,8 @@ function reset_db(){
 	run_sql($query) or die();
 	$query = "TRUNCATE mods;";
 	run_sql($query) or die();
+	$query = "TRUNCATE inventory;";
+	run_sql($query) or die();
 }
 
 function secure_param($name){
@@ -231,10 +233,23 @@ function set_attr($idBoard, $name, $attr, $val){
 	$query = "INSERT INTO attrs (idBoard, tokenName, attr, val) ";
 	$query.= "VALUES ($idBoard,'$name','$attr',$val) ";
 	$query.= " ON DUPLICATE KEY UPDATE val='$val'";
-	error_log($query);
 	run_sql($query) or die();
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
 	$query = "UPDATE tokens SET actionId=$nextActionId WHERE idBoard=$idBoard AND name='$name'";
+	run_sql($query) or die();
+	increase_last_actionId($idBoard, 1);
+}
+
+function set_attr2($token_id, $attr, $val){
+	$token = get_token_by_id($token_id);
+	$query = "INSERT INTO attrs (idBoard, tokenName, attr, val) ";
+	$query.= "VALUES (".$token['idBoard'].",'".$token['name']."','$attr',$val) ";
+	$query.= " ON DUPLICATE KEY UPDATE val='$val'";
+	run_sql($query) or die();
+	$idBoard = $token['idBoard'];
+	$tokenName = $token['name'];
+	$nextActionId = intval(read_last_actionId($idBoard))+1;
+	$query = "UPDATE tokens SET actionId=$nextActionId WHERE idBoard=$idBoard AND name='$tokenName'";
 	run_sql($query) or die();
 	increase_last_actionId($idBoard, 1);
 }
@@ -354,6 +369,14 @@ function get_attrs($idBoard, $tokenName){
 
 function get_attr($idBoard, $tokenName, $attrName){
 	$q = "SELECT val FROM attrs WHERE idBoard=$idBoard AND tokenName='$tokenName' AND attr='$attrName'";
+	$result = run_sql($q) or die();
+	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+	return $row['val'];
+}
+
+function get_attr2($token_id, $attrName){
+	$token = get_token_by_id($token_id);
+	$q = "SELECT val FROM attrs WHERE idBoard=".$token['idBoard']." AND tokenName='".$token['name']."' AND attr='$attrName'";
 	$result = run_sql($q) or die();
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 	return $row['val'];
@@ -518,6 +541,37 @@ function has_status($idBoard, $tokenName, $status){
 
 function remove_status($idBoard, $tokenName, $status){
 	$q = "DELETE FROM mods WHERE idBoard=$idBoard AND tokenName='$tokenName' AND status='$status'";
+	run_sql($q) or die();
+}
+
+/****************************** INVENTORY ********************/
+function insert_inventory($token_id, $inv_name, $n, $position, $function){
+	$q = "INSERT INTO inventory (token_id, name, n, position, function)";
+	$q.= " VALUES ($token_id, '$inv_name', $n, $position, '$function') ";
+	$q.= " ON DUPLICATE KEY UPDATE n=n+1";
+	run_sql($q) or die();
+}
+
+function get_inventory_by_id($inventory_id){
+	$q = "SELECT * FROM inventory WHERE inventory_id = $inventory_id";
+	$rs = run_sql($q) or die();
+	return mysqli_fetch_array($rs, MYSQLI_ASSOC);
+}
+
+function get_inventory_by_token_id($token_id){
+	$q = "SELECT * FROM inventory WHERE token_id = $token_id";
+	$rs = run_sql($q) or die();
+	return $rs;
+}
+
+function get_inventory_by_tokenid_and_name($token_id, $inv_name){
+	$q = "SELECT * FROM inventory WHERE token_id = $token_id AND name='$inv_name' LIMIT 1";
+	$rs = run_sql($q) or die();
+	return mysqli_fetch_array($rs, MYSQLI_ASSOC);
+}
+
+function inventory_remove_counter($token_id, $inv_name){
+	$q = "UPDATE inventory SET n=n-1 WHERE token_id=$token_id AND name='$inv_name'";
 	run_sql($q) or die();
 }
 ?>

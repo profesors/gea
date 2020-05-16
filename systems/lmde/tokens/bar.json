@@ -45,5 +45,13 @@
 		"maxn": 5,
 		"n": 5
 		}
+	],
+	"inventory":[
+		{
+			"name":"poción de curación",
+			"n":2,
+			"position":1,
+			"function":"lmde_health_potion"
+		}
 	]
 }

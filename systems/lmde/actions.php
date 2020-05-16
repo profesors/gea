@@ -41,3 +41,20 @@ function lmde_defensive($idBoard, $token){
 		set_mod($idBoard, $token['name'], 'ac', 'defensive', _('DEFENSIVE'), 2, $newTurn);
 	}
 }
+
+function lmde_health_potion($token_id, $inventory_id){
+	$inv = get_inventory_by_id($inventory_id);
+	if ($inv['n']>0){
+		error_log("BEBO POCION");
+		$d8 = one_roll(1,8);
+		$token = get_token_by_id($token_id);
+		$hp = get_attr2($token_id, 'hp');
+		$max_hp = get_attr2($token_id, 'maxhp');
+		$new_hp = $hp+$d8>$max_hp?$max_hp:$hp+$d8;
+		set_attr2($token_id, 'hp', $new_hp);
+		$action_string = "<p><span class='name_text'>".$token['name']."</span> "._('USES')." ".$inv['name'].' ';
+		$action_string.= _('REACHS').' '.$new_hp.' '._('HP').'</p>';
+		insert_action($token['idBoard'], $action_string);
+		inventory_remove_counter($token['token_id'], $inv['name']);
+	}
+}
