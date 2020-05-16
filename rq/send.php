@@ -99,7 +99,7 @@
 			$board = get_board($idBoard);
 			$im_walls = imagecreatefrompng("../img/bg/".$board->bg."_walls.png");
 			move_token_by_path($idBoard, $token, $arr_path, $im_walls);
-			if ($token['pc']==1){
+			if ($board->lights==0){
 				show_visible_npc($idBoard, $name);
 			}
 			insert_action($idBoard, "<span class='name_text'>$name</span> "._("MOVES TO")." $x,$y");

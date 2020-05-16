@@ -9,6 +9,7 @@
 	"bg":"010bg",
 	"drawGrid":0,
 	"lastActionId":0,
+	"lights":1,
 	"tokens": [
 		{
 			"file": "bar",

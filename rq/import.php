@@ -7,6 +7,7 @@ reset_db();
 $files = array("medusa", "baddon1");
 
 $token_id=1;
+$board_file;
 foreach($files as $file){
 	global $db;
 	# Import tokens to database
@@ -44,6 +45,9 @@ foreach($files as $file){
 	}
 }
 $board = get_board($idBoard);
-$im_walls = imagecreatefrompng("../img/bg/".$board->bg."_walls.png");
-$im_full = imagecreatefromjpeg("../img/bg/".$board->bg."_full.jpg");
-//apply_lights($board, $im_walls, $im_full);
+if ($board->lights==1){
+	$im_walls = imagecreatefrompng("../img/bg/".$board->bg."_walls.png");
+	$im_full = imagecreatefromjpeg("../img/bg/".$board->bg."_full.jpg");
+	apply_lights($board, $im_walls, $im_full);
+}
+echo "LOADED";

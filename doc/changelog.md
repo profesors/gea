@@ -5,7 +5,8 @@
 
 ## Versiones
 
-1.53	Cambio de tablero
+1.54	Luces avanzadas cuyas fuentes se sacan de una tabla de la base de datos
+1.53	Permite dos tableros
 1.52	Inventario
 1.51	Panel de control de master
 1.50	Mejoras

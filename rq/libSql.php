@@ -90,10 +90,12 @@ function read_last_actionId($idBoard){
 function get_board($idBoard){
 	$query = "SELECT * FROM boards WHERE id = $idBoard LIMIT 1;";
 	$result = run_sql($query) or die();
-	$row = mysqli_fetch_array($result);
+	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+	$row['bgTs'] = get_bg_ts($idBoard);
 	$ret = new stdClass();
 	$ret->id = $row['id'];
 	$ret->name = $row['name'];
+	$ret->lights = $row['lights'];
 	$ret->tilew = $row['tilew'];
 	$ret->tileh = $row['tileh'];
 	$ret->ntilesw = $row['ntilesw'];
@@ -192,14 +194,13 @@ function move_token_by_path($idBoard, &$token, $arrPath_tiles, $im_walls){
 	for ($i=0; $i<sizeof($arrPath_tiles); $i++){
 		$x = $arrPath_tiles[$i]['x'];
 		$y = $arrPath_tiles[$i]['y'];
-		$is_visible = isVisible_between_tiles($board, $im_walls, $token, $x, $y);
+		$is_visible = isVisible_between_tiles($board, $im_walls, $token['x'], $token['y'], $x, $y);
 		if ($is_visible){
 			$is_free = free_from_enemy_in_tile($idBoard, $token, $x, $y);
 			if ($is_free){
 				$current_d = distance_tiles($token['x'], $token['y'], $x, $y);
 				if (floor($current_d)<=1){
 					$step = get_step($idBoard, $token['name'], 'movement');
-					error_log("STEP ".$step['current']);
 					if (($step['current']-$current_d)>=0){
 						move_token($idBoard, $token, $arrPath_tiles[$i]['x'], $arrPath_tiles[$i]['y'], false);
 						if ($i>0 && $turn>0) {
@@ -407,8 +408,9 @@ function get_guideline($idBoard, $tokenName, $guideNumber){
 
 function insert_board($board){
 	global $db;
-	$query = 'INSERT INTO boards (id, name, tilew, tileh, ntilesw, ntilesh, offsetx, offsety, bg, drawGrid, lastActionId, turn)';
-	$query.= " VALUES (null, '$board->name', $board->tilew, $board->tileh, $board->ntilesw, $board->ntilesh, ";
+	$query = 'INSERT INTO boards (id, name,lights,tilew, tileh, ntilesw, ntilesh, offsetx, ';
+	$query.= 'offsety, bg, drawGrid, lastActionId, turn)';
+	$query.= " VALUES (null, '$board->name', $board->lights,$board->tilew, $board->tileh, $board->ntilesw, $board->ntilesh, ";
 	$query.= " $board->offsetx, $board->offsety, '$board->bg', $board->drawGrid, 0, 1) ";
 	$result = run_sql($query) or die();
 	return mysqli_insert_id($db);
@@ -583,5 +585,12 @@ function get_game($game_id){
 	$q = "SELECT * FROM games WHERE game_id=$game_id";
 	$rs = run_sql($q) or die();
 	return mysqli_fetch_array($rs, MYSQLI_ASSOC); 
+}
+
+/**************************** LIGHTS ******************************/
+function get_lights_by_board_id($board_id){
+	$q = "SELECT * FROM lights WHERE board_id=$board_id";
+	$rs = run_sql($q) or die();
+	return $rs;
 }
 ?>

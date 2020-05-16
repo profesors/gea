@@ -118,6 +118,31 @@ function get_number_of_corners_in_token(&$token){
 	return ($token['w']+1)*($token['h']+1);
 }
 
+function n_corners_visible(&$board, $im_bg_wall, $tilex1, $tiley1, $tilex2, $tiley2, $max=null){
+	$n_visible = 0;
+	for($a=0; $a<=1; $a++){		# Origin corner
+		for ($b=0; $b<=1; $b++){
+			$x1=$board->tilew*($tilex1-1+$a);
+			$y1=$board->tileh*($tiley1-1+$b);
+			for ($y=0; $y<=1; $y++){	# Destiny corner
+				for ($x=0; $x<=1; $x++){
+					$x2=$board->tilew*($tilex2-1+$x);
+					$y2=$board->tileh*($tiley2-1+$y);
+					$hidden_corners = 0;
+					$v = isVisible_between_pixels($im_bg_wall, $x1, $y1, $x2, $y2);
+					if ($v){
+						$n_visible++;
+					} 
+					if ($n_visible==$max){
+						return $n_visible;
+					}
+				}
+			}
+		}
+	}
+	return $n_visible;
+}
+
 # Returns min number of hidden corners
 function min_hidden_corners_visible($im_bg_wall, &$token1, &$token2, &$board){
 	$min_hidden_corners = PHP_INT_MAX;
@@ -209,6 +234,15 @@ function free_from_enemy_in_tile($idBoard, &$token, $x, $y){
 	return true;
 }
 
+function isVisible_between_tiles(&$board, $im, $fromX1, $fromY1, $toX, $toY){
+	$x1 = ($fromX1-1)*$board->tilew+$board->offsetx+0.5*$board->tilew;
+	$y1 = ($fromY1-1)*$board->tileh+$board->offsety+0.5*$board->tileh;
+	$x2 = ($toX-1)*$board->tilew+$board->offsetx+0.5*$board->tilew;
+	$y2 = ($toY-1)*$board->tileh+$board->offsety+0.5*$board->tileh;
+	$v = isVisible_between_pixels($im, $x1, $y1, $x2, $y2);
+	return $v;
+}
+/*
 function isVisible_between_tiles(&$board, $im, &$token, $toX, $toY){
 	$x1 = ($token['x']-1)*$board->tilew+$board->offsetx+0.5*$board->tilew;
 	$y1 = ($token['y']-1)*$board->tileh+$board->offsety+0.5*$board->tileh;
@@ -216,10 +250,9 @@ function isVisible_between_tiles(&$board, $im, &$token, $toX, $toY){
 	$y2 = ($toY-1)*$board->tileh+$board->offsety+0.5*$board->tileh;
 	$v = isVisible_between_pixels($im, $x1, $y1, $x2, $y2);
 	return $v;
-}
+}*/
 
 function apply_lights(&$board, $im_walls, $im_full){
-	error_log("APPLY LIGHTS");
 	$arr_lights = array($board->ntilesw,$board->ntilesh);
 	$arr_lights2 = array($board->ntilesw,$board->ntilesh);
 	for ($y=0; $y<=$board->ntilesh+1; $y++) 
@@ -229,30 +262,37 @@ function apply_lights(&$board, $im_walls, $im_full){
 		}
 
 	$black = imagecolorallocate($im_full, 0, 0, 0);
-	$arrBlack = array();
-	$max_d = 8;
-	$pi2 = 3.14/2.0;
-	for($d=0; $d<=$max_d; $d++){
-		$arrBlack[$d] = imagecolorallocatealpha($im_full, 0, 0, 0, 127*cos($pi2*(($d/$max_d))));
-	}
 	$rs_pc = get_tokens_by_pc($board->id, 1);
-	while($row_token = mysqli_fetch_array($rs_pc)){
+	$rs_lights = get_lights_by_board_id($board->id);
+	while($light = mysqli_fetch_array($rs_lights)){
+		//echo "LUZ ".$light['tilex']." ".$light['tiley']." I:".$light['intensity']." ID".$light['light_id'];
+		$max_d = $light['intensity'];
+		$pi2 = 3.14/2.0;
+		$arrBlack = array();
+		for($d=0; $d<=$max_d; $d++){
+			$arrBlack[$d] = imagecolorallocatealpha($im_full, 0, 0, 0, 127*cos($pi2*(($d/$max_d))));
+		}
 		for ($y=1; $y<=$board->ntilesh; $y++){
 			for ($x=1; $x<=$board->ntilesw; $x++){
-				$d = floor(distance_tiles($row_token['x'], $row_token['y'], $x, $y));
-				if ($x==3 && $y==22) error_log("D: $d");
-				//error_log("$x $y");
+				$d = floor(distance_tiles($light['tilex'], $light['tiley'], $x, $y));
+				//if ($x==5 && $y==25) error_log($light['tilex']);
 				if ($d<=$max_d) {
-					$v = isVisible_between_tiles($board, $im_walls, $row_token, $x, $y);
-					if ($v){
-						$light = 127*cos($pi2*(($d/$max_d)));
-						if ($x==3 && $y==22) error_log("L: $light");
-						$arr_lights[$x][$y] = $arr_lights[$x][$y] + $light;
-						$arr_lights2[$x][$y] = $arr_lights[$x][$y] + $light;
-						if ($arr_lights[$x][$y]>127) {
-							$arr_lights[$x][$y] = 127;
-							$arr_lights2[$x][$y] = 127;
-						}	
+					$v1 = n_corners_visible($board,$im_walls, $light['tilex'],$light['tiley'],$x,$y,2)==2;
+					if ($v1){
+						while($token=mysqli_fetch_array($rs_pc, MYSQLI_ASSOC)){
+							$v2 = isVisible_between_tiles($board, $im_walls, $token['x'], $token['y'], $x, $y);
+							if ($v2){
+								$intensity = 127*cos($pi2*(($d/$max_d)));
+								//if ($x==3 && $y==22) error_log("L: $intensity");
+								$arr_lights[$x][$y] = $arr_lights[$x][$y] + $intensity;
+								$arr_lights2[$x][$y] = $arr_lights[$x][$y] + $intensity;
+								if ($arr_lights[$x][$y]>127) {
+									$arr_lights[$x][$y] = 127;
+									$arr_lights2[$x][$y] = 127;
+								}	
+							}
+						}
+						mysqli_data_seek($rs_pc, 0);
 					}
 				}
 			}
@@ -287,6 +327,18 @@ function apply_lights(&$board, $im_walls, $im_full){
 		}
 	}
 	imagejpeg($im_full, '../img/bg/'.$board->bg.'.jpg', 90);
+
+	# Show visible NPC
+	$rsNpcTokens = get_npc_hidden_tokens($board->id);
+	while($npc = mysqli_fetch_array($rsNpcTokens, MYSQLI_ASSOC)){
+		$intensity = $arr_lights[$npc['x']][$npc['y']];
+		if ($intensity>32){
+			//error_log("INTENSIDAD $intensity para ver a ".$npc['name']);
+			//if (can_see_tokens($im_bg_wall, $token, $npc, $board)){
+				set_token_opacity_by_name($board->id, $npc['name'], $intensity);
+			//}
+		}
+	}
 }
 
 function show_visible_npc($idBoard, $tokenName){
@@ -297,12 +349,12 @@ function show_visible_npc($idBoard, $tokenName){
 	$arrTokens = array();
 	while ($tokenNpc = mysqli_fetch_array($rsTokens, MYSQLI_ASSOC)){
 		$d = distance_tiles($tokenPc['x'], $tokenPc['y'], $tokenNpc['x'], $tokenNpc['y']);
-		if ($d<=8){
+		//if ($d<=8){
 			$v =can_see_tokens($im_bg_wall, $tokenPc, $tokenNpc, $board); 
 			if ($v){
 				set_token_opacity_by_name($idBoard, $tokenNpc['name'], 1);
 			}
-		}
+		//}
 	}
 }
 
