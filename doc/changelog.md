@@ -5,6 +5,8 @@
 
 ## Versiones
 
+1.51	Panel de control de master
+1.50	Mejoras
 1.49	Luz dinámica
 1.48	Añadido Gac0 a la ficha y elimina correctamente tokens del tablero
 1.45	Output en servidor correcto con ñ y tilde

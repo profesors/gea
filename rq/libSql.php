@@ -231,6 +231,7 @@ function set_attr($idBoard, $name, $attr, $val){
 	$query = "INSERT INTO attrs (idBoard, tokenName, attr, val) ";
 	$query.= "VALUES ($idBoard,'$name','$attr',$val) ";
 	$query.= " ON DUPLICATE KEY UPDATE val='$val'";
+	error_log($query);
 	run_sql($query) or die();
 	$nextActionId = intval(read_last_actionId($idBoard))+1;
 	$query = "UPDATE tokens SET actionId=$nextActionId WHERE idBoard=$idBoard AND name='$name'";
@@ -297,6 +298,13 @@ function get_token($idBoard, $name){
 	return $row;
 }
 
+function get_token_by_id($token_id){
+	$query = "SELECT * FROM tokens WHERE token_id=$token_id LIMIT 1";
+	$result = run_sql($query) or die();
+	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+	return $row;
+}
+
 function get_token_by_tile($idBoard, $tilex, $tiley){
 	$query = "SELECT * FROM tokens WHERE idBoard=$idBoard AND x=$tilex AND y=$tiley LIMIT 1";
 	$result = run_sql($query) or die();
@@ -306,9 +314,8 @@ function get_token_by_tile($idBoard, $tilex, $tiley){
 
 function get_tokens_by_board($idBoard){
 	$query = "SELECT * FROM tokens WHERE idBoard=$idBoard";
-	$result = run_sql($query) or die();
-	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-	return $row;
+	$rs = run_sql($query) or die();
+	return $rs;
 }
 
 function get_tokens_by_pc($idBoard, $pc){

@@ -1,0 +1,26 @@
+html {
+	background-color: white;
+}
+
+h3{
+	font-size: 1.4rem;
+	margin-top: 1rem;
+	color: blue;
+}
+th {
+	background-color: black;
+	color: white;
+	font-weight: bold;
+	border: 1px solid black;
+	padding: 0 0.5rem 0 0.5rem;
+}
+
+td {
+	border: 1px solid black;
+	text-align: center;
+}
+
+input.attr_val{
+	width: 2rem;
+	text-align: center;
+}

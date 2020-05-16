@@ -185,10 +185,12 @@ async function getTokens(idBoard, fromActionId=null){
 					changeTokenOpacity(token, newToken.opacity);
 				}
 				// Lose HP
-				if (token.attrs.hp > newToken.attrs.hp){	// Lose HP
-					var damage = newToken.attrs.hp-token.attrs.hp;
-					showIndicator(token, damage, "red", 2000, 2000, (board.tileh/2)+"px");
-					//showDamage(token, token.attrs.hp-newToken.attrs.hp);
+				if (token.attrs.hp != newToken.attrs.hp){	// Lose HP
+					var diff = newToken.attrs.hp-token.attrs.hp;
+					diff = diff<=0?diff:'+'+diff;
+					var color = 'white';
+					var color = diff<0?'red':'aqua';
+					showIndicator(token, diff, color, 2000, 2000, (board.tileh/2)+"px");
 					token.attrs.hp = newToken.attrs.hp;
 					updateHp(token);
 				} 
