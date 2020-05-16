@@ -274,7 +274,7 @@ window.addEventListener("DOMContentLoaded", function() {
 });
 
 async function main(){
-	var BOARD = 1;
+	var BOARD = 2;
 	await getBoard(BOARD);	/* Number of board */
 	while(board==null)	{
 		await sleep(T_PRECISION);

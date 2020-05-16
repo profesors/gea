@@ -199,6 +199,7 @@ function move_token_by_path($idBoard, &$token, $arrPath_tiles, $im_walls){
 				$current_d = distance_tiles($token['x'], $token['y'], $x, $y);
 				if (floor($current_d)<=1){
 					$step = get_step($idBoard, $token['name'], 'movement');
+					error_log("STEP ".$step['current']);
 					if (($step['current']-$current_d)>=0){
 						move_token($idBoard, $token, $arrPath_tiles[$i]['x'], $arrPath_tiles[$i]['y'], false);
 						if ($i>0 && $turn>0) {
@@ -225,8 +226,10 @@ function move_token_by_path($idBoard, &$token, $arrPath_tiles, $im_walls){
 	$path = trim($path, ',');
 	$q = "UPDATE tokens SET path='$path' WHERE idBoard=$idBoard AND name='".$token['name']."'";
 	run_sql($q) or die();
-	$im_full = imagecreatefromjpeg("../img/bg/010bg_full.jpg");
-	apply_lights($board, $im_walls, $im_full);
+	if ($board->lights==1){
+		$im_full = imagecreatefromjpeg("../img/bg/".$board->bg."_full.jpg");
+		apply_lights($board, $im_walls, $im_full);
+	}
 }
 
 function set_attr($idBoard, $name, $attr, $val){
@@ -459,7 +462,7 @@ function new_turn($idBoard){
 	run_sql($q) or die();
 	$q = "UPDATE boards SET turn=turn+1 WHERE id=$idBoard";
 	run_sql($q) or die();
-	$q = "UPDATE steps SET current=max WHERE idBoard=1";
+	$q = "UPDATE steps SET current=max WHERE idBoard=$idBoard";
 	error_log("Nuevo turno: ".$q);
 	run_sql($q) or die();
 }
@@ -573,5 +576,12 @@ function get_inventory_by_tokenid_and_name($token_id, $inv_name){
 function inventory_remove_counter($token_id, $inv_name){
 	$q = "UPDATE inventory SET n=n-1 WHERE token_id=$token_id AND name='$inv_name'";
 	run_sql($q) or die();
+}
+
+/************************ GAME ***************************/
+function get_game($game_id){
+	$q = "SELECT * FROM games WHERE game_id=$game_id";
+	$rs = run_sql($q) or die();
+	return mysqli_fetch_array($rs, MYSQLI_ASSOC); 
 }
 ?>

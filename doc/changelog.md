@@ -5,6 +5,7 @@
 
 ## Versiones
 
+1.53	Cambio de tablero
 1.52	Inventario
 1.51	Panel de control de master
 1.50	Mejoras

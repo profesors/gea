@@ -1,0 +1,84 @@
+{
+	"name":"Baddon Roith 1",
+	"tilew":70,
+	"tileh":70,
+	"ntilesw":19,
+	"ntilesh":25,
+	"offsetx":0,
+	"offsety":0,
+	"bg":"011bg",
+	"drawGrid":0,
+	"lastActionId":0,
+	"tokens": [
+		{
+			"file": "bar",
+			"name": "Groonan",
+			"x": 9,
+			"y": 22,
+			"default_guideline_id":1
+		},
+		{
+			"file": "exp",
+			"name": "Connor",
+			"x": 10,
+			"y": 22,
+			"default_guideline_id":2
+		},
+		{
+			"file": "elf",
+			"name": "Varyarel",
+			"x": 10,
+			"y": 23,
+			"default_guideline_id":3
+		},
+		{
+			"file": "thief_baddon",
+			"name": "Dexter",
+			"x":7,
+			"y":12,
+			"default_guideline_id":1
+		},
+		{
+			"file": "thief_baddon",
+			"name": "Luca",
+			"x":7,
+			"y":20,
+			"default_guideline_id":1
+		},
+		{
+			"file": "thief_baddon",
+			"name": "Jenson",
+			"x":6,
+			"y":16,
+			"default_guideline_id":1
+		},
+		{
+			"file": "thief_baddon",
+			"name": "Oscar",
+			"x":4,
+			"y":16,
+			"default_guideline_id":1
+		},
+		{
+			"file": "thief_baddon",
+			"name": "Graeme",
+			"x":4,
+			"y":18,
+			"default_guideline_id":1
+		},
+		{
+			"file": "thief_baddon",
+			"name": "Krish",
+			"x":4,
+			"y":19,
+			"default_guideline_id":1
+		},
+		{
+			"file": "thief_baddon",
+			"name": "Finn",
+			"x":5,
+			"y":21,
+			"default_guideline_id":1
+		}
+	]
+}

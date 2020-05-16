@@ -4,7 +4,7 @@ include_once('libSql.php');
 connectDB();
 $idBoard = secure_param('idBoard');
 
-$idBoard = 1;
+#$idBoard = 1;
 
 $lastId = read_last_actionId($idBoard);
 $bg_ts = get_bg_ts($idBoard);
