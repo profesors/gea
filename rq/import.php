@@ -46,8 +46,8 @@ foreach($files as $file){
 }
 $board = get_board($idBoard);
 if ($board->lights==1){
-	$im_walls = imagecreatefrompng("../img/bg/".$board->bg."_walls.png");
-	$im_full = imagecreatefromjpeg("../img/bg/".$board->bg."_full.jpg");
+	$im_walls = imagecreatefrompng("../img/bg/".$board_file->bg."_walls.png");
+	$im_full = imagecreatefromjpeg("../img/bg/".$board_file->bg."_full.jpg");
 	apply_lights($board, $im_walls, $im_full);
 }
-echo "LOADED";
+echo "LOADED ".time();

@@ -314,19 +314,21 @@ async function changeBackground(newBg){
 }
 
 async function changeTokenOpacity(token, newVal){
-	await sleep(1000);
+	//await sleep(1000);
 	var t0 = (new Date).getTime();
 	var tf = t0+1000;
 	var tt = tf-t0;
 	var t = 0.0;
+	var currentOp = Number.parseFloat(token.div.style.opacity);
+	var d = newVal-currentOp;
 	const k = Math.PI/(2*tt);
 	while(t<tt){
 		var p = t/tt;
-		token.div.style.opacity = p;
+		token.div.style.opacity = currentOp+p*d;
 		await sleep(T_PRECISION);
 		t = (new Date).getTime() - t0;
 	}
-	token.div.style.opacity = 1;
+	token.div.style.opacity = newVal;
 }
 
 

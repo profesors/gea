@@ -41,6 +41,8 @@ function reset_db(){
 	run_sql($query) or die();
 	$query = "TRUNCATE inventory;";
 	run_sql($query) or die();
+	$query = "TRUNCATE lights;";
+	run_sql($query) or die();
 }
 
 function secure_param($name){
@@ -91,7 +93,7 @@ function get_board($idBoard){
 	$query = "SELECT * FROM boards WHERE id = $idBoard LIMIT 1;";
 	$result = run_sql($query) or die();
 	$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-	$row['bgTs'] = get_bg_ts($idBoard);
+	//$row['bgTs'] = get_bg_ts($idBoard);
 	$ret = new stdClass();
 	$ret->id = $row['id'];
 	$ret->name = $row['name'];
@@ -413,7 +415,15 @@ function insert_board($board){
 	$query.= " VALUES (null, '$board->name', $board->lights,$board->tilew, $board->tileh, $board->ntilesw, $board->ntilesh, ";
 	$query.= " $board->offsetx, $board->offsety, '$board->bg', $board->drawGrid, 0, 1) ";
 	$result = run_sql($query) or die();
-	return mysqli_insert_id($db);
+	$lastBoardId = mysqli_insert_id($db);
+	if (property_exists($board, 'lights_array')){
+		foreach($board->lights_array as $light){
+			$q = "INSERT INTO lights (intensity, board_id, tilex, tiley)";
+			$q.= "	VALUES ($light->intensity, $lastBoardId, $light->x, $light->y)";
+			run_sql($q) or die();
+		}
+	}
+	return $lastBoardId;
 }
 
 function set_default_guideline_id($idBoard, $tokenName, $guide_id){

@@ -35,8 +35,8 @@
 		{
 			"file": "thief_baddon",
 			"name": "Dexter",
-			"x":7,
-			"y":12,
+			"x":6,
+			"y":13,
 			"default_guideline_id":1
 		},
 		{
@@ -80,6 +80,26 @@
 			"x":5,
 			"y":21,
 			"default_guideline_id":1
+		}
+	],
+	"lights_array":[
+		{
+			"name":"Sun",
+			"x":9,
+			"y":25,
+			"intensity":8
+		},
+		{
+			"name":"Sun",
+			"x":13,
+			"y":24,
+			"intensity":8
+		},
+		{
+			"name":"Torch",
+			"x":4,
+			"y":20,
+			"intensity":6
 		}
 	]
 }
