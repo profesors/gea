@@ -1,0 +1,164 @@
+{
+	"name":"Baddon Roith 2",
+	"tilew":70,
+	"tileh":70,
+	"ntilesw":29,
+	"ntilesh":25,
+	"offsetx":0,
+	"offsety":0,
+	"bg":"012bg",
+	"drawGrid":0,
+	"lastActionId":0,
+	"lights":1,
+	"tokens": [
+		{
+			"file": "bar",
+			"name": "Groonan",
+			"x": 12,
+			"y": 13,
+			"default_guideline_id":1
+		},
+		{
+			"file": "exp",
+			"name": "Connor",
+			"x": 11,
+			"y": 13,
+			"default_guideline_id":2
+		},
+		{
+			"file": "elf",
+			"name": "Varyarel",
+			"x": 9,
+			"y": 13,
+			"default_guideline_id":3
+		},
+		{
+			"file": "skeleton",
+			"name": "Huesito",
+			"x":7,
+			"y":24,
+			"default_guideline_id":1
+		},
+		{
+			"file": "skeleton",
+			"name": "Hueson",
+			"x":6,
+			"y":24,
+			"default_guideline_id":1
+		},
+		{
+			"file": "skeleton",
+			"name": "Huesillo",
+			"x":5,
+			"y":24,
+			"default_guideline_id":1
+		},
+		{
+			"file": "skeleton",
+			"name": "Huesu",
+			"x":4,
+			"y":24,
+			"default_guideline_id":1
+		},
+		{
+			"file": "skeleton",
+			"name": "Eskeletor",
+			"x":3,
+			"y":24,
+			"default_guideline_id":1
+		},
+		{
+			"file": "skeleton",
+			"name": "Femur",
+			"x":5,
+			"y":20,
+			"default_guideline_id":1
+		},
+		{
+			"file": "skeleton",
+			"name": "Cubito",
+			"x":7,
+			"y":23,
+			"default_guideline_id":1
+		},
+		{
+			"file": "zombie",
+			"name": "Franklin",
+			"x":23,
+			"y":24,
+			"default_guideline_id":1
+		},
+		{
+			"file": "zombie",
+			"name": "Jefferson",
+			"x":27,
+			"y":23,
+			"default_guideline_id":1
+		},
+		{
+			"file": "zombie",
+			"name": "Linconln",
+			"x":28,
+			"y":20,
+			"default_guideline_id":1
+		},
+		{
+			"file": "zombie",
+			"name": "Washington",
+			"x":28,
+			"y":24,
+			"default_guideline_id":1
+		},
+		{
+			"file": "zombie",
+			"name": "Murdoc",
+			"x":23,
+			"y":14,
+			"default_guideline_id":1
+		},
+		{
+			"file": "zombie",
+			"name": "Anibal",
+			"x":24,
+			"y":14,
+			"default_guideline_id":1
+		},
+		{
+			"file": "zombie",
+			"name": "Barracus",
+			"x":27,
+			"y":14,
+			"default_guideline_id":1
+		},
+		{
+			"file": "zombie",
+			"name": "Fenix",
+			"x":28,
+			"y":16,
+			"default_guideline_id":1
+		},
+		{
+			"file": "fleshGolem",
+			"name": "Animal",
+			"x":20,
+			"y":11,
+			"default_guideline_id":1
+		},
+		{
+			"file": "fleshGolem",
+			"name": "de Bellota",
+			"x":20,
+			"y":3,
+			"default_guideline_id":1
+		},
+		{
+			"file": "spectre",
+			"name": "Alexia",
+			"x":28,
+			"y":2,
+			"default_guideline_id":1
+		}
+	],
+	"lights_array":[
+	]
+}

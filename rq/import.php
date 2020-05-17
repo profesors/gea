@@ -4,7 +4,7 @@ include_once('libControllers.php');
 connectDB();
 
 reset_db();
-$files = array("medusa", "baddon1");
+$files = array("baddon1", "baddon2", "baddon3");
 
 $token_id=1;
 $board_file;

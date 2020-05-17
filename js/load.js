@@ -47,7 +47,7 @@ async function getBoard(idBoard){
 			if (scrollTop!=null && scrollTop!=null){
 				window.scrollTo(scrollLeft[1], scrollTop[1]);
 			}
-			
+			drawCellCoordinates();
 			addSvgCanvas();	
 		}
 	}
@@ -234,19 +234,18 @@ async function getTokens(idBoard, fromActionId=null){
 				showIndicator(token, damage, "red", 2000, 2000, (board.tileh/2)+"px");
 				token.attrs = newToken.attrs;
 				updateHp(token);
-				removeToken(token);
+				removeToken(token.name);
 			} else if (token.attrs.hp<0){	// Caso 3
 				console.log("Caso 3: "+token.name+" HP:"+token.attrs.hp+" -> "+newToken.attrs.hp);
 				token.attrs = newToken.attrs;
-				updateHp(token);
-				token.x=newToken.x;
-				token.y=newToken.y;
-				removeToken(token.name);
+				token.div.style.opacity=0;
+				//removeToken(token.name);	// No porque llama de nuevo a sendCommand
 			}
 		}	// for
 		if (remoteLastAction != null){
 			board.lastActionId = remoteLastAction.id;
 		}
+		//if (document.getElementById("svgPanelPc")!=null)		
 		drawPCPortraits();
 		updateAllHpBar();
 

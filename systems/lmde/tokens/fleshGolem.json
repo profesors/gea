@@ -1,0 +1,27 @@
+{
+	"img": "fleshGolem.png",
+	"border": "5px+solid+red",
+	"w": 1,
+	"h": 1,
+	"type":"undead",
+	"pc":0,
+	"steps": {
+		"movement":4,
+		"action": 1
+		},
+	"attrs":{
+		"maxhp": 30,
+		"hp":30,
+		"ac":18,
+		"thaco":6
+	},
+	"guidelines":[
+		{
+		"number":1,
+		"icon":"sword",
+		"name":"garras",
+		"short_desc":"2d6",
+		"action": "flmde_attack r1 d1d6 ba1"
+		}
+	]
+}

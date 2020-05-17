@@ -160,7 +160,7 @@ async function showMasterOutput(text, preTime, postTime){
 
 function updateAllHpBar(){
 	for (var i=0; i<arrTokens.length; i++){
-		if (arrTokens[i].pc == 1){
+		if (arrTokens[i]!=null && arrTokens[i].pc == 1){
 			updateHp(arrTokens[i]);
 		}
 	}
@@ -191,7 +191,7 @@ async function updateHp(token){
 
 function updateBoardOutput(){
 	const rq = new XMLHttpRequest();
-	rq.open("GET", "rq/getActions.php?idBoard="+board.id);
+	rq.open("GET", "rq/getActions.php?idBoard="+board.id+"&n=1");
 	rq.send();
 	rq.onreadystatechange = function(e) {
 	if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
@@ -211,7 +211,7 @@ function updateBoardOutput(){
 
 function updateActionsPanel(idBoard){
 	const rq = new XMLHttpRequest();
-	rq.open("GET", "rq/getActions.php?idBoard="+idBoard);
+	rq.open("GET", "rq/getActions.php?idBoard="+idBoard+"&n=10");
 	rq.send();
 	rq.onreadystatechange = function(e) {
 	if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
@@ -235,35 +235,39 @@ function updateActionsPanel(idBoard){
 function addSvgCanvas(){
 	var w = board.ntilesw*board.tilew;
 	var h = board.ntilesh*board.tileh;
-	svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-	svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-	svg.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-	svg.setAttribute("id", "svgCanvas");
-	svg.setAttribute("width", w);
-	svg.setAttribute("height", h);
-	svg.setAttribute("style", "z-index: 20; position: absolute;");
-	svg.setAttribute("version", "1.1");
-	canvas.appendChild(svg);
+	if (document.getElementById("svgCanvas")==null){
+		svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+		svg.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+		svg.setAttribute("id", "svgCanvas");
+		svg.setAttribute("width", w);
+		svg.setAttribute("height", h);
+		svg.setAttribute("style", "z-index: 20; position: absolute;");
+		svg.setAttribute("version", "1.1");
+		canvas.appendChild(svg);
+	}
 
-	var w = board.ntilesw*board.tilew;
-	var h = board.ntilesh*board.tileh;
-	svgOver = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-	svgOver.setAttribute("id", "svgCanvasOver");
-	svgOver.setAttribute("width", w);
-	svgOver.setAttribute("height", h);
-	svgOver.setAttribute("style", "z-index: 21; position: absolute;");
-	svgOver.setAttribute("version", "1.1");
-	canvas.appendChild(svgOver);
+	if (document.getElementById("svgOver")==null){
+		svgOver = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		svgOver.setAttribute("id", "svgCanvasOver");
+		svgOver.setAttribute("width", w);
+		svgOver.setAttribute("height", h);
+		svgOver.setAttribute("style", "z-index: 21; position: absolute;");
+		svgOver.setAttribute("version", "1.1");
+		canvas.appendChild(svgOver);
+	}
 
-	var svgPanelPC = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-	svgPanelPC.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-	svgPanelPC.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-	svgPanelPC.setAttribute("id", "svgPanelPC");
-	svgPanelPC.setAttribute("width", 128);
-	svgPanelPC.setAttribute("height", 128);
-	svgPanelPC.setAttribute("style", "z-index: 22; position: fixed; top:0; right:0; background-color:black;");
-	svgPanelPC.setAttribute("version", "1.1");
-	canvas.appendChild(svgPanelPC);
+	if (document.getElementById("svgPanelPC")==null){
+		var svgPanelPC = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		svgPanelPC.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+		svgPanelPC.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+		svgPanelPC.setAttribute("id", "svgPanelPC");
+		svgPanelPC.setAttribute("width", 128);
+		svgPanelPC.setAttribute("height", 128);
+		svgPanelPC.setAttribute("style", "z-index: 22; position: fixed; top:0; right:0; background-color:black;");
+		svgPanelPC.setAttribute("version", "1.1");
+		canvas.appendChild(svgPanelPC);
+	}
 	/*
 	var buttonNewTurn =document.createElementNS("http://www.w3.org/2000/svg", "circle");
 	buttonNewTurn.setAttribute("cx",50);
@@ -478,12 +482,16 @@ function removeAllLoadedTokens(){
 			var child = svgPanelPC.lastChild;
 			document.getElementById("svgPanelPC").removeChild(child);
 		}
-		canvas.removeChild(svgPanelPc);
+		//canvas.removeChild(svgPanelPc);
 	}
 	arrTokens.length = 0;
 }
 
 function drawCellCoordinates(){
+	var coordinates = document.getElementsByClassName("coordinates");
+	while(coordinates.lastChild){
+		canvas.removeChild(coordinates.lastChild);
+	}
 	for (var y=1; y<=board.ntilesh; y++){
 		for (var x=1; x<=board.ntilesw; x++){
 			var txt = document.createElement("div");	
@@ -501,7 +509,8 @@ function drawCellCoordinates(){
 	}
 }
 
-async function removeToken(token){
+async function removeToken(tokenName){
+	token = getTokenByName(tokenName);
 	if (token.div!=null){
 		await sleep(2000);
 		var t0 = (new Date).getTime();
@@ -521,6 +530,12 @@ async function removeToken(token){
 		token.x = board.ntilesw+1;
 		token.y = board.ntilesh+1;
 		token.div.style.opacity=0;
+		for (var i=0; i<arrTokens.length; i++){
+			if (arrTokens[i].name == tokenName){
+				arrTokens.splice(i,1);
+				break;
+			}
+		}
 	}
 }
 

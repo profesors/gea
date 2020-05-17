@@ -1,0 +1,36 @@
+{
+	"pc_name": "Elias",
+	"short_description": "Un pnj",
+	"w": 1,
+	"h": 1,
+	"img": "003.png",
+	"border": "5px+solid+blue",
+	"type":"humanoid",
+	"pc":1,
+	"steps": {
+		"movement":4,
+		"action": 1
+		},
+	"attrs":{
+		"maxhp": 12,
+		"hp":12,
+		"ac":16,
+		"light":0,
+		"str":17,
+		"dex":13,
+		"con":16,
+		"int":8,
+		"wis":8,
+		"car":9,
+		"thaco":1,
+		"save1":12,
+		"save2":13,
+		"save3":14,
+		"save4":15,
+		"save5":16
+	},
+	"guidelines":[
+	],
+	"inventory":[
+	]
+}

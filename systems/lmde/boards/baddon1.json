@@ -1,111 +1,45 @@
 {
-	"name":"Baddon Roith 1",
+	"name":"Baddon Roith 0",
 	"tilew":70,
 	"tileh":70,
-	"ntilesw":19,
-	"ntilesh":25,
+	"ntilesw":16,
+	"ntilesh":11,
 	"offsetx":0,
 	"offsety":0,
-	"bg":"011bg",
+	"bg":"013bg",
 	"drawGrid":0,
 	"lastActionId":0,
-	"lights":1,
+	"lights":0,
 	"tokens": [
 		{
 			"file": "bar",
 			"name": "Groonan",
-			"x": 6,
-			"y": 25,
+			"x": 14,
+			"y": 6,
 			"default_guideline_id":1
 		},
 		{
 			"file": "exp",
 			"name": "Connor",
-			"x": 5,
-			"y": 25,
+			"x": 13,
+			"y": 6,
 			"default_guideline_id":2
 		},
 		{
 			"file": "elf",
 			"name": "Varyarel",
-			"x": 3,
-			"y": 25,
+			"x": 12,
+			"y": 6,
 			"default_guideline_id":3
 		},
 		{
-			"file": "thief_baddon",
-			"name": "Dexter",
-			"x":6,
-			"y":13,
-			"default_guideline_id":1
-		},
-		{
-			"file": "thief_baddon",
-			"name": "Luca",
-			"x":7,
-			"y":20,
-			"default_guideline_id":1
-		},
-		{
-			"file": "thief_baddon",
-			"name": "Jenson",
-			"x":6,
-			"y":16,
-			"default_guideline_id":1
-		},
-		{
-			"file": "thief_baddon",
-			"name": "Oscar",
-			"x":4,
-			"y":16,
-			"default_guideline_id":1
-		},
-		{
-			"file": "thief_baddon",
-			"name": "Graeme",
-			"x":4,
-			"y":18,
-			"default_guideline_id":1
-		},
-		{
-			"file": "thief_baddon",
-			"name": "Krish",
-			"x":4,
-			"y":19,
-			"default_guideline_id":1
-		},
-		{
-			"file": "thief_baddon",
-			"name": "Finn",
-			"x":5,
-			"y":21,
+			"file": "elias",
+			"name": "Elias",
+			"x":13,
+			"y":9,
 			"default_guideline_id":1
 		}
 	],
 	"lights_array":[
-		{
-			"name":"Sun",
-			"x":9,
-			"y":25,
-			"intensity":8
-		},
-		{
-			"name":"Sun",
-			"x":13,
-			"y":24,
-			"intensity":8
-		},
-		{
-			"name":"Torch",
-			"x":4,
-			"y":20,
-			"intensity":6
-		},
-		{
-			"name":"Lamp",
-			"x":11,
-			"y":14,
-			"intensity":4
-		}
 	]
 }

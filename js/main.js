@@ -290,7 +290,6 @@ async function main(){
 		await sleep(T_PRECISION);
 	}
 	movement = new Movement(board);
-	drawCellCoordinates();
 
 	if (remoteLastAction != undefined){
 		board.lastActionId = remoteLastAction.id;
