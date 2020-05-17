@@ -191,7 +191,7 @@ async function updateHp(token){
 
 function updateBoardOutput(){
 	const rq = new XMLHttpRequest();
-	rq.open("GET", "rq/getActions.php?idBoard="+board.id+"&n=1");
+	rq.open("GET", "rq/getActions.php?idBoard="+board.id);
 	rq.send();
 	rq.onreadystatechange = function(e) {
 	if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
@@ -472,6 +472,14 @@ function removeAllLoadedTokens(){
 			canvas.removeChild(divToken);
 		}
 	}
+	var svgPanelPc = document.getElementById("svgPanelPC");
+	if (svgPanelPc!=null){
+		while(svgPanelPC.childElementCount>0){
+			var child = svgPanelPC.lastChild;
+			document.getElementById("svgPanelPC").removeChild(child);
+		}
+		canvas.removeChild(svgPanelPc);
+	}
 	arrTokens.length = 0;
 }
 
@@ -512,6 +520,7 @@ async function removeToken(token){
 		canvas.removeChild(token.div);
 		token.x = board.ntilesw+1;
 		token.y = board.ntilesh+1;
+		token.div.style.opacity=0;
 	}
 }
 

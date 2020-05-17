@@ -331,4 +331,38 @@ async function changeTokenOpacity(token, newVal){
 	token.div.style.opacity = newVal;
 }
 
+async function fadeOutScreen(duration){
+	if (duration==null) duration=1000;
+	var t0 = (new Date).getTime();
+	var tf = t0+duration;
+	var tt = tf-t0;
+	var t = 0.0;
+	const k = Math.PI/(2*tt);
+	while(t<tt){
+		var p = t/tt;
+		document.getElementById("canvas").style.opacity = 1-p;
+		document.getElementById("canvas_bg").style.opacity = 1-p;
+		await sleep(T_PRECISION);
+		t = (new Date).getTime() - t0;
+	}
+	document.getElementById("canvas").style.opacity = 0;
+	document.getElementById("canvas_bg").style.opacity = 0;
+}
+async function fadeInScreen(duration){
+	if (duration==null) duration=1000;
+	var t0 = (new Date).getTime();
+	var tf = t0+1000;
+	var tt = tf-t0;
+	var t = 0.0;
+	const k = Math.PI/(2*tt);
+	while(t<tt){
+		var p = t/tt;
+		document.getElementById("canvas").style.opacity = p;
+		document.getElementById("canvas_bg").style.opacity = p;
+		await sleep(T_PRECISION);
+		t = (new Date).getTime() - t0;
+	}
+	document.getElementById("canvas").style.opacity = p;
+	document.getElementById("canvas_bg").style.opacity = p;
+}
 

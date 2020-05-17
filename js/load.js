@@ -3,7 +3,7 @@ async function getBoard(idBoard){
 	const rq = new XMLHttpRequest();
 	rq.open("GET", "rq/getBoard.php?idBoard="+idBoard);
 	rq.send();
-	rq.onreadystatechange = function(e) {
+	rq.onreadystatechange = async function(e) {
 		if(rq.readyState === XMLHttpRequest.DONE && rq.status === 200){
 			var s = rq.responseText;
 			board = JSON.parse(s);
@@ -11,9 +11,11 @@ async function getBoard(idBoard){
 
 			// BG
 			var canvasBg = document.getElementById("canvas_bg");
+			await fadeOutScreen(1000);
 			canvasBg.style.backgroundImage = "url(img/bg/"+board.bg+".jpg)";
+			await fadeInScreen(1000);
 			canvasBg.style.backgroundRepeat = "no-repeat";
-			canvasBg.style.opacity=1;
+			//canvasBg.style.opacity=1;
 			canvasBg.style.zIndex=1;
 			canvasBg.style.position = "absolute";
 			canvasBg.style.width = (parseInt(board.tilew)*parseInt(board.ntilesw))+0.5*board.tilew+100+"px";
@@ -21,6 +23,7 @@ async function getBoard(idBoard){
 
 			var canvas = document.getElementById("canvas");
 			canvas.style.zIndex=2;
+			//canvas.style.opacity=1;
 			canvas.style.position = "absolute";
 			canvas.style.left=0;
 			canvas.style.top=0;
@@ -59,11 +62,10 @@ async function getTokens(idBoard, fromActionId=null){
 		var s = rq.responseText;
 		//console.log(s);
 		var arrUpdatedTokens = JSON.parse(s);
-		//console.log("--- Llegan "+arrUpdatedTokens.length+" nuevos tokens");
-		//console.log(arrUpdatedTokens);
 		// Create arr tokens
 		for(var i=0; i<arrUpdatedTokens.length; i++){
 			var newToken = arrUpdatedTokens[i];	// Updated token
+			//console.log("NUEVO "+newToken.name);
 			var token = getTokenByName(arrUpdatedTokens[i].name);
 			if (token==null){	// Es un nuevo token
 				token = newToken;
@@ -163,12 +165,6 @@ async function getTokens(idBoard, fromActionId=null){
 
 				arrTokens.push(token);
 				canvas.appendChild(token.div);
-
-				// A new PC token
-				if (token.pc == 1){
-					//var w = board.ntilesw*board.tilew;
-					//var h = board.ntilesh*board.tileh;
-				}
 
 				var bPj= document.getElementById("b"+token.name);
 				if (bPj!=null){

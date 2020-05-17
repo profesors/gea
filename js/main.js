@@ -14,6 +14,7 @@ var touch = {
 }
 var reScrollTop = new RegExp(/scrollTop=(\d+)/);
 var reScrollLeft = new RegExp(/scrollLeft=(\d+)/);
+var reBoardId = new RegExp(/boardId=(\d+)/);
 
 var movement;
 
@@ -160,10 +161,16 @@ function checkUpdates(){
 	var rq = new XMLHttpRequest();
 	rq.open("GET", "rq/getLastActionId.php?idBoard="+board.id);
 	rq.send();
-	rq.onreadystatechange = function () {
+	rq.onreadystatechange = async function () {
 		if (rq.readyState == XMLHttpRequest.DONE && rq.status == 200){
 			var s = rq.responseText;
 			remoteLastAction = JSON.parse(s);
+
+			// Change of board
+			if(board.id != remoteLastAction.boardId){
+				document.cookie = "boardId="+remoteLastAction.boardId+";samesite=strict";
+				main();
+			}
 
 			// Update Board
 			//console.log(board.bgTs+" "+remoteLastAction.bgTs);
@@ -274,8 +281,11 @@ window.addEventListener("DOMContentLoaded", function() {
 });
 
 async function main(){
-	var BOARD = 2;
-	await getBoard(BOARD);	/* Number of board */
+	removeAllLoadedTokens();
+	var boardId = document.cookie.match(reBoardId)[1];
+	//console.log("LOADING BOARD ID "+boardId);
+	if (boardId==null) boardId = 2;
+	await getBoard(boardId);	/* Number of board */
 	while(board==null)	{
 		await sleep(T_PRECISION);
 	}

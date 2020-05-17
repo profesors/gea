@@ -112,6 +112,12 @@ function get_board($idBoard){
 	return $ret;
 }
 
+function get_all_boards(){
+	$q = "SELECT * FROM boards";
+	$rs_boards = run_sql($q) or die();
+	return $rs_boards;
+}
+
 # Inser action in the DB table
 function insert_action($idBoard, $text){
 	global $db;

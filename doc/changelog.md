@@ -5,6 +5,8 @@
 
 ## Versiones
 
+1.56	Cambio de tablero automático
+1.55	Luces con antorchas que portan los PJs
 1.54	Luces avanzadas cuyas fuentes se sacan de una tabla de la base de datos
 1.53	Permite dos tableros
 1.52	Inventario
