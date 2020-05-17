@@ -271,7 +271,7 @@ function apply_lights(&$board, $im_walls, $im_full){
 	$rs_pc = get_tokens_by_pc($board->id, 1);
 	while ($pc = mysqli_fetch_array($rs_pc, MYSQLI_ASSOC)){
 		$intensity = get_attr($board->id, $pc['name'], 'light');
-		if ($intensity!=null){
+		if ($intensity>=1){
 			array_push($arr_sources, array('intensity'=>$intensity, 'tilex'=>$pc['x'], 'tiley'=>$pc['y']));
 		}
 	}
@@ -281,6 +281,7 @@ function apply_lights(&$board, $im_walls, $im_full){
 	foreach($arr_sources as $light){
 		//echo "LUZ ".$light['tilex']." ".$light['tiley']." I:".$light['intensity']." ID".$light['light_id'];
 		$max_d = $light['intensity'];
+		if ($light['intensity']==0) echo "ZERO ".$light['tilex']." ".$light['tiley']."\n";
 		$pi2 = 3.14/2.0;
 		$arrBlack = array();
 		for($d=0; $d<=$max_d; $d++){

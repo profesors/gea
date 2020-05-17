@@ -100,6 +100,12 @@
 			"x":4,
 			"y":20,
 			"intensity":6
+		},
+		{
+			"name":"Lamp",
+			"x":11,
+			"y":14,
+			"intensity":4
 		}
 	]
 }
