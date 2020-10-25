@@ -13,8 +13,8 @@
 		"action": 1
 		},
 	"attrs":{
-		"maxhp": 8,
-		"hp":8,
+		"maxhp": 12,
+		"hp":12,
 		"ac":17,
 		"light":4,
 		"str":13,
@@ -23,7 +23,7 @@
 		"int":14,
 		"wis":11,
 		"car":10,
-		"thaco":1,
+		"thaco":2,
 		"save1":12,
 		"save2":13,
 		"save3":13,

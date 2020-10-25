@@ -299,7 +299,7 @@ async function main(){
 	// Go Full screen
     document.getElementById("canvas").addEventListener("click", function(e){
 		if (!canvas.fullScreen){
-			//getFullscreen(document.documentElement);
+			getFullscreen(document.documentElement);
 			canvas.fullScreen = true;
 		}
     },false);
