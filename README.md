@@ -1,3 +1,4 @@
+Estoy reescribiendo la aplicación desde cero en Lua en este repositorio: https://github.com/samuel-gf/gea
 
 Esta aplicación
 crea un tablero al que se conectan varios jugadores, cada uno con su propio dispositivo, aunque
